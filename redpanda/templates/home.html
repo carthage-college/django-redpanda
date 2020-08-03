@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% load livewhale_api %}
+{% load bootstrap4 %}
+{% block navbar-header %}
+<a href="{% url 'home' %}" class="mr-sm-3 mr-lg-3">
+<a class="navbar-brand" href="{{root_url}}">Carthage Clear</a>
+{% endblock %}
+{% block breadcrumb %}
+<div class="row">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3">
+  {% if messages %}
+    {% for message in messages %}
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3">
+      <div class=" alert {{message.tags}}">
+        <strong>{{ message }}</strong>
+      </div>
+    </div>
+    {% endfor %}
+  {% endif %}
+  </div>
+</div>
+<!-- /.row -->
+{% endblock %}
+{% block content %}
+<div class="forms-container col-lg-8 col-md-8 col-sm-12 col-xs-12">
+  <h3>Greetings</h3>
+  <p>
+  Today is {% now "F jS, Y H:i" %}
+  <br>
+  How are you today?
+  </p>
+  {% include "includes/errors_text.html" %}
+  <form method="post" action="." autocomplete="false" class="form" role="form">
+    {% csrf_token %}
+    {# bootstrap_form form #}
+    {% for field in form.hidden_fields %}
+      {% include "form_field.inc.html" %}
+    {% endfor %}
+    <fieldset>
+      <ol style="padding:0 0 0 4px;">
+        <li class="list-item col-6 border-top">
+          <input type="checkbox" name="positive" required="" id="id_positive">
+          <label for="id_positive">
+            <img src="{{static_url}}img/positive.svg" style="width:30px;">
+            <small style="display:block;">
+              I've tested positive for COVID-19
+            </small>
+          </label>
+        </li>
+        <li class="list-item col-5 border-top">
+          <input type="checkbox" name="negative" required="" id="id_negative">
+          <label for="id_negative">
+            <img src="{{static_url}}img/negative.svg" style="width:30px;">
+            <small style="display:block;">
+              No symptoms
+            </small>
+          </label>
+        </li>
+        <li class="list-item col-6 border-top">
+          <input type="checkbox" name="temperature" required="" id="id_temperature">
+          <label for="id_temperature">
+            <img src="{{static_url}}img/temperature.png" style="width:30px;">
+            <small style="display:block;">
+              Temp ≥ 100.4 F/38.0 C or chills
+            </small>
+          </label>
+        </li>
+        <li class="list-item col-5 border-top">
+          <input type="checkbox" name="cough" required="" id="id_cough">
+          <label for="id_cough">
+            <img src="{{static_url}}img/cough.png" style="width:30px;">
+            <small style="display:block;">
+              New cough
+            </small>
+          </label>
+        </li>
+        <li class="list-item col-6 border-top">
+          <input type="checkbox" name="short_breath" required="" id="id_short_breath">
+          <label for="id_short_breath">
+            <img src="{{static_url}}img/short_breath.png" style="width:30px;">
+            <small style="display:block;">
+              Shortness of breath
+            </small>
+          </label>
+        </li>
+        <li class="list-item col-5 border-top">
+          <input type="checkbox" name="loss_taste_smell" required="" id="id_loss_taste_smell">
+          <label for="id_loss_taste_smell">
+            <img src="{{static_url}}img/loss_taste_smell.png" style="width:30px;">
+            <small style="display:block;">
+              New loss of taste or smell
+            </small>
+          </label>
+        </li>
+        <li class="list-item col-6 border-top">
+          <input type="checkbox" name="sore_throat" required="" id="id_sore_throat">
+          <label for="id_sore_throat">
+            <img src="{{static_url}}img/sore_throat.png" style="width:30px;">
+            <small style="display:block;">
+              Sore throat
+            </small>
+          </label>
+        </li>
+        <li class="list-item col-5 border-top">
+          <input type="checkbox" name="congestion" required="" id="id_congestion">
+          <label for="id_congestion">
+            <img src="{{static_url}}img/congestion.png" style="width:30px;">
+            <small style="display:block;">
+              Congestion or runny nose
+            </small>
+          </label>
+        </li>
+        <li class="list-item col-6 border-top">
+          <input type="checkbox" name="fatigue" required="" id="id_fatigue">
+          <label for="id_fatigue">
+            <img src="{{static_url}}img/fatigue.png" style="width:30px;">
+            <small style="display:block;">
+              New unexplained fatigue
+            </small>
+          </label>
+        </li>
+        <li class="list-item col-5 border-top">
+          <input type="checkbox" name="body_aches" required="" id="id_body_aches">
+          <label for="id_body_aches">
+            <img src="{{static_url}}img/body_aches.png" style="width:30px;">
+            <small style="display:block;">
+              Muscle or Body Ache
+            </small>
+          </label>
+        </li>
+        <li class="list-item col-6 border-top">
+          <input type="checkbox" name="headache" required="" id="id_headache">
+          <label for="id_headache">
+            <img src="{{static_url}}img/headache.png" style="width:30px;">
+            <small style="display:block;">
+              New headache
+            </small>
+          </label>
+        </li>
+        <li class="list-item col-5 border-top">
+          <input type="checkbox" name="nausea" required="" id="id_nausea">
+          <label for="id_nausea">
+            <img src="{{static_url}}img/nausea.png" style="width:30px;">
+            <small style="display:block;">
+              Nausea or vomiting
+            </small>
+          </label>
+        </li>
+        <li class="list-item col-6 border-top">
+          <input type="checkbox" name="diarrhea" required="" id="id_diarrhea">
+          <label for="id_diarrhea">
+            <img src="{{static_url}}img/diarrhea.png" style="width:30px;">
+            <small style="display:block;">
+              Diarrhea
+            </small>
+          </label>
+        </li>
+        <li class="list-item col-12 border-top">
+          <input type="checkbox" name="quarantine" required="" id="id_quarantine">
+          <label for="id_quarantine">
+            <img src="{{static_url}}img/quarantine.jpg" style="width:30px;">
+            <small style="display:block;">
+              Self quarantine due to symptoms or suspected COVID exposure
+            </small>
+          </label>
+        </li>
+      </ol>
+    </fieldset>
+    <input class="btn btn-primary btn-lg" type="submit" value="Submit">
+  </form>
+  <p>&nbsp;</p>
+</div>
+<div class="col-lg-4 col-md-4 col-sm-12">
+</div>
+{% endblock content %}
+{% block modal %}
+<div class="modal fade" id="donation-modal" tabindex="-1" role="dialog"
+  aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="donationModalLabel">Donation Form</h4>
+          <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true">&times;</button>
+        </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,258 @@
+{% load ifusergroup %}
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-hover display proposals-data">
+    <thead>
+      <tr>
+        <th style="width:40%;">
+          Title
+          <i class="fa fa-eye green blue-tooltip" data-toggle="tooltip"
+            data-placement="top" aria-hidden="true"
+            title="View Proposal"></i>
+          /
+          <i class="fa fa-print green blue-tooltip" data-toggle="tooltip"
+            data-placement="top" aria-hidden="true"
+            title="Print Proposal"></i>
+        </th>
+        <th>Part A</th>
+        <th>Part B</th>
+        <th style="text-align:center;">
+          Open/Closed
+          <i class="fa fa-question-circle-o green blue-tooltip"
+            data-toggle="tooltip" data-placement="top" aria-hidden="true"
+            title="Click the icon to open or close a proposal"></i>
+        </th>
+        <th>
+          Submitted by
+          <i class="fa fa-envelope-o green blue-tooltip" data-toggle="tooltip"
+            data-placement="top" aria-hidden="true"
+            title="Send email to primary investigator"></i>
+        </th>
+        <th>Deadline Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in proposals %}
+        <tr>
+          <td>
+            <a href="{% url 'proposal_detail' p.id %}" data-toggle="tooltip"
+            data-placement="top" class="blue-tooltip"
+            title="View Proposal">{{p.title}}</a>
+          </td>
+          {% if p.decline %}
+          <td colspan="2" class="red" style="text-align:center;">
+            Proposal Declined
+            <i class="fa fa-question-circle-o green blue-tooltip"
+              data-toggle="tooltip" data-placement="top" aria-hidden="true"
+              title="Click the Recycle icon to reopen this proposal"></i>
+          </td>
+          {% else %}{% if p.closed %}
+          <td colspan="2" class="red" style="text-align:center;">
+            Proposal Closed
+            <i class="fa fa-question-circle-o green blue-tooltip"
+              data-toggle="tooltip" data-placement="top" aria-hidden="true"
+              title="Click the Recycle icon to reopen this proposal and resubmit it"></i>
+          </td>
+          {% else %}
+          <td>
+            {% if p.step1 or p.opened or group or request.user.is_superuser %}
+              {% if p.user.id == request.user.id or group or request.user.is_superuser %}
+                {% if not p.save_submit %}
+                <a href="{% url 'proposal_update' p.id %}" data-toggle="tooltip"
+                data-placement="top" title="Update Part A" class="blue-tooltip">
+                  <i class="fa fa-2x fa-pencil-square-o" aria-hidden="true"></i>
+                </a>
+                {% endif %}
+              {% else %}
+                {% if p.opened and p.proposal_type == 'revised' %}
+                <i class="fa fa-2x fa-meh-o green blue-tooltip"
+                data-toggle="tooltip" data-placement="top" aria-hidden='true'
+                title="Part A needs work"></i>
+                {% endif %}
+              {% endif %}
+            {% else %}
+              <i class="fa fa-2x fa-exclamation-circle yellow blue-tooltip"
+              data-toggle="tooltip" data-placement="top" aria-hidden='true'
+              title="Part A has not been Approved"></i>
+            {% endif %}
+            {% for a in p.proposal_approvers.all %}
+              {% if a.replace != 'level3' %}
+                {% if a.step1 %}
+                  <i class="fa fa-2x fa-check green blue-tooltip"
+                  data-toggle="tooltip" data-placement="top" aria-hidden="true"
+                  title="{{a.user.last_name}}, {{a.user.first_name}} Approved"></i>
+                {% else %}
+                  <i class="fa fa-2x fa-times red blue-tooltip"
+                  data-toggle="tooltip" data-placement="top" aria-hidden="true"
+                  title="{{a.user.last_name}}, {{a.user.first_name}} has NOT Approved this proposl"></i>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+            {% if p.level3 %}
+              <i class="fa fa-2x fa-check green blue-tooltip"
+              data-toggle="tooltip" data-placement="top" aria-hidden="true"
+              title="Division Dean or VP has approved Part A"></i>
+            {% else %}
+              <i class="fa fa-2x fa-times red blue-tooltip"
+              data-toggle="tooltip" data-placement="top" aria-hidden="true"
+              title="Division Dean or VP has NOT approved Part A"></i>
+            {% endif %}
+          </td>
+          <td>
+            {% if p.step1 %}
+              {% if p.user.id == request.user.id or group or request.user.is_superuser %}
+                {% if not p.save_submit %}
+                <a href="{% url 'impact_form' p.id %}"
+                data-toggle="tooltip" data-placement="top" class="blue-tooltip"
+                title="Update Part B">
+                  <i class="fa fa-2x fa-pencil-square-o" aria-hidden="true"></i>
+                </a>
+                {% endif %}
+              {% endif %}
+              {% for a in p.proposal_approvers.all %}
+              {% if a.replace != 'level3' %}
+                {% if a.step2 %}
+                <i class="fa fa-2x fa-check green blue-tooltip"
+                data-toggle="tooltip" data-placement="top" aria-hidden="true"
+                title="{{a.user.last_name}}, {{a.user.first_name}} Approved"></i>
+                {% else %}
+                <i class="fa fa-2x fa-times red blue-tooltip"
+                data-toggle="tooltip" data-placement="top" aria-hidden="true"
+                title="{{a.user.last_name}}, {{a.user.first_name}} has NOT Approved Part B"></i>
+                {% endif %}
+              {% endif %}
+              {% endfor %}
+              {% if p.impact.level3 %}
+                <i class="fa fa-2x fa-check green blue-tooltip"
+                data-toggle="tooltip" data-placement="top" aria-hidden="true"
+                title="Division Dean or Department VP Approved"></i>
+              {% else %}
+                <i class="fa fa-2x fa-times red blue-tooltip"
+                data-toggle="tooltip" data-placement="top" aria-hidden="true"
+                title="Dean or Department VP has NOT approved Part B"></i>
+              {% endif %}
+              {% if p.impact.level2 %}
+                <i class="fa fa-2x fa-check green blue-tooltip"
+                data-toggle="tooltip" data-placement="top" aria-hidden="true"
+                title="CFO Approved"></i>
+              {% else %}
+                <i class="fa fa-2x fa-times red blue-tooltip"
+                data-toggle="tooltip" data-placement="top" aria-hidden="true"
+                title="CFO has NOT approved Part B"></i>
+              {% endif %}
+              {% if p.impact.level1 %}
+                <i class="fa fa-2x fa-check green blue-tooltip"
+                data-toggle="tooltip" data-placement="top" aria-hidden="true"
+                title="Provost Approved"></i>
+              {% else %}
+                <i class="fa fa-2x fa-times red blue-tooltip"
+                data-toggle="tooltip" data-placement="top" aria-hidden="true"
+                title="Provost has NOT approved Part B"></i>
+              {% endif %}
+            {% else %}
+              <i class="fa fa-2x fa-exclamation-circle yellow blue-tooltip"
+              data-toggle="tooltip" data-placement="top" aria-hidden='true'
+              title="Part A must be approved before proceeding to Part B"></i>
+            {% endif %}
+          </td>
+          {% endif %}{% endif %}
+          <td style="text-align:center;">
+            {% if p.closed or p.decline %}
+              <a href="{% url 'proposal_status' %}" data-toggle="tooltip"
+                data-placement="top" title="Reopen this proposal"
+                data-pid="{{p.id}}" data-status="open"
+                class="proposal-status blue-tooltip">
+                <i class="fa fa-2x fa-recycle green" aria-hidden="true"></i>
+              </a>
+              {% ifusergroup osp_group %}
+                <i class="fa fa-2x fa-power-off grey" data-toggle="tooltip"
+                data-placement="top" title="This proposal is closed"
+                aria-hidden="true"></i>
+              {% endifusergroup %}
+            {% else %}
+              {% ifusergroup osp_group %}
+              {% if p.step1 and p.step2 %}
+              <i class="fa fa-2x fa-smile-o green" data-toggle="tooltip"
+                data-placement="top" title="This proposal is complete"
+                aria-hidden="true"></i>
+              {% else %}
+              <i class="fa fa-2x fa-circle-o green" data-toggle="tooltip"
+                data-placement="top" title="This proposal is open"
+                aria-hidden="true"></i>
+              {% endif %}
+              <a href="{% url 'proposal_status' %}" data-toggle="tooltip"
+                data-placement="top" title="Close this proposal"
+                data-pid="{{p.id}}" data-status="close"
+                class="proposal-status blue-tooltip">
+                <i class="fa fa-2x fa-power-off red" aria-hidden="true"></i>
+              </a>
+              {% else %}
+              {% if p.step1 and p.step2 %}
+              <i class="fa fa-2x fa-smile-o green" data-toggle="tooltip"
+                data-placement="top" title="This proposal is complete"
+                aria-hidden="true"></i>
+              {% else %}
+              <i class="fa fa-2x fa-circle-o green" data-toggle="tooltip"
+                data-placement="top" title="This proposal is open"
+                aria-hidden="true"></i>
+              {% endif %}
+              {% endifusergroup %}
+            {% endif%}
+          </td>
+          <td>
+            {% if approver %}
+            <a href="{% url 'email_investigator_form' p.id 'compose' %}"
+              data-toggle="tooltip" data-placement="top" class="blue-tooltip"
+              title="Send email to primary investigator">
+              {{p.user.last_name}}, {{p.user.first_name}}
+            </a>
+            {% else %}
+            {% ifusergroup osp_group %}
+            <a href="{% url 'email_investigator_form' p.id 'compose' %}"
+              data-toggle="tooltip" data-placement="top" class="blue-tooltip"
+              title="Send email to primary investigator">
+              {{p.user.last_name}}, {{p.user.first_name}}
+            </a>
+            {% else %}
+            <a href="mailto:{{p.user.email}}"
+              data-toggle="tooltip" data-placement="top" class="blue-tooltip"
+              title="Send email to primary investigator">
+              {{p.user.last_name}}, {{p.user.first_name}}</a>
+            {% endifusergroup %}
+            {% endif %}
+          </td>
+          <td>{{p.grant_deadline_date}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th style="width:40%;">
+          Title
+          <i class="fa fa-eye green blue-tooltip" data-toggle="tooltip"
+            data-placement="top" aria-hidden="true"
+            title="View Proposal"></i>
+          /
+          <i class="fa fa-print green blue-tooltip" data-toggle="tooltip"
+            data-placement="top" aria-hidden="true"
+            title="Print Proposal"></i>
+        </th>
+        <th>Part A</th>
+        <th>Part B</th>
+        <th style="text-align:center;">
+          Open/Closed
+          <i class="fa fa-question-circle-o green blue-tooltip"
+            data-toggle="tooltip" data-placement="top" aria-hidden="true"
+            title="Click the icon to open or close a proposal"></i>
+        </th>
+        <th>
+          Submitted by
+          <i class="fa fa-envelope-o green blue-tooltip" data-toggle="tooltip"
+            data-placement="top" aria-hidden="true"
+            title="Send email to primary investigator"></i>
+        </th>
+        <th>Deadline Date</th>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+<!-- /.table-responsive -->
