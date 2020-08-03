@@ -2,22 +2,57 @@
 
 """URLs for all views."""
 
+import datetime
+
+from django.conf import settings
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from djimix.decorators.auth import portal_auth_required
+from djtools.utils.mail import send_mail
 from redpanda.core.forms import HealthCheckForm
 
 
-#@portal_auth_required(
-    #session_var='REDPANDA_AUTH',
-    #redirect_url=reverse_lazy('access_denied'),
-#)
+
+@portal_auth_required(
+    session_var='REDPANDA_AUTH',
+    redirect_url=reverse_lazy('access_denied'),
+)
 def home(request):
     """Application home."""
     # check in once a day
     # check any and all icons and then submit
-    form = HealthCheckForm()
+
+    if request.method == 'POST':
+        form = HealthCheckForm(request.POST)
+        if form.is_valid():
+            check = form.save(commit=False)
+            check.created_by = request.user
+            check.save()
+            frum = settings.DEFAULT_FROM_EMAIL
+            subject = "[Health Check] {0}, {1} ({2})".format(
+                check.created_by.last_name,
+                check.created_by.first_name,
+                check.created_by.id,
+            )
+            send_mail(request, [frum], subject, frum, 'email.html', check)
+            now = datetime.datetime.now()
+            message =  "You are all set as of {0}.<br>".format(
+                now.strftime('%B %d, %Y')
+            )
+            message += "Please follow social distancing guidelines."
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                mark_safe(message),
+                extra_tags='alert-success',
+            )
+            return HttpResponseRedirect(reverse_lazy('home'))
+    else:
+        form = HealthCheckForm()
     return render(request, 'home.html', {'form': form})
 
 

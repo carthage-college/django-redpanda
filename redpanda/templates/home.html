@@ -6,20 +6,15 @@
 <a class="navbar-brand" href="{{root_url}}">Carthage Clear</a>
 {% endblock %}
 {% block breadcrumb %}
-<div class="row">
-  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3">
   {% if messages %}
     {% for message in messages %}
-    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ml-2">
       <div class=" alert {{message.tags}}">
         <strong>{{ message }}</strong>
       </div>
     </div>
     {% endfor %}
   {% endif %}
-  </div>
-</div>
-<!-- /.row -->
 {% endblock %}
 {% block content %}
 <div class="forms-container col-lg-8 col-md-8 col-sm-12 col-xs-12">
@@ -29,7 +24,13 @@
   <br>
   How are you today?
   </p>
-  {% include "includes/errors_text.html" %}
+  {% if form.errors %}
+  <div class="error">
+    {% for error in form.non_field_errors %}
+    {{error}}
+    {% endfor %}
+  </div>
+  {% endif %}
   <form method="post" action="." autocomplete="false" class="form" role="form">
     {% csrf_token %}
     {# bootstrap_form form #}
@@ -39,7 +40,7 @@
     <fieldset>
       <ol style="padding:0 0 0 4px;">
         <li class="list-item col-6 border-top">
-          <input type="checkbox" name="positive" required="" id="id_positive">
+          <input type="checkbox" name="positive" id="id_positive">
           <label for="id_positive">
             <img src="{{static_url}}img/positive.svg" style="width:30px;">
             <small style="display:block;">
@@ -48,7 +49,7 @@
           </label>
         </li>
         <li class="list-item col-5 border-top">
-          <input type="checkbox" name="negative" required="" id="id_negative">
+          <input type="checkbox" name="negative" id="id_negative">
           <label for="id_negative">
             <img src="{{static_url}}img/negative.svg" style="width:30px;">
             <small style="display:block;">
@@ -57,7 +58,7 @@
           </label>
         </li>
         <li class="list-item col-6 border-top">
-          <input type="checkbox" name="temperature" required="" id="id_temperature">
+          <input type="checkbox" name="temperature" id="id_temperature">
           <label for="id_temperature">
             <img src="{{static_url}}img/temperature.png" style="width:30px;">
             <small style="display:block;">
@@ -66,7 +67,7 @@
           </label>
         </li>
         <li class="list-item col-5 border-top">
-          <input type="checkbox" name="cough" required="" id="id_cough">
+          <input type="checkbox" name="cough" id="id_cough">
           <label for="id_cough">
             <img src="{{static_url}}img/cough.png" style="width:30px;">
             <small style="display:block;">
@@ -75,7 +76,7 @@
           </label>
         </li>
         <li class="list-item col-6 border-top">
-          <input type="checkbox" name="short_breath" required="" id="id_short_breath">
+          <input type="checkbox" name="short_breath" id="id_short_breath">
           <label for="id_short_breath">
             <img src="{{static_url}}img/short_breath.png" style="width:30px;">
             <small style="display:block;">
@@ -84,7 +85,7 @@
           </label>
         </li>
         <li class="list-item col-5 border-top">
-          <input type="checkbox" name="loss_taste_smell" required="" id="id_loss_taste_smell">
+          <input type="checkbox" name="loss_taste_smell" id="id_loss_taste_smell">
           <label for="id_loss_taste_smell">
             <img src="{{static_url}}img/loss_taste_smell.png" style="width:30px;">
             <small style="display:block;">
@@ -93,7 +94,7 @@
           </label>
         </li>
         <li class="list-item col-6 border-top">
-          <input type="checkbox" name="sore_throat" required="" id="id_sore_throat">
+          <input type="checkbox" name="sore_throat" id="id_sore_throat">
           <label for="id_sore_throat">
             <img src="{{static_url}}img/sore_throat.png" style="width:30px;">
             <small style="display:block;">
@@ -102,7 +103,7 @@
           </label>
         </li>
         <li class="list-item col-5 border-top">
-          <input type="checkbox" name="congestion" required="" id="id_congestion">
+          <input type="checkbox" name="congestion" id="id_congestion">
           <label for="id_congestion">
             <img src="{{static_url}}img/congestion.png" style="width:30px;">
             <small style="display:block;">
@@ -111,7 +112,7 @@
           </label>
         </li>
         <li class="list-item col-6 border-top">
-          <input type="checkbox" name="fatigue" required="" id="id_fatigue">
+          <input type="checkbox" name="fatigue" id="id_fatigue">
           <label for="id_fatigue">
             <img src="{{static_url}}img/fatigue.png" style="width:30px;">
             <small style="display:block;">
@@ -120,7 +121,7 @@
           </label>
         </li>
         <li class="list-item col-5 border-top">
-          <input type="checkbox" name="body_aches" required="" id="id_body_aches">
+          <input type="checkbox" name="body_aches" id="id_body_aches">
           <label for="id_body_aches">
             <img src="{{static_url}}img/body_aches.png" style="width:30px;">
             <small style="display:block;">
@@ -129,7 +130,7 @@
           </label>
         </li>
         <li class="list-item col-6 border-top">
-          <input type="checkbox" name="headache" required="" id="id_headache">
+          <input type="checkbox" name="headache" id="id_headache">
           <label for="id_headache">
             <img src="{{static_url}}img/headache.png" style="width:30px;">
             <small style="display:block;">
@@ -138,7 +139,7 @@
           </label>
         </li>
         <li class="list-item col-5 border-top">
-          <input type="checkbox" name="nausea" required="" id="id_nausea">
+          <input type="checkbox" name="nausea" id="id_nausea">
           <label for="id_nausea">
             <img src="{{static_url}}img/nausea.png" style="width:30px;">
             <small style="display:block;">
@@ -147,7 +148,7 @@
           </label>
         </li>
         <li class="list-item col-6 border-top">
-          <input type="checkbox" name="diarrhea" required="" id="id_diarrhea">
+          <input type="checkbox" name="diarrhea" id="id_diarrhea">
           <label for="id_diarrhea">
             <img src="{{static_url}}img/diarrhea.png" style="width:30px;">
             <small style="display:block;">
@@ -156,7 +157,7 @@
           </label>
         </li>
         <li class="list-item col-12 border-top">
-          <input type="checkbox" name="quarantine" required="" id="id_quarantine">
+          <input type="checkbox" name="quarantine" id="id_quarantine">
           <label for="id_quarantine">
             <img src="{{static_url}}img/quarantine.jpg" style="width:30px;">
             <small style="display:block;">
@@ -166,7 +167,7 @@
         </li>
       </ol>
     </fieldset>
-    <input class="btn btn-primary btn-lg" type="submit" value="Submit">
+    <input class="btn btn-primary btn-block" type="submit" value="Submit">
   </form>
   <p>&nbsp;</p>
 </div>
