@@ -1,8 +1,10 @@
 {% extends "base.html" %}
-{% load livewhale_api %}
 {% load bootstrap4 %}
+{% load livewhale_api %}
+{% load static %}
 {% block navbar-header %}
 <a href="{% url 'home' %}" class="mr-sm-3 mr-lg-3">
+<img src="{% static 'img/clogo.png' %}" height="30" class="mr-1">
 <a class="navbar-brand" href="{{root_url}}">Carthage Clear</a>
 {% endblock %}
 {% block breadcrumb %}
@@ -17,7 +19,7 @@
   {% endif %}
 {% endblock %}
 {% block content %}
-<div class="forms-container col-lg-8 col-md-8 col-sm-12 col-xs-12">
+<div class="forms-container col-lg-8 col-md-8 col-sm-12 col-xs-12" style="padding-right:0px !important;">
   <h3>Greetings</h3>
   <p>
   Today is {% now "F jS, Y H:i" %}
