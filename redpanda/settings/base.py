@@ -25,6 +25,7 @@ REQUIRED_ATTRIBUTE = True
 ADMINS = ()
 MANAGERS = ADMINS
 SECRET_KEY = None
+ENCRYPTION_KEY = None
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'America/Chicago'
