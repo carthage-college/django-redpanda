@@ -20,6 +20,7 @@ from redpanda.core.forms import HealthCheckForm
 @portal_auth_required(
     session_var='REDPANDA_AUTH',
     redirect_url=reverse_lazy('access_denied'),
+    encryption=True,
 )
 def home(request):
     """Application home."""
