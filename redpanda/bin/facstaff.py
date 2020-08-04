@@ -11,52 +11,31 @@ import django
 django.setup()
 
 from django.conf import settings
+from django.core.validators import validate_email
+from djimix.core.database import get_connection
+from djimix.core.database import xsql
+#from djimix.core.utils import get_uuid
+from djimix.people.utils import get_peeps
 
-import argparse
 import logging
 
 logger = logging.getLogger('debug_logfile')
 
-# set up command-line options
-desc = """
-Accepts as input...
-"""
-
-# RawTextHelpFormatter method allows for new lines in help text
-parser = argparse.ArgumentParser(
-    description=desc, formatter_class=argparse.RawTextHelpFormatter
-)
-
-parser.add_argument(
-    '-x', '--equis',
-    required=True,
-    help="Lorem ipsum dolor sit amet.",
-    dest='equis'
-)
-parser.add_argument(
-    '--test',
-    action='store_true',
-    help="Dry run?",
-    dest='test'
-)
-
 
 def main():
     """Main function description."""
-    if test:
-        print("this is a test")
-        logger.debug("debug = %s" % test)
-    else:
-        print("this is not a test")
+    for peep in get_peeps('facstaff'):
+        #print(get_uuid(peep['email']))
+        #print(peep['email'])
+        email = peep['email']
+        sql = "SELECT * FROM fwk_user WHERE email='{}'".format(email)
+        connection = get_connection(settings.MSSQL_EARL, encoding=False)
+        with connection:
+            results = xsql(sql, connection)
+            row = results.fetchone()
+        print(row)
 
 
 if __name__ == '__main__':
-    args = parser.parse_args()
-    equis = args.equis
-    test = args.test
-
-    if test:
-        print(args)
 
     sys.exit(main())
-

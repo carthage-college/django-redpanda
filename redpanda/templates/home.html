@@ -31,7 +31,8 @@
     {% endfor %}
   </div>
   {% endif %}
-  <form method="post" action="." autocomplete="false" class="form" role="form">
+  <form method="post" action="." autocomplete="false" class="form"
+    role="form" id="health-check">
     {% csrf_token %}
     {# bootstrap_form form #}
     {% for field in form.hidden_fields %}

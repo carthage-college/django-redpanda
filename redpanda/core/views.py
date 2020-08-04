@@ -39,16 +39,24 @@ def home(request):
                 check.created_by.id,
             )
             send_mail(request, [frum], subject, frum, 'email.html', check)
-            now = datetime.datetime.now()
-            message =  "You are all set as of {0}.<br>".format(
-                now.strftime('%B %d, %Y')
-            )
-            message += "Please follow social distancing guidelines."
+            bummer = """
+                Sorry about that.<br>Please consult our
+                <a href="/covid-19/">Covid-19</a> page for more infomration.
+            """
+            sweet = "You are all set.<br>Please follow social distancing guidelines."
+            if check.negative:
+                message = sweet
+                kind = messages.SUCCESS
+                tag = 'alert-success'
+            else:
+                message = bummer
+                kind = messages.WARNING
+                tag = 'alert-warning'
             messages.add_message(
                 request,
-                messages.SUCCESS,
+                kind,
                 mark_safe(message),
-                extra_tags='alert-success',
+                extra_tags=tag,
             )
             return HttpResponseRedirect(reverse_lazy('home'))
     else:

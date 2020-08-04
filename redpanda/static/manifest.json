@@ -4,7 +4,7 @@
   "name": "Carthage Clear",
   "short_name": "Clear",
   "display": "standalone",
-  "start_url": "https://www.carthage.edu/apps/carthage-clear/",
+  "start_url": "/apps/carthage-clear/",
   "icons": [
 
     {
