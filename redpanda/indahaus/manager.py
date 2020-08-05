@@ -41,8 +41,8 @@ class Client(object):
         token = None
         response = requests.get(
             '{0}/{1}'.format(self.base_url, settings.INDAHAUS_ENDPOINT_LOGIN),
-            auth=(settings.INDAHAUS_USERNAME, settings.INDAHAUS_PASSWORD),
-            verify=False,
+             auth=(settings.INDAHAUS_USERNAME, settings.INDAHAUS_PASSWORD),
+             verify=False,
         )
         jason = response.json()
         if jason.get('data'):

@@ -42,6 +42,7 @@ def main():
                         settings.ROOT_URL,
                         encrypt(row[0]),
                     ),
+                    row[4],
                 )
 
 

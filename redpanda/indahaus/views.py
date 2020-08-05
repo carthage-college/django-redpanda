@@ -20,7 +20,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     session_var='REDPANDA_INDAHAUS_AUTH',
     redirect_url=reverse_lazy('access_denied'),
 )
-def clients(request):
+def home(request):
     """Display all clients for all domain controllers."""
     client = Client()
     domains = settings.INDAHAUS_RF_DOMAINS

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load livewhale_api %}
 {% load static %}
 {% block extra_style %}
 <link href="{% static 'css/circle.css' %}" rel="stylesheet">
@@ -54,6 +55,34 @@
         {% endfor %}
       {% endif %}
     {% endfor %}
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.col-* -->
+  <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4 ml-2">
+    <div class="row list-group">
+      <p>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        Questions?
+        </button>
+      </p>
+      {% get_lw_content as help blurbs 3003 %}
+      <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+          <div id="lw_success_3003">{{help.body|safe}}</div>
+          {% if user.is_superuser %}
+          <p>
+            <a href="https://www.carthage.edu/livewhale/?blurbs_edit&tid=285&id=3003"
+              target="_blank">
+              <i class="fa fa-pencil green" aria-hidden="true"
+              title="Manage the content above in LiveWhale"></i></a>
+            <a href="#" data-cid="3003" data-target="lw_success_3003" class="clear-cache">
+              <i class="fa fa-refresh green" aria-hidden="true"
+              title="Clear the cache for this content"></i></a>
+          </p>
+          {% endif %}
+        </div>
+      </div>
     </div>
     <!-- /.row -->
   </div>
