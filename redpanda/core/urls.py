@@ -58,6 +58,10 @@ urlpatterns = [
     path(
         'cache/<str:ctype>/clear/', views.clear_cache, name='clear_cache',
     ),
+    # wing api
+    path(
+        'space/', include('redpanda.indahaus.urls'),
+    ),
     # home SPA
     path(
         '', views.home, name='home'
