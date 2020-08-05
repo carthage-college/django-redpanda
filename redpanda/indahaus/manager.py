@@ -19,6 +19,23 @@ class Client(object):
             settings.INDAHAUS_ENDPOINT_STATS_WIRELESS_CLIENTS,
         )
 
+    def get_token_nac(self):
+        """Obtain the authentication token from packetfence API."""
+        headers = {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+        auth_params = {
+            'username': settings.PACKETFENCE_USERNAME,
+            'password': settings.PACKETFENCE_PASSWORD,
+        }
+        url = settings.PACKETFENCE_API_EARL + settings.PACKETFENCE_LOGIN_ENDPOINT
+        resp = requests.post(
+            url=url, data=json.dumps(auth_params), headers=headers, verify=False,
+        )
+        return json.loads(resp.content.decode('utf-8'))['token']
+
+
     def get_token(self):
         """Obtain the authentication token from the API."""
         token = None

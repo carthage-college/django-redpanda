@@ -7,8 +7,6 @@ import requests
 import urllib3
 from django.conf import settings
 from redpanda.indahaus.manager import Client
-from redpanda.packetfence.settings.local import API_EARL
-from redpanda.packetfence.utils.helpers import get_token as get_token_nac
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 
@@ -26,7 +24,7 @@ def main():
     for idx, domain in enumerate(domains):
         # auth token from NAC
         headers = {
-            'accept': 'application/json', 'Authorization': get_token_nac(),
+            'accept': 'application/json', 'Authorization': client.get_token_nac(),
         }
         if settings.DEBUG:
             print(headers)
@@ -45,7 +43,9 @@ def main():
                     print('ap = {0}'.format(ap))
                     print('mac = {0}'.format(mac))
                 url = '{0}{1}/{2}'.format(
-                    API_EARL, settings.PACKETFENCE_NODE_ENDPOINT, mac,
+                    settings.PACKETFENCE_API_EARL,
+                    settings.PACKETFENCE_NODE_ENDPOINT,
+                    mac,
                 )
                 response = requests.get(url=url, headers=headers, verify=False)
                 device_nac = response.json()

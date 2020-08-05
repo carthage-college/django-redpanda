@@ -9,8 +9,6 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from djimix.decorators.auth import portal_auth_required
 from redpanda.indahaus.manager import Client
-from redpanda.packetfence.settings.local import API_EARL
-from redpanda.packetfence.utils.helpers import get_token as get_token_nac
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 
@@ -30,7 +28,7 @@ def clients(request):
     for idx, domain in enumerate(domains):
         headers = {
             'accept': 'application/json',
-            'Authorization': get_token_nac(),
+            'Authorization': client.get_token_nac(),
         }
         devices = client.get_devices(domain['id'], token)
         pids = []
@@ -40,7 +38,9 @@ def clients(request):
                 ap = device_wap['ap']
                 mac = device_wap['mac'].replace('-', ':')
                 url = '{0}{1}/{2}'.format(
-                    API_EARL, settings.PACKETFENCE_NODE_ENDPOINT, mac,
+                    settings.PACKETFENCE_API_EARL,
+                    settings.PACKETFENCE_NODE_ENDPOINT,
+                    mac,
                 )
                 response = requests.get(
                     url=url, headers=headers, verify=False,
