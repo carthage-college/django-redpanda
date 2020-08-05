@@ -1,13 +1,17 @@
-{% extends "minimal.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% block extra_style %}
- <link href="{% static 'css/circle.css' %}" rel="stylesheet">
- <style>
+<link href="{% static 'css/circle.css' %}" rel="stylesheet">
+<style>
+ #app {margin-bottom: 69px;}
  .list-group-item {padding: 0 1.75rem 0 1.25rem;}
  .domain-pids {display:inline-block;width:42px;margin-top:3px;}
  .domain-name {font-size: 2em;}
- </style>
+ body.sidenav-toggled footer.sticky-footer {width: 100%;}
+</style>
 {% endblock %}
+{% block navigation %}{% endblock %}
+{% block content-wrapper %}{% endblock %}
 {% block content %}
 <div id="app" class="row">
   <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
