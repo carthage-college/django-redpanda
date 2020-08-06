@@ -74,3 +74,9 @@ label img {
   padding:0;
 }
 .form fieldset {padding:0;}
+body.sidenav-toggled .content-wrapper {
+    margin-left: 0px;
+}
+body.sidenav-toggled footer.sticky-footer {
+    width: 100%;
+}

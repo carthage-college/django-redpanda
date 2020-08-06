@@ -19,7 +19,7 @@
   {% endif %}
 {% endblock %}
 {% block content %}
-<div class="forms-container col-lg-8 col-md-8 col-sm-12 col-xs-12" style="padding-right:0px !important;">
+<div class="forms-container col-lg-8 col-md-8 col-sm-12 col-xs-12 mb-4" style="padding-right:0px !important;">
   <h3>Greetings {{user.first_name}}</h3>
   <p>
   Today is {% now "F jS, Y H:i" %}
@@ -174,8 +174,7 @@
   </form>
   <p>&nbsp;</p>
 </div>
-<div class="col-lg-4 col-md-4 col-sm-12">
-</div>
+<div class="col-lg-4 col-md-4 col-sm-12">&nbsp;</div>
 {% endblock content %}
 {% block modal %}
 <div class="modal fade" id="donation-modal" tabindex="-1" role="dialog"
