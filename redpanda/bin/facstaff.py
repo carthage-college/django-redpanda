@@ -11,8 +11,6 @@ import django
 django.setup()
 
 from django.conf import settings
-from django.core.validators import validate_email
-from django.urls import reverse_lazy
 from djimix.core.database import get_connection
 from djimix.core.database import xsql
 from djimix.people.utils import get_peeps
