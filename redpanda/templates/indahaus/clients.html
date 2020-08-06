@@ -20,11 +20,13 @@
     {% for domain in domains %}
       {% if domain.active %}
         <div class="domain-name list-group-item list-group-item-action">
-          <span{% if user.is_superuser %} title="occupied: {{domain.occupied}}"{% endif %}>
+          <span{% if user.is_superuser %} title="occupied: {{domain.occupied}} | {{domain.capacity}} | {{domain.percent}}"{% endif %}>
           {{domain.name}}
           </span>
-          <div class="c100 small float-right p{{domain.percent}}">
-            <span>{{domain.percent}}%</span>
+          <div class="c100 small float-right p{% if domain.percent <= 10 %}10{% else %}{{domain.percent}}{% endif %}">
+            <span>
+            {% if domain.percent <= 10 %}< 10{% else %}{{domain.percent}}{% endif %}%
+            </span>
             <div class="slice">
               <div class="bar"></div>
               <div class="fill"></div>
@@ -36,16 +38,17 @@
         {% for area in domain.areas %}
           <div class="domain-name list-group-item list-group-item-action">
             {% if domain.active %}
-            <span class="ml-2"{% if user.is_superuser %} title="occupied: {{area.occupied}}"{% endif %}>
-              <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            </template>
+            <span class="ml-2"{% if user.is_superuser %} title="occupied: {{area.occupied}} | {{area.capacity}} | {{area.percent}}"{% endif %}>
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
             {% else %}
-            <span{% if user.is_superuser %} title="occupied: {{area.occupied}}"{% endif %}>
+            <span{% if user.is_superuser %} title="occupied: {{area.occupied}} | {{area.capacity}} | {{area.percent}}%"{% endif %}>
             {% endif %}
             {{area.name}}
             </span>
-            <div class="c100 small float-right p{{area.percent}}">
-              <span>{{area.percent}}%</span>
+            <div class="c100 small float-right p{% if domain.percent <= 10 %}10{% else %}{{domain.percent}}{% endif %}">
+              <span>
+                {% if area.percent <= 10 %}< 10{% else %}{{area.percent}}{% endif %}%
+              </span>
               <div class="slice">
                 <div class="bar"></div>
                 <div class="fill"></div>
