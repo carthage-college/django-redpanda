@@ -5,19 +5,19 @@
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-# sqlserver connection string
 from djimix.settings.local import MSSQL_EARL
-from djimix.settings.local import INFORMIX_ODBC, INFORMIX_ODBC_TRAIN
-from djimix.settings.local import (
-    INFORMIXSERVER,
-    DBSERVERNAME,
-    INFORMIXDIR,
-    ODBCINI,
-    ONCONFIG,
-    INFORMIXSQLHOSTS,
-    LD_LIBRARY_PATH,
-    LD_RUN_PATH,
-)
+from djimix.settings.local import DBSERVERNAME
+from djimix.settings.local import INFORMIX_ODBC
+from djimix.settings.local import INFORMIX_ODBC_TRAIN
+from djimix.settings.local import INFORMIXDIR
+from djimix.settings.local import INFORMIXSERVER
+from djimix.settings.local import INFORMIXSQLHOSTS
+from djimix.settings.local import LD_LIBRARY_PATH
+from djimix.settings.local import LD_RUN_PATH
+from djimix.settings.local import MSSQL_EARL
+from djimix.settings.local import ODBCINI
+from djimix.settings.local import ONCONFIG
+
 # Debug
 DEBUG = True
 INFORMIX_DEBUG = ''
