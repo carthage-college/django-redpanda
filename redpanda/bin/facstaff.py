@@ -24,8 +24,6 @@ def main():
     frum = settings.DEFAULT_FROM_EMAIL
     subject = "[Health Check] Daily Reminder"
     for counter, peep in enumerate(get_peeps('facstaff')):
-        #print(get_uuid(peep['email']))
-        #print(peep['email'])
         email = peep['email']
         sql = "SELECT * FROM fwk_user WHERE HostID like '%{}'".format(peep['cid'])
         connection = get_connection(settings.MSSQL_EARL, encoding=False)
