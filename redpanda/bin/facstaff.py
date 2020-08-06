@@ -19,7 +19,7 @@ from djtools.utils.mail import send_mail
 
 
 def main():
-    """Main function description."""
+    """Send fac/staff notification to complete daily health check."""
     request = None
     frum = settings.DEFAULT_FROM_EMAIL
     subject = "[Health Check] Daily Reminder"
