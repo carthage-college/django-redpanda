@@ -89,3 +89,6 @@ footer.sticky-footer {
 #data-table td {
     text-align: center;
 }
+.green, .green .glyphicon-ok {
+    color: #008000;
+}
