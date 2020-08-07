@@ -25,12 +25,12 @@
     <tbody>
     {% for c in czechs %}
       <tr>
-        <td nowrap>
+        <td nowrap style="text-align: left;">
           <a href="mailto:{{c.created_by.email}}"
             title="Email student: {{c.created_by.id}}">
               {{c.created_by.last_name}}, {{c.created_by.first_name}}</a>
         </td>
-        <td nowrap>{{c.created_by.id}}</td>
+        <td nowrap style="text-align: left;">{{c.created_by.id}}</td>
         <td nowrap>
         {% if c.positive %}
           <i class="fa fa-check" title="Positive">
@@ -166,7 +166,9 @@
           <i class="fa fa-times red" title="Notification"></i>
         {% endif %}
         </td>
-        <td nowrap>{{c.created_at|date:'Y-m-d H:i:s'}}</td>
+        <td nowrap style="text-align: left;">
+        {{c.created_at|date:'Y-m-d H:i:s'}}
+        </td>
       </tr>
     {% endfor %}
     </tbody>

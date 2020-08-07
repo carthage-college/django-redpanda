@@ -19,7 +19,7 @@ def home(request):
         request,
         'dashboard/home.html',
         {
-            'czechs': HealthCheck.objects.all(),
+            'czechs': HealthCheck.objects.all().order_by('-created_at'),
         },
     )
 

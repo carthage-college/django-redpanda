@@ -12,8 +12,8 @@ $(function() {
   /* datatables initialization */
   var gearupTable = $('#data-table').DataTable({
     'lengthMenu': [
-      [25, 50, 100, 250, 500, 1000, 2000, -1],
-      [25, 50, 100, 250, 500, 1000, 2000, 'All']
+      [100, 250, 500, 1000, 2000, -1],
+      [100, 250, 500, 1000, 2000, 'All']
     ],
     drawCallback: function() {
         $('[data-toggle="popover"]').popover({
@@ -24,7 +24,7 @@ $(function() {
     'columnDefs': [
       { targets: 'no-sort', orderable: false }
     ],
-    order: [[1, "asc"]],
+    order: [[17, "desc"]],
     dom: 'lfrBtip',
     buttons: [
       {

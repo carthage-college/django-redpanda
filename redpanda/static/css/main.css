@@ -86,3 +86,6 @@ body.sidenav-toggled footer.sticky-footer {
 footer.sticky-footer {
     width: 100%;
 }
+#data-table td {
+    text-align: center;
+}
