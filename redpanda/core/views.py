@@ -40,23 +40,48 @@ def home(request):
                 check.created_by.id,
             )
             send_mail(request, [frum], subject, frum, 'email.html', check)
-            bummer = """
-                Sorry about that.<br>Please consult our
-                <a href="/covid-19/">Covid-19</a> page for more infomration.
+            now = datetime.datetime.now().strftime('%B %d, %Y')
+            positive = """
+                Thank you for reporting your test results.<br>
+                Please consult our
+                <a href="/covid-19/">covid resources</a>
+                page for more infomration.<br>
+                Check in again tomorrow.
             """
-            sweet = "You are all set.<br>Please follow social distancing guidelines."
+            negative = """
+                Thanks for checking in.<br>Please follow social distancing
+                guidelines and check in again tomorrow.
+            """
+            quarantine = """
+                Thank you for reporting that you are staying home.<br>
+                We will let your professors know.<br>
+                Please contact your supervisors directly.<br>
+                Check in again tomorrow.
+            """
+            symptoms = """
+                Sorry to hear you are not feeling well.<br>
+                Please consult our
+                <a href="/covid-19/">covid resources</a>
+                page for more infomration.<br>
+                Check in again tomorrow.
+            """
+            tag = 'alert-warning'
+            kind = messages.WARNING
             if check.negative:
-                message = sweet
+                message = negative
                 kind = messages.SUCCESS
                 tag = 'alert-success'
+            elif check.positive:
+                message = positive
+            elif check.quarantine:
+                message = quarantine
             else:
-                message = bummer
-                kind = messages.WARNING
-                tag = 'alert-warning'
+                message = symptoms
+
             messages.add_message(
                 request,
                 kind,
-                mark_safe(message),
+                mark_safe('{0}<br>{1}'.format(now, message)),
                 extra_tags=tag,
             )
             return HttpResponseRedirect(reverse_lazy('home'))
