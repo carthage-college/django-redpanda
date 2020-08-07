@@ -44,7 +44,7 @@ def home(request):
             positive = """
                 Thank you for reporting your test results.<br>
                 Please consult our
-                <a href="/covid-19/">covid resources</a>
+                <a href="https://www.carthage.edu/covid-19/">covid resources</a>
                 page for more infomration.<br>
                 Check in again tomorrow.
             """
@@ -61,7 +61,7 @@ def home(request):
             symptoms = """
                 Sorry to hear you are not feeling well.<br>
                 Please consult our
-                <a href="/covid-19/">covid resources</a>
+                <a href="https://www.carthage.edu/covid-19/">covid resources</a>
                 page for more infomration.<br>
                 Check in again tomorrow.
             """
