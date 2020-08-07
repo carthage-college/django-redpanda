@@ -77,6 +77,12 @@ label img {
 body.sidenav-toggled .content-wrapper {
     margin-left: 0px;
 }
+.content-wrapper {
+    margin-left: 0;
+}
 body.sidenav-toggled footer.sticky-footer {
+    width: 100%;
+}
+footer.sticky-footer {
     width: 100%;
 }
