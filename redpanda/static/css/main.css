@@ -92,3 +92,24 @@ footer.sticky-footer {
 .green, .green .glyphicon-ok {
     color: #008000;
 }
+
+table.dataTable > tbody > tr:hover > td.minor { background-color: #ccf; }
+table.dataTable > tbody > tr:nth-child(2n+1) > td.minor { background-color: #ccf; }
+table.dataTable > tbody tr.selected { background-color: #b0bed9 !important; }
+table.dataTable > tbody tr:nth-child(even):hover td{ background-color: #fae7b5 !important; }
+table.dataTable > tbody tr:nth-child(odd):hover td { background-color: #fae7b5 !important; }
+table.dataTable tbody th, table.dataTable tbody td { padding: 1px 4px; }
+table.dataTable thead th, table.dataTable thead td { border-bottom: 2px solid #111; padding: 6px 4px 2px 4px; }
+table.dataTable tfoot th, table.dataTable tfoot td { padding: 6px 4px 2px 4px; }
+table.dataTable thead th, table.dataTable tfoot th { text-align: center; }
+.navbar-default {z-index:100;}
+.center{text-align:center;}
+div.DTTT {
+float: right;
+margin-bottom: 1em;
+position: relative;
+}
+@media (min-width: 768px) {
+    .navbar-static-side { width: 150px; }
+    #page-wrapper { margin: 0 0 0 150px; }
+}
