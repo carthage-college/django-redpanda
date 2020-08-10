@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""URLs for all views."""
-
 import datetime
 
 from django.conf import settings
@@ -14,7 +12,6 @@ from django.views.decorators.csrf import csrf_exempt
 from djimix.decorators.auth import portal_auth_required
 from djtools.utils.mail import send_mail
 from redpanda.core.forms import HealthCheckForm
-
 
 
 @portal_auth_required(

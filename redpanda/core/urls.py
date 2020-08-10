@@ -62,6 +62,10 @@ urlpatterns = [
     path(
         'space/', include('redpanda.indahaus.urls'),
     ),
+    # short URLs
+    path(
+        'lynx/', include('redpanda.lynx.urls'),
+    ),
     # home SPA
     path(
         '', views.home, name='home'

@@ -12,4 +12,5 @@ pyodbc==4.0.30
 python-ldap==3.3.1
 python-memcached==1.59
 requests==2.22.0
+short-url==1.2.2
 wemake-python-styleguide==0.13.3
