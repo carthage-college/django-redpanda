@@ -5,7 +5,6 @@
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-from djimix.settings.local import MSSQL_EARL
 from djimix.settings.local import DBSERVERNAME
 from djimix.settings.local import INFORMIX_ODBC
 from djimix.settings.local import INFORMIX_ODBC_TRAIN
