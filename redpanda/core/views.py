@@ -68,7 +68,7 @@ def home(request):
                 message = negative
                 kind = messages.SUCCESS
                 tag = 'alert-success'
-            elif check.positive:
+            elif check.tested_positive:
                 message = positive
             elif check.quarantine:
                 message = quarantine

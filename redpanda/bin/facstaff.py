@@ -26,8 +26,7 @@ def main():
     for counter, peep in enumerate(get_peeps('facstaff')):
         email = peep['email']
         sql = "SELECT * FROM fwk_user WHERE HostID like '%{}'".format(peep['cid'])
-        connection = get_connection(settings.MSSQL_EARL, encoding=False)
-        with connection:
+        with get_connection(settings.MSSQL_EARL, encoding=False) as connection:
             results = xsql(sql, connection)
             row = results.fetchone()
             if row:
