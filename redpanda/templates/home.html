@@ -47,7 +47,7 @@
           <label for="id_positive">
             <img src="{{static_url}}img/tested_positive.png" style="width:42px;">
             <small style="display:block;font-weight:600;">
-              I've tested positive for COVID-19
+              Tested positive for COVID-19
             </small>
           </label>
         </li>
@@ -55,26 +55,25 @@
         <li class="list-item col-5 border-top">
           <input type="checkbox" name="tested_negative" id="id_tested_negative">
           <label for="id_tested_negative">
-            <img src="{{static_url}}img/tested_negative.png" style="width:42px;">
+            <i class="fa fa-minus-square-o" style="color:green; font-size: 1.9em;margin-top:8px;" aria-hidden="true"></i>
             <small style="display:block;font-weight:600;">
-              I've tested negative for COVID-19
+              Tested negative for COVID-19
             </small>
           </label>
         </li>
-        <li class="list-item col-5 border-top">
+        <li class="list-item col-6 border-top">
           <input type="checkbox" name="tested_pending" id="id_tested_pending">
           <label for="id_tested_pending">
-            <img src="{{static_url}}img/tested_pending.png" style="width:42px;">
+            <i class="fa fa-envelope-open-o" style="color:#d2202e;font-size: 1.7em;margin-top: 12px; margin-left:6px;" aria-hidden="true"></i>
             <small style="display:block;font-weight:600;">
-              No symptoms
+              Tested and awaiting results
             </small>
           </label>
         </li>
-
         <li class="list-item col-5 border-top">
           <input type="checkbox" name="negative" id="id_negative">
           <label for="id_negative">
-            <img src="{{static_url}}img/negative.png" style="width:42px;">
+            <img src="{{static_url}}img/negative.png" style="width:42px;margin-left:-7px;">
             <small style="display:block;font-weight:600;">
               No symptoms
             </small>
