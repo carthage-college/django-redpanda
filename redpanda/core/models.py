@@ -55,8 +55,18 @@ class HealthCheck(models.Model):
     created_at = models.DateTimeField(
         "Date Created", auto_now_add=True
     )
-    positive = models.BooleanField(
+    tested_positive = models.BooleanField(
         "I've tested positive for COVID-19",
+        null=True,
+        blank=True,
+    )
+    tested_negative = models.BooleanField(
+        "I've tested negative for COVID-19",
+        null=True,
+        blank=True,
+    )
+    tested_pending = models.BooleanField(
+        "Tested and awaiting results",
         null=True,
         blank=True,
     )

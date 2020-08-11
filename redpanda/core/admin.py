@@ -29,7 +29,9 @@ class HealthCheckAdmin(admin.ModelAdmin):
     list_display = (
         'created_by',
         'created_at',
-        'positive',
+        'tested_positive',
+        'tested_negative',
+        'tested_pending',
         'negative',
         'temperature',
         'cough',

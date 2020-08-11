@@ -4,8 +4,10 @@
       <tr>
         <th>Name</th>
         <th>CID</th>
-        <th>Positive</th>
-        <th>Negative</th>
+        <th>Tested positive</th>
+        <th>Tested negative</th>
+        <th>Tested pending</th>
+        <th>No symptoms</th>
         <th>Temperature</th>
         <th>Cough</th>
         <th>Short breath</th>
@@ -32,15 +34,27 @@
         </td>
         <td nowrap style="text-align: left;">{{c.created_by.id}}</td>
         <td nowrap>
-        {% if c.positive %}
-          <i class="fa fa-check green" title="Positive">
+        {% if c.tested_positive %}
+          <i class="fa fa-check green" title="Tested Positive">
+            <span style="display:none;">x</span>
+          </i>
+        {% endif %}
+        </td>
+        {% if c.tested_negative %}
+          <i class="fa fa-check green" title="Tested negative">
+            <span style="display:none;">x</span>
+          </i>
+        {% endif %}
+        </td>
+        {% if c.tested_pending %}
+          <i class="fa fa-check green" title="Tested pending">
             <span style="display:none;">x</span>
           </i>
         {% endif %}
         </td>
         <td nowrap>
         {% if c.negative %}
-          <i class="fa fa-check green" title="Negative">
+          <i class="fa fa-check green" title="No symptoms">
             <span style="display:none;">x</span>
           </i>
         {% endif %}
@@ -146,8 +160,10 @@
       <tr>
         <th>Name</th>
         <th>CID</th>
-        <th>Positive</th>
-        <th>Negative</th>
+        <th>Tested positive</th>
+        <th>Tested negative</th>
+        <th>Tested pending</th>
+        <th>No symptoms</th>
         <th>Temperature</th>
         <th>Cough</th>
         <th>Short breath</th>
