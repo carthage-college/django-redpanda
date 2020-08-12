@@ -92,6 +92,7 @@ footer.sticky-footer {
 .green, .green .glyphicon-ok {
     color: #008000;
 }
+.red, .red .glyphicon {color:#800;}
 
 table.dataTable > tbody > tr:hover > td.minor { background-color: #ccf; }
 table.dataTable > tbody > tr:nth-child(2n+1) > td.minor { background-color: #ccf; }

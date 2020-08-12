@@ -71,7 +71,13 @@
   <div class="container">
     <div class="text-center">
       <small>
-        Carthage College © |
+        Carthage College
+        {% if user.is_superuser %}
+        <a href="{% url 'admin:index' %}">&copy;</a>
+        {% else %}
+        <a href="{% url 'dashboard' %}">&copy;</a>
+        {% endif %}
+        |
         <a href="https://www.carthage.edu/privacy/" target="_blank">Privacy Policy</a>
       </small>
     </div>

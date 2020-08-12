@@ -24,7 +24,7 @@ $(function() {
     'columnDefs': [
       { targets: 'no-sort', orderable: false }
     ],
-    order: [[17, "desc"]],
+    order: [[2, "desc"]],
     dom: 'lfrBtip',
     buttons: [
       {

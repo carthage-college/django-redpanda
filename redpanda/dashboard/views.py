@@ -22,20 +22,42 @@ def home(request):
     """Dashboard home."""
     user = request.user
     faculty = in_group(user, settings.FACULTY_GROUP)
-    if faculty:
-        phile = os.path.join(settings.BASE_DIR, 'sql/students_faculty.sql')
-        with open(phile) as incantation:
-            sql = incantation.read()
-            sql = sql.replace('CID', str(user.id))
-        with get_connection() as connection:
-            students = xsql(sql, connection).fetchall()
-        cids = []
-        for student in students:
-            cids.append(student.student_id)
-        czechs = HealthCheck.objects.filter(created_by__id__in=cids)
+    admins = in_group(user, settings.ADMIN_GROUP)
+    students = []
+    czechs = None
+    if faculty or admins:
+        if admins:
+            czechs = HealthCheck.objects.all().order_by('-created_at')
+        else:
+            phile = os.path.join(settings.BASE_DIR, 'sql/students_faculty.sql')
+            with open(phile) as incantation:
+                sql = incantation.read()
+                sql = sql.replace('CID', str(user.id))
+            with get_connection() as connection:
+                roster = xsql(sql, connection).fetchall()
+
+            for ros in roster:
+                students.append(
+                    {
+                        'roster': ros,
+                        'czechs': HealthCheck.objects.filter(
+                            created_by__id=ros.student_id,
+                        ),
+                    },
+                )
+
+        return render(
+            request,
+            'dashboard/home.html',
+            {
+                'admins': admins,
+                'faculty': faculty,
+                'czechs': czechs,
+                'students': students,
+            },
+        )
     else:
-        czechs = HealthCheck.objects.all().order_by('-created_at')
-    return render(request, 'dashboard/home.html', {'czechs': czechs})
+        return HttpResponseRedirect(reverse_lazy('home'))
 
 
 def search(request):

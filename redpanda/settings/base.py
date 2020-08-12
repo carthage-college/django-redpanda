@@ -131,6 +131,7 @@ CACHES = {
 }
 STAFF_GROUP = ''
 FACULTY_GROUP = ''
+ADMIN_GROUP = ''
 # LDAP Constants
 LDAP_SERVER = ''
 LDAP_PORT = ''
