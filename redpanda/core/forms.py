@@ -9,7 +9,9 @@ from redpanda.core.models import HealthCheck
 class HealthCheckForm(forms.ModelForm):
     """Data model for the health check app."""
 
-    positive = forms.BooleanField(required=False)
+    tested_positive = forms.BooleanField(required=False)
+    tested_negative = forms.BooleanField(required=False)
+    tested_pending = forms.BooleanField(required=False)
     negative = forms.BooleanField(required=False)
     temperature = forms.BooleanField(required=False)
     cough = forms.BooleanField(required=False)
@@ -35,7 +37,9 @@ class HealthCheckForm(forms.ModelForm):
         if not any(
             cd.get(field, '')
             for field in (
-                'positive',
+                'tested_positive',
+                'tested_negative',
+                'tested_pending',
                 'negative',
                 'temperature',
                 'cough',
