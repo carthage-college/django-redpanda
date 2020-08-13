@@ -21,6 +21,7 @@
       {% if domain.active %}
         <div class="domain-name list-group-item list-group-item-action">
           <span{% if user.is_superuser %} title="occupied: {{domain.occupied}} | {{domain.capacity}} | {{domain.percent}}"{% endif %}>
+          <i class="fa fa-angle-right" aria-hidden="true"></i>
           {{domain.name}}
           </span>
           <div class="c100 small float-right p{% if domain.percent <= 10 %}10{% else %}{{domain.percent}}{% endif %}">
