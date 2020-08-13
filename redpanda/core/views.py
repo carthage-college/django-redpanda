@@ -42,7 +42,7 @@ def home(request):
                 Thank you for reporting your test results.<br>
                 Please consult our
                 <a href="https://www.carthage.edu/covid-19/">covid resources</a>
-                page for more infomration.<br>
+                page for more information.<br>
                 Check in again tomorrow.
             """
             negative = """
