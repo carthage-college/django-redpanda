@@ -7,7 +7,7 @@
         <th>Created At</th>
         <th>Course</th>
         <th>Title</th>
-        <th>Quarantine</th>
+        <th>Staying home</th>
       </tr>
     </thead>
     <tbody>
@@ -26,9 +26,7 @@
         <td nowrap style="text-align: left;">{{s.roster.title}}</td>
         <td nowrap>
         {% if czech.quarantine %}
-          <i class="fa fa-check green" title="Quarantine"><span style="display:none;">x</span></i>
-        {% else %}
-          <i class="fa fa-times red" title="Quarantine"></i>
+          <i class="fa fa-check green" title="Staying home"><span style="display:none;">x</span></i>
         {% endif %}
         </td>
       </tr>
@@ -54,7 +52,7 @@
         <th>Created At</th>
         <th>Course</th>
         <th>Title</th>
-        <th>Quarantine</th>
+        <th>Staying home</th>
       </tr>
     </tfoot>
   </table>
