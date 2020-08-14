@@ -46,7 +46,7 @@ def home(request):
                 Check in again tomorrow.
             """
             negative = """
-                Thanks for checking in.<br>Please follow social distancing
+                Thank you for checking in.<br>Please follow social distancing
                 guidelines and check in again tomorrow.
             """
             quarantine = """
@@ -59,7 +59,7 @@ def home(request):
                 Sorry to hear you are not feeling well.<br>
                 Please consult our
                 <a href="https://www.carthage.edu/covid-19/">covid resources</a>
-                page for more infomration.<br>
+                page for more information.<br>
                 Check in again tomorrow.
             """
             tag = 'alert-warning'
