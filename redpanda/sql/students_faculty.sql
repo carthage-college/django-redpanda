@@ -103,7 +103,7 @@ FROM
     ON
         ACTIVE.id = STU.id
 WHERE
-    ACTIVE.fac_id = CID
+    ACTIVE.fac_id = {CID}
 AND
     ACTIVE.yr = 2020
 AND

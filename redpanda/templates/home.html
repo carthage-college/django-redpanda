@@ -191,9 +191,37 @@
     </fieldset>
     <input class="btn btn-primary btn-block" type="submit" value="Submit">
   </form>
+  <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4 ml-2">
+    <div class="row list-group">
+      <p class="ml-2">
+        <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapsePrivacy" aria-expanded="false" aria-controls="collapsePrivacy">
+        Questions?
+        </button>
+      </p>
+      {% get_lw_content as help blurbs 3006 %}
+      <div class="collapse" id="collapsePrivacy">
+        <div class="card card-body">
+          <div id="lw_success_3006">{{help.body|safe}}</div>
+          {% if user.is_superuser %}
+          <p>
+            <a href="https://www.carthage.edu/livewhale/?blurbs_edit&tid=285&id=3006"
+              target="_blank">
+              <i class="fa fa-pencil green" aria-hidden="true"
+              title="Manage the content above in LiveWhale"></i></a>
+            <a href="#" data-cid="3006" data-target="lw_success_3006" class="clear-cache">
+              <i class="fa fa-refresh green" aria-hidden="true"
+              title="Clear the cache for this content"></i></a>
+          </p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.col-* -->
   <p>&nbsp;</p>
 </div>
-<div class="col-lg-4 col-md-4 col-sm-12">&nbsp;</div>
+<!-- /.forms-container /.col-* -->
 {% endblock content %}
 {% block modal %}
 <div class="modal fade" id="donation-modal" tabindex="-1" role="dialog"

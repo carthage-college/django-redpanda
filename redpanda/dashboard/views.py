@@ -29,13 +29,15 @@ def home(request):
         if admins:
             czechs = HealthCheck.objects.all().order_by('-created_at')
         else:
-            phile = os.path.join(settings.BASE_DIR, 'sql/students_faculty.sql')
+            if request.coaches:
+                phile = os.path.join(settings.BASE_DIR, 'sql/students_coaches.sql')
+            else:
+                phile = os.path.join(settings.BASE_DIR, 'sql/students_faculty.sql')
             with open(phile) as incantation:
                 sql = incantation.read()
-                sql = sql.replace('CID', str(user.id))
+                sql = sql.replace('{CID}', str(user.id))
             with get_connection() as connection:
                 roster = xsql(sql, connection).fetchall()
-
             for ros in roster:
                 students.append(
                     {
