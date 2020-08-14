@@ -24,7 +24,7 @@
   <p>
   Today is {% now "F jS, Y H:i" %}
   <br>
-  How are you today?
+  How are you today? Click all that apply.
   </p>
   {% if form.errors %}
   <div class="error">
@@ -89,11 +89,11 @@
           </label>
         </li>
         <li class="list-item col-5 border-top">
-          <input type="checkbox" name="cough" id="id_cough">
-          <label for="id_cough">
-            <img src="{{static_url}}img/cough.png" style="width:42px;">
+          <input type="checkbox" name="loss_taste_smell" id="id_loss_taste_smell">
+          <label for="id_loss_taste_smell">
+            <img src="{{static_url}}img/loss_taste_smell.png" style="width:42px;">
             <small style="display:block;font-weight:600;">
-              New cough
+              New loss of taste or smell
             </small>
           </label>
         </li>
@@ -107,11 +107,11 @@
           </label>
         </li>
         <li class="list-item col-5 border-top">
-          <input type="checkbox" name="loss_taste_smell" id="id_loss_taste_smell">
-          <label for="id_loss_taste_smell">
-            <img src="{{static_url}}img/loss_taste_smell.png" style="width:42px;">
+          <input type="checkbox" name="cough" id="id_cough">
+          <label for="id_cough">
+            <img src="{{static_url}}img/cough.png" style="width:42px;">
             <small style="display:block;font-weight:600;">
-              New loss of taste or smell
+              New cough
             </small>
           </label>
         </li>
