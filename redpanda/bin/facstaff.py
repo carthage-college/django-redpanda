@@ -24,7 +24,7 @@ def main():
     """Send fac/staff notification to complete daily health check."""
     request = None
     frum = settings.DEFAULT_FROM_EMAIL
-    subject = "[Health Check] Daily Reminder"
+    subject = "Daily Health Check Reminder"
 
     sql = 'SELECT * FROM provisioning_vw WHERE id in {0}'.format(
         settings.REDPANDA_TEST_CIDS,
@@ -42,7 +42,6 @@ def main():
             results = xsql(sql, connection)
             row = results.fetchone()
             if row:
-
                 earl = 'https://{0}{1}{2}?uid={3}'.format(
                     settings.REDPANDA_SERVER_URL,
                     settings.REDPANDA_ROOT_URL,
