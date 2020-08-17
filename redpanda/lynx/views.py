@@ -3,6 +3,7 @@
 import json
 
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
@@ -13,8 +14,11 @@ from redpanda.lynx.models import URL
 
 def rewrite(request, earl_hash):
     earl = get_object_or_404(URL, earl_hash=earl_hash)
-    earl.clicked()
-    return redirect(earl.earl_full)
+    if earl.clicks == 0:
+        earl.clicked()
+        return redirect(earl.earl_full)
+    else:
+        return HttpResponseRedirect(reverse_lazy('home'))
 
 
 @csrf_exempt

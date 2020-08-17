@@ -12,7 +12,8 @@ class UserTypeMiddleware(object):
 
     def __call__(self, request):
         """Code executed for each request/response after the view is called."""
-        request.coaches = True
+        #request.coaches = True
+        request.coaches = False
         response = self.get_response(request)
         return response
 

@@ -1,7 +1,7 @@
-    select coach_id, coach_fname, coach_lname, player_id, player_fname, player_lname, description, sys_connect_by_path(notes, '&') as notes
+    select coach_id, coach_fname, coach_lname, student_id, player_fname, player_lname, description, sys_connect_by_path(notes, '&') as notes
     from (
             select unique coach.id as coach_id, trim(coach_name.firstname) as coach_fname, trim(coach_name.lastname) as coach_lname,
-                   player.id as player_id, trim(player_name.firstname) as player_fname, trim(player_name.lastname) as player_lname,
+                   player.id as student_id, trim(player_name.firstname) as player_fname, trim(player_name.lastname) as player_lname,
                    "" as description, TRIM(invl_table.txt) as notes,
                    rank() over (partition by player.id, coach.id order by txt) AS seq,
                    rank() over (partition by player.id, coach.id order by txt desc) AS rseq          
@@ -16,5 +16,5 @@
             AND prog_enr_rec.acst in ('GOOD' ,'LOC' ,'PROB' ,'PROC' ,'PROR' ,'READ' ,'RP' ,'SAB' ,'SHAC' ,'SHOC')
         ) ath
     WHERE rseq = 1 start with seq = 1
-    CONNECT BY prior player_id = player_id
+    CONNECT BY prior student_id = student_id
            AND prior seq = seq-1

@@ -50,8 +50,10 @@ def home(request):
                 guidelines and check in again tomorrow.
             """
             pending = """
-                Thank you for testing.<br>Please follow social distancing
-                guidelines and check in again tomorrow.
+                Thank you for reporting your test results.
+                Please consult your health care provider and visit our
+                <a href="https://www.carthage.edu/carthage-covid-19/stay-safe-carthage/symptom-monitoring/">covid resources</a>
+                page for more information.<br>
             """
             quarantine = """
                 Thank you for reporting that you are staying home.<br>
@@ -61,10 +63,9 @@ def home(request):
             """
             symptoms = """
                 Sorry to hear you are not feeling well.<br>
-                Please consult our
+                Please consult your health care provider and visit our
                 <a href="https://www.carthage.edu/carthage-covid-19/stay-safe-carthage/symptom-monitoring/">covid resources</a>
                 page for more information.<br>
-                Check in again tomorrow.
             """
             tag = 'alert-warning'
             kind = messages.WARNING

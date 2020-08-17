@@ -19,6 +19,16 @@ from djimix.people.utils import get_peeps
 from djimix.core.encryption import encrypt
 from djtools.utils.mail import send_mail
 
+# informix environment
+os.environ['INFORMIXSERVER'] = settings.INFORMIXSERVER
+os.environ['DBSERVERNAME'] = settings.DBSERVERNAME
+os.environ['INFORMIXDIR'] = settings.INFORMIXDIR
+os.environ['ODBCINI'] = settings.ODBCINI
+os.environ['ONCONFIG'] = settings.ONCONFIG
+os.environ['INFORMIXSQLHOSTS'] = settings.INFORMIXSQLHOSTS
+os.environ['LD_LIBRARY_PATH'] = settings.LD_LIBRARY_PATH
+os.environ['LD_RUN_PATH'] = settings.LD_RUN_PATH
+
 
 def main():
     """Send fac/staff notification to complete daily health check."""
@@ -30,7 +40,7 @@ def main():
         settings.REDPANDA_TEST_CIDS,
     )
     print(sql)
-    with get_connection() as connection:
+    with get_connection(earl=settings.INFORMIX_ODBC) as connection:
         peeps = xsql(sql, connection).fetchall()
     #peeps = get_peeps('facstaff')
     for peep in peeps:
