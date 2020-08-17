@@ -49,6 +49,10 @@ def home(request):
                 Thank you for checking in.<br>Please follow social distancing
                 guidelines and check in again tomorrow.
             """
+            pending = """
+                Thank you for testing.<br>Please follow social distancing
+                guidelines and check in again tomorrow.
+            """
             quarantine = """
                 Thank you for reporting that you are staying home.<br>
                 We will let your professors know.<br>
@@ -64,8 +68,12 @@ def home(request):
             """
             tag = 'alert-warning'
             kind = messages.WARNING
-            if check.negative:
+            if check.tested_negative or check.negative:
                 message = negative
+                kind = messages.SUCCESS
+                tag = 'alert-success'
+            elif check.tested_pending:
+                message = pending
                 kind = messages.SUCCESS
                 tag = 'alert-success'
             elif check.tested_positive:
