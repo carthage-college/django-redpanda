@@ -24,13 +24,14 @@ def home(request):
     user = request.user
     faculty = in_group(user, settings.FACULTY_GROUP)
     admins = in_group(user, settings.ADMIN_GROUP)
+    coach = get_coach(user.id)
     students = []
     czechs = None
     if faculty or admins:
         if admins:
             czechs = HealthCheck.objects.all().order_by('-created_at')
         else:
-            if get_coach(user.id):
+            if coach:
                 phile = os.path.join(
                     settings.BASE_DIR, 'sql/students_coach.sql',
                 )
@@ -48,7 +49,7 @@ def home(request):
                     {
                         'roster': ros,
                         'czechs': HealthCheck.objects.filter(
-                            created_by__id=ros.student_id,
+                            created_by__id=ros.id,
                         ),
                     },
                 )
@@ -58,6 +59,7 @@ def home(request):
             'dashboard/home.html',
             {
                 'admins': admins,
+                'coach': coach,
                 'faculty': faculty,
                 'czechs': czechs,
                 'students': students,

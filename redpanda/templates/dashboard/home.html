@@ -35,9 +35,11 @@ $(function() {
         <div class="panel-body" id="data-panel">
           {% if admins %}
             {% include "dashboard/data.admins.inc.html" %}
+          {% else %}{% if coach %}
+            {% include "dashboard/data.coach.inc.html" %}
           {% else %}{% if faculty %}
             {% include "dashboard/data.faculty.inc.html" %}
-          {% endif %}{% endif %}
+          {% endif %}{% endif %}{% endif %}
         </div>
         <!-- /.panel-body -->
       </div>
