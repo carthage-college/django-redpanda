@@ -31,9 +31,13 @@ def home(request):
             czechs = HealthCheck.objects.all().order_by('-created_at')
         else:
             if get_coach(user.id):
-                phile = os.path.join(settings.BASE_DIR, 'sql/students_coach.sql')
+                phile = os.path.join(
+                    settings.BASE_DIR, 'sql/students_coach.sql',
+                )
             else:
-                phile = os.path.join(settings.BASE_DIR, 'sql/students_faculty.sql')
+                phile = os.path.join(
+                    settings.BASE_DIR, 'sql/students_faculty.sql',
+                )
             with open(phile) as incantation:
                 sql = incantation.read()
                 sql = sql.replace('{CID}', str(user.id))
