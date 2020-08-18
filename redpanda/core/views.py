@@ -38,16 +38,17 @@ def home(request):
             )
             send_mail(request, [frum], subject, frum, 'email.html', check)
             now = datetime.datetime.now().strftime('%B %d, %Y')
+            # messages displayed after submit
+            default = """
+                Thank you for checking in.<br>Please follow social distancing
+                guidelines and check in again tomorrow.
+            """
             positive = """
                 Thank you for reporting your test results.<br>
                 Please consult our
                 <a href="https://www.carthage.edu/carthage-covid-19/stay-safe-carthage/symptom-monitoring/">covid resources</a>
                 page for more information.<br>
                 Check in again tomorrow.
-            """
-            negative = """
-                Thank you for checking in.<br>Please follow social distancing
-                guidelines and check in again tomorrow.
             """
             pending = """
                 Thank you for reporting your test results.
@@ -69,11 +70,7 @@ def home(request):
             """
             tag = 'alert-warning'
             kind = messages.WARNING
-            if check.tested_negative or check.negative:
-                message = negative
-                kind = messages.SUCCESS
-                tag = 'alert-success'
-            elif check.tested_pending:
+            if check.tested_pending:
                 message = pending
                 kind = messages.SUCCESS
                 tag = 'alert-success'
@@ -81,8 +78,14 @@ def home(request):
                 message = positive
             elif check.quarantine:
                 message = quarantine
+            elif check.tested_negative or check.negative:
+                message = default
+                kind = messages.SUCCESS
+                tag = 'alert-success'
             else:
-                message = symptoms
+                message = default
+                kind = messages.SUCCESS
+                tag = 'alert-success'
 
             messages.add_message(
                 request,

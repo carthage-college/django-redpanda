@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-#from redpanda.core.utils import get_coaches
+from redpanda.core.utils import get_coach
 
 
 class UserTypeMiddleware(object):
@@ -12,8 +12,8 @@ class UserTypeMiddleware(object):
 
     def __call__(self, request):
         """Code executed for each request/response after the view is called."""
-        #request.coaches = True
-        request.coaches = False
+        cid = request.user.id
+        request.coaches = get_coach(request.user.id)
         response = self.get_response(request)
         return response
 

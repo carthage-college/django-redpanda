@@ -83,6 +83,8 @@ INSTALLED_APPS = (
     'djtools',
     # honeypot for admin attacks
     'admin_honeypot',
+    # needed for template tags and error views
+    #'djtools',
     # sign in as a user
     'loginas',
     # tagging package
@@ -95,7 +97,7 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'redpanda.core.middleware.UserTypeMiddleware',
+    #'redpanda.core.middleware.UserTypeMiddleware',
 )
 # template stuff
 TEMPLATES = [
@@ -222,7 +224,6 @@ LOGGING = {
         },
         'mail_admins': {
             'level': 'ERROR',
-            'filters': ['require_debug_false'],
             'include_html': True,
             'class': 'django.utils.log.AdminEmailHandler',
         },
@@ -284,31 +285,6 @@ REDPANDA_TEST_CIDS = ()
 REDPANDA_SERVER_URL = ''
 REDPANDA_ROOT_URL = '/'
 REDPANDA_SHORT_URL_API = 'lynx/api/'
-# PacketFence Apps
-PACKETFENCE_API_EARL = ''
-PACKETFENCE_USERNAME = ''
-PACKETFENCE_PASSWORD = ''
-PACKETFENCE_LOGIN_ENDPOINT = ''
-PACKETFENCE_REPORTS_ENDPOINT = ''
-PACKETFENCE_IP4LOGS_ENDPOINT = ''
-PACKETFENCE_NODE_ENDPOINT = ''
-# Wing API
-INDAHAUS_API_EARL = ''
-INDAHAUS_USERNAME = ''
-INDAHAUS_PASSWORD = ''
-INDAHAUS_ENDPOINT_LOGIN = ''
-INDAHAUS_ENDPOINT_LOGOUT = ''
-INDAHAUS_ENDPOINT_STATS = ''
-INDAHAUS_ENDPOINT_STATS_WIRELESS = ''
-INDAHAUS_ENDPOINT_STATS_WIRELESS_CLIENTS = ''
-INDAHAUS_XCLUDE = []
-INDAHAUS_RF_DOMAINS = ()
-# PacketFence Apps
-PACKETFENCE_API_EARL = ''
-PACKETFENCE_USERNAME = ''
-PACKETFENCE_PASSWORD = ''
-PACKETFENCE_LOGIN_ENDPOINT = ''
-PACKETFENCE_REPORTS_ENDPOINT = ''
 
 ##################
 # LOCAL SETTINGS #

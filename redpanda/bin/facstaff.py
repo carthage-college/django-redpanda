@@ -35,7 +35,6 @@ def main():
     request = None
     frum = settings.DEFAULT_FROM_EMAIL
     subject = "Daily Health Check Reminder"
-
     sql = 'SELECT * FROM provisioning_vw WHERE id in {0}'.format(
         settings.REDPANDA_TEST_CIDS,
     )
@@ -44,10 +43,12 @@ def main():
         peeps = xsql(sql, connection).fetchall()
     #peeps = get_peeps('facstaff')
     for peep in peeps:
-        #email = peep['email']
         email = '{0}@carthage.edu'.format(peep[3])
-        #sql = "SELECT * FROM fwk_user WHERE HostID like '%{}'".format(peep['cid'])
         sql = "SELECT * FROM fwk_user WHERE HostID like '%{}'".format(peep[0])
+        #email = peep['email']
+        #sql = "SELECT * FROM fwk_user WHERE HostID like '%{}'".format(peep['cid'])
+        print(email)
+        print(sql)
         with get_connection(settings.MSSQL_EARL, encoding=False) as connection:
             results = xsql(sql, connection)
             row = results.fetchone()

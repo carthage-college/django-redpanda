@@ -1,14 +1,4 @@
 $(function() {
-  $("#id_negative").on('change', function() {
-    if(this.checked) {
-      $('input[type="checkbox"]').not(this).prop("checked", false);
-    }
-  });
-  $('input[type="checkbox"]').bind('click',function() {
-    if ($(this).attr('id') != 'id_negative') {
-      $("#id_negative").prop("checked", false);
-    };
-  });
   /* datatables initialization */
   var gearupTable = $('#data-table').DataTable({
     'lengthMenu': [

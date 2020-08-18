@@ -12,6 +12,7 @@ from djimix.core.database import xsql
 from djimix.decorators.auth import portal_auth_required
 from djtools.utils.users import in_group
 from redpanda.core.models import HealthCheck
+from redpanda.core.utils import get_coach
 
 
 @portal_auth_required(
@@ -29,8 +30,8 @@ def home(request):
         if admins:
             czechs = HealthCheck.objects.all().order_by('-created_at')
         else:
-            if request.coaches:
-                phile = os.path.join(settings.BASE_DIR, 'sql/students_coaches.sql')
+            if get_coach(user.id):
+                phile = os.path.join(settings.BASE_DIR, 'sql/students_coach.sql')
             else:
                 phile = os.path.join(settings.BASE_DIR, 'sql/students_faculty.sql')
             with open(phile) as incantation:

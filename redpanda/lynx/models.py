@@ -15,6 +15,6 @@ class URL(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.id:
-            self.earl_hash = md5(self.earl_full.encode()).hexdigest()[:10]
+            self.earl_hash = md5(self.earl_full.encode()).hexdigest()[:16]
 
         return super().save(*args, **kwargs)

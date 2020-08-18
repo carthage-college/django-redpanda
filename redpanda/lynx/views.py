@@ -13,13 +13,17 @@ from redpanda.lynx.models import URL
 
 
 def rewrite(request, earl_hash):
-    earl = get_object_or_404(URL, earl_hash=earl_hash)
+    try:
+        earl = URL.objects.get(earl_hash=earl_hash)
+    except Exception:
+        response = HttpResponseRedirect(reverse_lazy('home'))
     if earl.clicks == 0:
         earl.clicked()
-        return redirect(earl.earl_full)
+        response = redirect(earl.earl_full)
     else:
-        return HttpResponseRedirect(reverse_lazy('home'))
+        response = HttpResponseRedirect(reverse_lazy('home'))
 
+    return response
 
 @csrf_exempt
 @portal_auth_required(
