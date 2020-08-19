@@ -19,7 +19,7 @@ SELECT
     ) AS Schedule,
     TRIM(STU.lastname) AS lastname,
     TRIM(STU.firstname) AS firstname,
-    STU.id AS student_id
+    STU.id
 FROM
     (
         SELECT
