@@ -109,6 +109,6 @@ AND
 AND
     ACTIVE.sess = 'RA'
 GROUP BY
-     Course, ACTIVE.title, Schedule, lastname, firstname, student_id
+     Course, ACTIVE.title, Schedule, lastname, firstname, STU.id
 ORDER BY
     course, lastname, firstname
