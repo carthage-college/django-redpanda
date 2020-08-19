@@ -70,14 +70,17 @@ def home(request):
             """
             tag = 'alert-warning'
             kind = messages.WARNING
-            if check.tested_pending:
-                message = pending
-                kind = messages.SUCCESS
-                tag = 'alert-success'
-            elif check.tested_positive:
+
+            if check.tested_positive:
                 message = positive
             elif check.quarantine:
                 message = quarantine
+            elif check.any_symptoms():
+                message = symptoms
+            elif check.tested_pending:
+                message = pending
+                kind = messages.SUCCESS
+                tag = 'alert-success'
             elif check.tested_negative or check.negative:
                 message = default
                 kind = messages.SUCCESS
