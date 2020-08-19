@@ -154,6 +154,21 @@ class HealthCheck(models.Model):
         """URL for the display view of the data class model."""
         return ('health_check_detail', [self.id])
 
+    def any_symptoms(self):
+        return (
+            self.temperature or
+            self.cough or
+            self.short_breath or
+            self.loss_taste_smell or
+            self.sore_throat or
+            self.congestion or
+            self.fatigue or
+            self.body_aches or
+            self.headache or
+            self.nausea or
+            self.diarrhea
+        )
+
 
 class Annotation(models.Model):
 
