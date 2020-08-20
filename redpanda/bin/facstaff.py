@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import logging
 import os
 import requests
 import sys
@@ -13,6 +14,8 @@ import django
 django.setup()
 
 from django.conf import settings
+from django.core.mail import EmailMessage
+from django.template import loader
 from djimix.core.database import get_connection
 from djimix.core.database import xsql
 from djimix.people.utils import get_peeps
@@ -29,24 +32,18 @@ os.environ['INFORMIXSQLHOSTS'] = settings.INFORMIXSQLHOSTS
 os.environ['LD_LIBRARY_PATH'] = settings.LD_LIBRARY_PATH
 os.environ['LD_RUN_PATH'] = settings.LD_RUN_PATH
 
+logger = logging.getLogger('debug_logfile')
+
 
 def main():
     """Send fac/staff notification to complete daily health check."""
     request = None
-    frum = settings.DEFAULT_FROM_EMAIL
-    subject = "Daily Health Check Reminder"
-    sql = 'SELECT * FROM provisioning_vw WHERE id in {0}'.format(
-        settings.REDPANDA_TEST_CIDS,
-    )
-    print(sql)
-    with get_connection(earl=settings.INFORMIX_ODBC) as connection:
-        peeps = xsql(sql, connection).fetchall()
-    #peeps = get_peeps('facstaff')
+    frum = settings.EMAIL_HOST_USER
+    subject = "Daily Health Check Reminder: {sn}, {fn}".format
+    peeps = get_peeps('facstaff')
     for peep in peeps:
-        email = '{0}@carthage.edu'.format(peep[3])
-        sql = "SELECT * FROM fwk_user WHERE HostID like '%{}'".format(peep[0])
-        #email = peep['email']
-        #sql = "SELECT * FROM fwk_user WHERE HostID like '%{}'".format(peep['cid'])
+        email = peep['email']
+        sql = "SELECT * FROM fwk_user WHERE HostID like '%{}'".format(peep['cid'])
         print(email)
         print(sql)
         with get_connection(settings.MSSQL_EARL, encoding=False) as connection:
@@ -63,8 +60,31 @@ def main():
                 response = requests.get(earl)
                 jason_data = json.loads(response.text)
                 earl = jason_data['lynx']
-                print(earl)
                 context_data = {'earl': earl, 'peep': peep}
+                print(context_data)
+
+                # debugging problems with gmail smtp
+                headers = {'Reply-To': frum,'From': frum,}
+                print(headers)
+                template = loader.get_template('email_reminder.html')
+                rendered = template.render({'data':context_data,}, request)
+                email = EmailMessage(
+                    subject(sn=peep['lastname'], fn=peep['firstname']),
+                    rendered,
+                    frum,
+                    [email],
+                    headers=headers,
+                )
+                email.encoding = 'utf-8'
+                email.content_subtype = 'html'
+
+                try:
+                    email.send(fail_silently=False)
+                except Exception as e:
+                    logger.debug(e)
+                    logger.debug(peep['cid'])
+
+                '''
                 send_mail(
                     request,
                     [email],
@@ -72,7 +92,9 @@ def main():
                     frum,
                     'email_reminder.html',
                     context_data,
+                    bcc=[frum],
                 )
+                '''
 
 
 if __name__ == '__main__':

@@ -186,18 +186,18 @@ ERROR_LOG_FILENAME = '{0}{1}'.format(LOG_FILEPATH, 'error.log')
 CUSTOM_LOG_FILENAME = '{0}{1}'.format(LOG_FILEPATH, 'custom.log')
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
     'formatters': {
         'standard': {
-            'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',
-            'datefmt': '%Y/%b/%d %H:%M:%S',
+            'format' : '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',
+            'datefmt' : '%Y/%b/%d %H:%M:%S'
         },
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s',
-            'datefmt': '%Y/%b/%d %H:%M:%S',
+            'datefmt' : '%Y/%b/%d %H:%M:%S'
         },
         'simple': {
-            'format': '%(levelname)s %(message)s',
+            'format': '%(levelname)s %(message)s'
         },
     },
     'filters': {
@@ -210,24 +210,22 @@ LOGGING = {
     },
     'handlers': {
         'logfile': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
+            'level':'DEBUG',
+            'class': 'logging.FileHandler',
             'filename': LOG_FILENAME,
-            'maxBytes': 50000,
-            'backupCount': 2,
             'formatter': 'standard',
         },
-        'console': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'standard',
+        'console':{
+            'level':'INFO',
+            'class':'logging.StreamHandler',
+            'formatter': 'standard'
         },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'include_html': True,
             'class': 'django.utils.log.AdminEmailHandler'
-        },
+        }
     },
     'loggers': {
         'custom_logfile': {
@@ -250,6 +248,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': DEBUG_LOG_FILENAME,
+            'handlers':['logfile'],
             'formatter': 'verbose'
         },
         'error_logfile': {
@@ -259,15 +258,25 @@ LOGGING = {
             'filename': ERROR_LOG_FILENAME,
             'formatter': 'verbose'
         },
-        'djauth': {
-            'handlers': ['logfile'],
+        'redpanda': {
+            'handlers':['logfile'],
             'propagate': True,
-            'level': 'DEBUG',
+            'level':'DEBUG',
+        },
+        'redpanda.lynx': {
+            'handlers':['logfile'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+        'redpanda.core': {
+            'handlers':['logfile'],
+            'propagate': True,
+            'level':'DEBUG',
         },
         'django': {
-            'handlers': ['console'],
+            'handlers':['console'],
             'propagate': True,
-            'level': 'WARN',
+            'level':'WARN',
         },
         'django.db.backends': {
             'handlers': ['console'],
@@ -279,13 +288,15 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-    },
+    }
 }
+
 # reminder messages
 REDPANDA_TEST_CIDS = ()
 REDPANDA_SERVER_URL = ''
 REDPANDA_ROOT_URL = '/'
 REDPANDA_SHORT_URL_API = 'lynx/api/'
+REDPANDA_FACSTAFF_TO_LIST = []
 
 ##################
 # LOCAL SETTINGS #
