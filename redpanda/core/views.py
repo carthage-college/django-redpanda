@@ -10,7 +10,6 @@ from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from djimix.decorators.auth import portal_auth_required
-from djtools.utils.mail import send_mail
 from redpanda.core.forms import HealthCheckForm
 
 
@@ -30,13 +29,6 @@ def home(request):
             check = form.save(commit=False)
             check.created_by = request.user
             check.save()
-            frum = settings.DEFAULT_FROM_EMAIL
-            subject = "[Health Check] {0}, {1} ({2})".format(
-                check.created_by.last_name,
-                check.created_by.first_name,
-                check.created_by.id,
-            )
-            send_mail(request, [frum], subject, frum, 'email.html', check)
             now = datetime.datetime.now().strftime('%B %d, %Y')
             # messages displayed after submit
             default = """
