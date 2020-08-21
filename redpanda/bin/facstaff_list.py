@@ -40,7 +40,7 @@ def main():
     request = None
     frum = settings.EMAIL_HOST_USER
     subject = "Daily Health Check Reminder"
-    to_list = [settings.REDPANDA_FACSTAFF_TO_LIST]
+    to_list = settings.REDPANDA_FACSTAFF_TO_LIST
     earl = 'https://{0}{1}'.format(
         settings.REDPANDA_SERVER_URL,
         settings.REDPANDA_ROOT_URL,
