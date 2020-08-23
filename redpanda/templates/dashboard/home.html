@@ -32,6 +32,24 @@ $(function() {
     </div>
     <div class="col-lg-12">
       <div class="panel panel-default">
+        <div class="panel-heading">
+          <form class="form-inline" method="post" role="form">
+          {% csrf_token %}
+            <div class="form-group">
+              <label>Show date range</label>
+              <input type="text" name="date_start"
+                value="{{date_start|date:'Y-m-d'}}" placeholder="From..."
+                class="form-control" id="id_date_start">
+              <input type="text" name="date_end"
+                value="{{date_end|date:'Y-m-d'}}" placeholder="To..."
+                class="form-control" id="id_date_end">
+              <input type="submit" name="submit" value="submit" id="submit-toggle" style="margin:0 10px;" class="btn btn-primary">
+            </div>
+          </form>
+        </div>
+        <!-- /.panel-heading -->
+      </div>
+      <div class="panel panel-default">
         <div class="panel-body" id="data-panel">
           {% if admins %}
             {% include "dashboard/data.admins.inc.html" %}

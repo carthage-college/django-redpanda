@@ -5,14 +5,21 @@
 import os
 
 from django.conf import settings
+from django.core.paginator import Paginator
+from django.db.models.query import Q
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from djimix.core.database import get_connection
 from djimix.core.database import xsql
 from djimix.decorators.auth import portal_auth_required
 from djtools.utils.users import in_group
+from djtools.fields import TODAY
 from redpanda.core.models import HealthCheck
 from redpanda.core.utils import get_coach
+
+from datetime import datetime
+from datetime import timedelta
+
 
 
 @portal_auth_required(
@@ -27,9 +34,33 @@ def home(request):
     coach = get_coach(user.id)
     students = []
     czechs = None
-    if faculty or admins:
+    if admins or faculty or coach:
+        date_start = request.POST.get('date_start')
+        if not date_start:
+            date_start = TODAY - timedelta(days=1)
+        else:
+            date_start = datetime.strptime(date_start, '%Y-%m-%d').date()
+
+        date_end = request.POST.get('date_end')
+        if not date_end:
+            date_end = TODAY + timedelta(days=1)
+        else:
+            date_end = datetime.strptime(date_end, '%Y-%m-%d').date() + timedelta(days=1)
+        '''
+        date_end = request.POST.get(
+            #'date_end', TODAY + timedelta(days=1)
+            'date_end', TODAY
+        ) + timedelta(days=2)
+        date_end = request.POST.get('date_end', TODAY)
+        '''
         if admins:
-            czechs = HealthCheck.objects.all().order_by('-created_at')
+            czechs = HealthCheck.objects.filter(
+                created_at__range=(date_start, date_end)
+            ).order_by('-created_at')
+            #czechs = HealthCheck.objects.filter(
+            #    Q(created_at__gte=date_start) & Q(created_at__lte=date_end)
+            #).order_by('-created_at')
+
         else:
             if coach:
                 phile = os.path.join(
@@ -50,7 +81,7 @@ def home(request):
                         'roster': ros,
                         'czechs': HealthCheck.objects.filter(
                             created_by__id=ros.id,
-                        ),
+                        ).filter(created_at__range=(date_start, date_end)),
                     },
                 )
 
@@ -63,6 +94,8 @@ def home(request):
                 'faculty': faculty,
                 'czechs': czechs,
                 'students': students,
+                'date_start': date_start,
+                'date_end': date_end - timedelta(days=1),
             },
         )
     else:
