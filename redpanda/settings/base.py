@@ -77,8 +77,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.staticfiles',
     # apps
-    'redpanda.core',
     'redpanda.lynx',
+    'redpanda.core',
+    'redpanda.research',
     # needed for template tags
     'djtools',
     # honeypot for admin attacks

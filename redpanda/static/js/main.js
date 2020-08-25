@@ -101,6 +101,29 @@ $(function() {
     ]
     */
   });
+  /* clear django cache object by cache key and refresh content */
+  $('.clear-cache').on('click', function(e){
+    e.preventDefault();
+    var $dis = $(this);
+    var $cid = $dis.attr('data-cid');
+    var $target = '#' + $dis.attr('data-target');
+    var $html = $dis.html();
+    $dis.html('<i class="fa fa-refresh fa-spin"></i>');
+    $.ajax({
+      type: 'POST',
+      url: $clearCacheUrl,
+      data: {'cid':$cid},
+      success: function(data) {
+        $.growlUI("Cache", "Clear");
+        $($target).html(data);
+        $dis.html('<i class="fa fa-refresh"></i>');
+      },
+      error: function(data) {
+        $.growlUI("Error", data);
+      }
+    });
+    return false;
+  });
   /* override the submit event for the alert form to handle some things */
   $('form#health-check').submit(function(){
     // disable submit button after users clicks it

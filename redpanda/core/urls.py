@@ -62,6 +62,10 @@ urlpatterns = [
     path(
         'lynx/', include('redpanda.lynx.urls'),
     ),
+    # Smell Study Research
+    path(
+        'research/', include('redpanda.research.urls'),
+    ),
     # home SPA
     path(
         '', views.home, name='home'
