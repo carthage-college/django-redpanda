@@ -15,11 +15,20 @@ a:hover {color: #cacaca;}
   border-color: #007bff !important;
 }
 .btn-primary:hover{color:#fff;background-color:#0069d9 !important;border-color:#0062cc !important}
+#lossSmell {font-weight:700;color:#000;background-color:#c5b32f;}
+#lossSmell a {color:#007bff;}
+#lossSmell a:hover {color:cyan;}
 </style>
 {% endblock %}
 {% block extra_javascript %}
 <script type="text/javascript" charset="utf-8">
   var $clearCacheUrl = "{% url 'clear_cache' 'blurbs' %}";
+  $(function() {
+    $("[name=studyOpt]").click(function(){
+      $('.smellTestOpt').hide();
+      $("#studyOpt" + $(this).val()).show('slow');
+    });
+  });
 </script>
 <script src="{% static 'js/research.js' %}?0420"
   type="text/javascript" language="javascript"></script>
@@ -44,7 +53,7 @@ a:hover {color: #cacaca;}
 {% block content %}
 <div class="forms-container col-lg-8 col-md-8 col-sm-12 col-xs-12 mb-4" style="padding-right:0px !important;">
   {% get_lw_content as help blurbs 3009 %}
-  <div class="card card-body">
+  <div class="card">
     <div id="lw_success_3009">{{help.body|safe}}</div>
     {% if user.is_superuser %}
     <p>
@@ -66,62 +75,64 @@ a:hover {color: #cacaca;}
     {% endfor %}
   </div>
   {% endif %}
+
   <form method="post" action="." autocomplete="false" class="form"
     role="form" id="smell-test">
     {% csrf_token %}
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="studyOpt" id="studyOptIn" data-toggle="collapse" data-target=".smellTestOpt" value="Y" checked="checked" />
+    <div class="form-group">
+      <input type="radio" name="studyOpt" id="studyOptIn" value="Yes">
       <label class="form-check-label" for="studyOptIn">I agree to participate in the study</label>
     </div>
-    <div class="smellTestOpt smellTestOptIn collapse show">
+    <div class="smellTestOpt" id="studyOptYes" style="display:none;">
       <p>Click <a href="https://forms.gle/hu7VuHiCZJgBVP4R8" target="_blank">HERE [link to smell test form]</a> to begin the study.</p>
       <div class="form-group">
         <label>Participant ID:</label>
         <input type="text" name="customID" value="" readonly="readonly" />
       </div>
     </div>
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="studyOpt" id="studyOptOut" data-toggle="collapse" data-target=".smellTestOpt" value="N" />
+    <div class="form-group">
+      <input type="radio" name="studyOpt" id="studyOptOut" value="No">
       <label class="form-check-label" for="studyOptOut">I prefer to opt out of the study</label>
     </div>
-    <div class="smellTestOpt smellTestOptOut collapse">
+    <div class="smellTestOpt" id="studyOptNo" style="display:none;">
       <p>If you choose to opt out of the study, please complete the Sensonics 8-Item Smell Test, as directed on the card.</p>
       <div class="form-group">
         <p>Please select which of the 8-items you answered correctly on the odor identification test:</p>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="smellCorrect" id="inlineCheckbox1" value="1" />
+        <div class="form-group form-check-inline">
+          <input type="checkbox" name="smellCorrect" id="inlineCheckbox1" value="1" />
           <label class="form-check-label" for="inlineCheckbox1">1</label>
         </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="smellCorrect" id="inlineCheckbox2" value="2" />
+        <div class="form-group form-check-inline">
+          <input type="checkbox" name="smellCorrect" id="inlineCheckbox2" value="2" />
           <label class="form-check-label" for="inlineCheckbox2">2</label>
         </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="smellCorrect" id="inlineCheckbox3" value="3" />
+        <div class="form-group form-check-inline">
+          <input type="checkbox" name="smellCorrect" id="inlineCheckbox3" value="3" />
           <label class="form-check-label" for="inlineCheckbox3">3</label>
         </div>
-        <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" name="smellCorrect" id="inlineCheckbox4" value="4" />
+        <div class="form-group form-check-inline">
+        <input type="checkbox" name="smellCorrect" id="inlineCheckbox4" value="4" />
         <label class="form-check-label" for="inlineCheckbox4">4</label>
         </div>
-        <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" name="smellCorrect" id="inlineCheckbox5" value="5" />
+        <div class="form-group form-check-inline">
+        <input type="checkbox" name="smellCorrect" id="inlineCheckbox5" value="5" />
         <label class="form-check-label" for="inlineCheckbox5">5</label>
         </div>
-        <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" name="smellCorrect" id="inlineCheckbox6" value="6" />
+        <div class="form-group form-check-inline">
+        <input type="checkbox" name="smellCorrect" id="inlineCheckbox6" value="6" />
         <label class="form-check-label" for="inlineCheckbox6">6</label>
         </div>
-        <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" name="smellCorrect" id="inlineCheckbox7" value="7" />
+        <div class="form-group form-check-inline">
+        <input type="checkbox" name="smellCorrect" id="inlineCheckbox7" value="7" />
         <label class="form-check-label" for="inlineCheckbox7">7</label>
         </div>
         <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" name="smellCorrect" id="inlineCheckbox8" value="8" />
+        <input type="checkbox" name="smellCorrect" id="inlineCheckbox8" value="8" />
         <label class="form-check-label" for="inlineCheckbox8">8</label>
         </div>
-        <p class="smellLoss collapse show bg-warning">Having scored five (5) or less, you are strongly encouraged to click the &quot;New smell or taste loss&quot; symptom on the
-        <a href="https://clear.carthage.edu" target="_blank">daily health-check app</a>.</p>
+        <p class="p-2" id="lossSmell">Having scored five or fewer, you are strongly encouraged to click the "New smell or taste loss" symptom on the
+          <a href="https://clear.carthage.edu/" target="_blank">daily health-check app</a>.
+        </p>
       </div>
       <!-- /.form-group -->
       <p>
@@ -134,9 +145,10 @@ a:hover {color: #cacaca;}
     <!-- /.smellTestOpt* -->
     <input class="btn btn-primary btn-block" type="submit" value="Submit">
   </form>
+
   <!-- end form -->
   {% get_lw_content as links blurbs 3010 %}
-  <div class="card card-body">
+  <div class="card">
     <div id="lw_success_3010">{{links.body|safe}}</div>
     {% if user.is_superuser %}
     <p>
