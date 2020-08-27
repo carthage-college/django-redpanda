@@ -19,7 +19,7 @@ def home(request):
     if request.method == 'POST':
         form = SmellTestForm(request.POST)
         if form.is_valid():
-            check = form.save(commit=False)
+            smell = form.save(commit=False)
             check.created_by = request.user
             check.save()
             # messages displayed after submit

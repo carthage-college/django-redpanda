@@ -9,6 +9,7 @@ footer.sticky-footer {background-color:inherit;width:100%;}
 a {color: cyan;}
 a:hover {color: #cacaca;}
 .content-wrapper { margin-left:0; }
+.container-fluid { padding-left:0;}
 .btn-primary {
   color: #fff;
   background-color: #007bff !important;
@@ -24,10 +25,14 @@ a:hover {color: #cacaca;}
 <script type="text/javascript" charset="utf-8">
   var $clearCacheUrl = "{% url 'clear_cache' 'blurbs' %}";
   $(function() {
+    var googleFormURL = 'https://docs.google.com/forms/d/e/1FAIpQLSf-pBEkYY6xEYVmJMdYFAxg35Pr4lyf6ko6ElUynfnkWrQrkA/viewform?usp=pp_url&entry.419058539=';
+    var participantID = Math.random().toString(36).substring(2, 8) + Math.random().toString(36).substring(2, 8);
     $("[name=studyOpt]").click(function(){
       $('.smellTestOpt').hide();
       $("#studyOpt" + $(this).val()).show('slow');
     });
+    $('#participantLink').attr({'href':googleFormURL + participantID});
+    $('input[name="customID"]').val(participantID);
   });
 </script>
 <script src="{% static 'js/research.js' %}?0420"
@@ -75,7 +80,6 @@ a:hover {color: #cacaca;}
     {% endfor %}
   </div>
   {% endif %}
-
   <form method="post" action="." autocomplete="false" class="form"
     role="form" id="smell-test">
     {% csrf_token %}
@@ -84,11 +88,7 @@ a:hover {color: #cacaca;}
       <label class="form-check-label" for="studyOptIn">I agree to participate in the study</label>
     </div>
     <div class="smellTestOpt" id="studyOptYes" style="display:none;">
-      <p>Click <a href="https://forms.gle/hu7VuHiCZJgBVP4R8" target="_blank">HERE [link to smell test form]</a> to begin the study.</p>
-      <div class="form-group">
-        <label>Participant ID:</label>
-        <input type="text" name="customID" value="" readonly="readonly" />
-      </div>
+      <p>Click <a href="https://docs.google.com/forms/d/e/1FAIpQLSf-pBEkYY6xEYVmJMdYFAxg35Pr4lyf6ko6ElUynfnkWrQrkA/viewform?usp=pp_url&amp;entry.419058539=wdwn8f6ci1do" id="participantLink">HERE</a> to begin the study</p>
     </div>
     <div class="form-group">
       <input type="radio" name="studyOpt" id="studyOptOut" value="No">
@@ -143,9 +143,7 @@ a:hover {color: #cacaca;}
       </p>
     </div>
     <!-- /.smellTestOpt* -->
-    <input class="btn btn-primary btn-block" type="submit" value="Submit">
   </form>
-
   <!-- end form -->
   {% get_lw_content as links blurbs 3010 %}
   <div class="card mt-4">
