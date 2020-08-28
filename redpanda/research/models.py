@@ -4,6 +4,7 @@
 
 from django.db import models
 from django.contrib.auth.models import User
+from djtools.fields import BINARY_CHOICES
 from redpanda.core.models import GenericChoice
 
 
@@ -20,29 +21,26 @@ class SmellStudy(models.Model):
     created_at = models.DateTimeField(
         "Date Created", auto_now_add=True
     )
-    affirmative = models.CharField(
-        "I could smell all 3 odors in my kit today (if checked: DONE)",
-        max_length=8,
-    )
-    # if user selects 5 or fewer: GO TO THE NURSE)
-    item_test = models.CharField(
-        verbose_name="""
-            I had difficulty smelling 1 or more of my 3 odors today
-            and so I completed the 8-item Test again and I had
-            the following number correct.
-        """,
-        max_length=4,
-    )
+    one = models.BooleanField()
+    two = models.BooleanField()
+    three = models.BooleanField()
+    four = models.BooleanField()
+    five = models.BooleanField()
+    six = models.BooleanField()
+    seven = models.BooleanField()
+    eight = models.BooleanField()
 
 
 class Registration(models.Model):
     """Data class model for the smell acuity research registration."""
-
-    created_by = models.ForeignKey(
+    user = models.OneToOneField(
         User,
-        verbose_name="Created by",
-        related_name="registration_created_by",
-        editable=False, null=True, blank=True,
+        verbose_name='Created by',
+        related_name='profile',
+        editable=False,
+        null=True,
+        blank=True,
+        #on_delete=models.CASCADE,
         on_delete=models.SET_NULL
     )
     created_at = models.DateTimeField(
@@ -53,27 +51,34 @@ class Registration(models.Model):
             How many items did you answer correctly (out of 8)
             on the odor identification task?
         """,
+        null=True,
+        blank=True,
         max_length=4,
     )
-    opt_in = models.BooleanField(
+    opt_in = models.CharField(
         "I would like to participate in the smell study",
-        default=True,
+        max_length=4,
+        choices=BINARY_CHOICES,
         null=True,
         blank=True,
     )
-    name = models.CharField(max_length=128)
-    contact = models.CharField(max_length=128)
-    age = models.CharField(max_length=4)
-    biological_sex = models.CharField(max_length=8)
+    name = models.CharField(max_length=128, null=True, blank=True)
+    contact = models.CharField(max_length=128, null=True, blank=True)
+    age = models.CharField(max_length=4, null=True, blank=True)
+    biological_sex = models.CharField(max_length=8, null=True, blank=True)
     race = models.ManyToManyField(
         GenericChoice,
         related_name="user_profile_race",
-        help_text = 'Check all that apply'
+        help_text = 'Check all that apply',
+        null=True,
+        blank=True,
     )
-    allergy_symptoms = models.CharField(max_length=4)
-    smoking_status = models.CharField(max_length=16)
-    medications = models.TextField()
-    incorrect_items = models.ManyToManyField(GenericChoice)
+    allergy_symptoms = models.CharField(max_length=4, null=True, blank=True)
+    smoking_status = models.CharField(max_length=16, null=True, blank=True)
+    medications = models.TextField(null=True, blank=True)
+    incorrect_items = models.ManyToManyField(
+        GenericChoice, null=True, blank=True,
+    )
 
     class Meta:
         """Information about the data class model."""
@@ -81,9 +86,6 @@ class Registration(models.Model):
         get_latest_by = 'created_at'
 
     def __str__(self):
-        """Default data for display."""
-        return self.created_by.username
-
-    #def get_absolute_url(self):
-        #"""URL for the display view of the data class model."""
-        #return ('health_check_detail', [self.id])
+        return "{0}, {1}".format(
+            self.user.last_name, self.user.first_name
+        )
