@@ -39,7 +39,7 @@ def main():
     """Send fac/staff notification to complete daily health check."""
     request = None
     frum = settings.EMAIL_HOST_USER
-    subject = "Daily Health Check Reminder: {sn}, {fn}".format
+    subject = "#StaySafeCarthage: Daily Health Check Reminder".format
     peeps = get_peeps('facstaff')
     for peep in peeps:
         email = peep['email']
