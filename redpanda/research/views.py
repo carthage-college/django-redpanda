@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from djimix.decorators.auth import portal_auth_required
-from redpanda.research.forms import SmellTestForm
+from redpanda.research.forms import SmellStudyForm
 from redpanda.research.models import Registration
 
 
@@ -25,26 +25,32 @@ def home(request):
     )[0]
 
     if request.method == 'POST':
-        form = SmellTestForm(request.POST)
+        # messages displayed after submit
+        base = '<p class="mt-4 p-2 alert" id="lossSmell">{message}</p>'.format
+        message = base(message="Thank you for participating.")
+        form = SmellStudyForm(request.POST)
         if form.is_valid():
             smell = form.save(commit=False)
             smell.created_by = request.user
             smell.save()
-            # messages displayed after submit
-            default = "Thank you for participating."
-            #tag = 'alert-warning'
-            tag = 'alert-success'
-            #kind = messages.WARNING
-            kind = messages.SUCCESS
+            if smell.count() <= 5:
+                kind = messages.SUCCESS
+                message = base(message='''
+                    Having scored five or fewer, you are strongly encouraged to
+                    click the "New loss of taste or smell" symptom on the
+                    <a href="https://clear.carthage.edu/">
+                      daily health-check app</a>.
+                    </p>
+                ''')
             messages.add_message(
                 request,
-                kind,
-                mark_safe('{0}<br>{1}'.format(now, message)),
-                extra_tags=tag,
+                messages.SUCCESS,
+                mark_safe(message),
+                extra_tags='alert-success',
             )
-            return HttpResponseRedirect(reverse_lazy('home'))
+            return HttpResponseRedirect(reverse_lazy('research_home'))
     else:
-        form = SmellTestForm()
+        form = SmellStudyForm()
     return render(
         request, 'research/home.html', {'form': form, 'profile': profile},
     )

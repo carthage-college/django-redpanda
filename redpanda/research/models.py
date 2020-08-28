@@ -30,6 +30,26 @@ class SmellStudy(models.Model):
     seven = models.BooleanField()
     eight = models.BooleanField()
 
+    def count(self):
+        smell = 0
+        if self.one:
+            smell += 1
+        if self.two:
+            smell += 1
+        if self.three:
+            smell += 1
+        if self.four:
+            smell += 1
+        if self.five:
+            smell += 1
+        if self.six:
+            smell += 1
+        if self.seven:
+            smell += 1
+        if self.eight:
+            smell += 1
+        return smell
+
 
 class Registration(models.Model):
     """Data class model for the smell acuity research registration."""

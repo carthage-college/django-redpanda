@@ -2,11 +2,13 @@
 
 from django import forms
 from django.core.exceptions import ValidationError
+from redpanda.research.models import SmellStudy
 
 
-class SmellTestForm(forms.Form):
+class SmellStudyForm(forms.ModelForm):
     """Data model for the health check app."""
-    opt_in = forms.BooleanField(required=False)
+
+    '''
     one = forms.BooleanField(required=False)
     two = forms.BooleanField(required=False)
     three = forms.BooleanField(required=False)
@@ -15,3 +17,8 @@ class SmellTestForm(forms.Form):
     six = forms.BooleanField(required=False)
     seven = forms.BooleanField(required=False)
     eight = forms.BooleanField(required=False)
+    '''
+
+    class Meta:
+        model = SmellStudy
+        exclude = ('created_by', 'created_at')

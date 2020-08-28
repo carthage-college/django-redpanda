@@ -16,6 +16,7 @@ a:hover {color: #cacaca;}
   border-color: #007bff !important;
 }
 .btn-primary:hover{color:#fff;background-color:#0069d9 !important;border-color:#0062cc !important}
+.form-check-label {padding-left: .25rem; margin-bottom: .5rem;}
 #lossSmell {font-weight:700;color:#000;background-color: #fcf8e3; border-color:#faebcc;}
 #lossSmell a {color:#007bff;}
 #lossSmell a:hover {color:cyan;}
@@ -58,18 +59,14 @@ a:hover {color: #cacaca;}
 <a class="navbar-brand" href="{{root_url}}" style="font-size:.9em;background-color:transparent !important;">#StaySafeCarthage Smell Study</a>
 {% endblock %}
 {% block breadcrumb %}
-  {% if messages %}
-    {% for message in messages %}
-    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ml-2">
-      <div class=" alert {{message.tags}}">
-        <strong>{{ message }}</strong>
-      </div>
-    </div>
-    {% endfor %}
-  {% endif %}
 {% endblock %}
 {% block content %}
 <div class="forms-container col-lg-8 col-md-8 col-sm-12 col-xs-12 mb-4" style="padding-right:0px !important;">
+  {% if messages %}
+    {% for message in messages %}
+      {{ message }}
+    {% endfor %}
+  {% endif %}
   {% get_lw_content as help blurbs 3009 %}
   <div class="card">
     <div id="lw_success_3009">{{help.body|safe}}</div>
@@ -112,42 +109,38 @@ a:hover {color: #cacaca;}
       <div class="form-group">
         <p>Please select which of the 8-items you answered correctly on the odor identification test:</p>
         <div class="form-group form-check-inline">
-          <input type="checkbox" name="smellCorrect" id="inlineCheckbox1" value="1">
-          <label class="form-check-label" for="inlineCheckbox1">1</label>
+          <input type="checkbox" name="one" id="id_one" value="1">
+          <label class="form-check-label" for="id_one">1</label>
         </div>
         <div class="form-group form-check-inline">
-          <input type="checkbox" name="smellCorrect" id="inlineCheckbox2" value="2">
-          <label class="form-check-label" for="inlineCheckbox2">2</label>
+          <input type="checkbox" name="two" id="id_two" value="2">
+          <label class="form-check-label" for="id_two">2</label>
         </div>
         <div class="form-group form-check-inline">
-          <input type="checkbox" name="smellCorrect" id="inlineCheckbox3" value="3">
-          <label class="form-check-label" for="inlineCheckbox3">3</label>
+          <input type="checkbox" name="three" id="id_three" value="3">
+          <label class="form-check-label" for="id_three">3</label>
         </div>
         <div class="form-group form-check-inline">
-        <input type="checkbox" name="smellCorrect" id="inlineCheckbox4" value="4">
-        <label class="form-check-label" for="inlineCheckbox4">4</label>
+        <input type="checkbox" name="four" id="id_four" value="4">
+        <label class="form-check-label" for="id_four">4</label>
         </div>
         <div class="form-group form-check-inline">
-        <input type="checkbox" name="smellCorrect" id="inlineCheckbox5" value="5">
-        <label class="form-check-label" for="inlineCheckbox5">5</label>
+        <input type="checkbox" name="five" id="id_five" value="5">
+        <label class="form-check-label" for="id_five">5</label>
         </div>
         <div class="form-group form-check-inline">
-        <input type="checkbox" name="smellCorrect" id="inlineCheckbox6" value="6">
-        <label class="form-check-label" for="inlineCheckbox6">6</label>
+        <input type="checkbox" name="six" id="id_six" value="6">
+        <label class="form-check-label" for="id_six">6</label>
         </div>
         <div class="form-group form-check-inline">
-        <input type="checkbox" name="smellCorrect" id="inlineCheckbox7" value="7">
-        <label class="form-check-label" for="inlineCheckbox7">7</label>
+        <input type="checkbox" name="seven" id="id_seven" value="7">
+        <label class="form-check-label" for="id_seven">7</label>
         </div>
         <div class="form-check form-check-inline">
-        <input type="checkbox" name="smellCorrect" id="inlineCheckbox8" value="8">
-        <label class="form-check-label" for="inlineCheckbox8">8</label>
+        <input type="checkbox" name="eight" id="id_eight" value="8">
+        <label class="form-check-label" for="id_eight">8</label>
         </div>
-        <p class="p-2 alert" id="lossSmell">
-          Having scored five or fewer, you are strongly encouraged to click
-          the "New loss of taste or smell" symptom on the
-          <a href="https://clear.carthage.edu/">daily health-check app</a>.
-        </p>
+        <input class="btn btn-primary btn-block" type="submit" value="Submit">
       </div>
       <!-- /.form-group -->
       <p>
