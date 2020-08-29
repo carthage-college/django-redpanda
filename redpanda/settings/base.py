@@ -2,7 +2,7 @@
 
 """Django settings for project."""
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import datetime
 import os
 
 from djimix.settings.local import DBSERVERNAME
@@ -133,9 +133,10 @@ CACHES = {
         'KEY_PREFIX': '{0}_'.format(PROJECT_APP),
     }
 }
-STAFF_GROUP = ''
-FACULTY_GROUP = ''
 ADMIN_GROUP = ''
+ATHLETICS_GROUP = ''
+FACULTY_GROUP = ''
+STAFF_GROUP = ''
 # LDAP Constants
 LDAP_SERVER = ''
 LDAP_PORT = ''
@@ -290,7 +291,9 @@ LOGGING = {
         },
     }
 }
-
+# app constants
+START_DATE = datetime.datetime(datetime.datetime.now().year, 6, 1)
+SPORTS_MONTH = 5
 # reminder messages
 REDPANDA_TEST_CIDS = ()
 REDPANDA_SERVER_URL = ''

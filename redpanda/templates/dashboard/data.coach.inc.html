@@ -35,16 +35,6 @@
         <td nowrap style="font-family: monospace;font-size:1.1em;}">
         {{czech.created_at|date:'Y-m-d H:i:s'}}
         </td>
-      <tr>
-        <td nowrap style="text-align: left;">
-          <a href="mailto:{{c.created_by.email}}"
-            title="Email this person: {{c.created_by.id}}">
-              {{c.created_by.last_name}}, {{c.created_by.first_name}}</a>
-        </td>
-        <td nowrap style="text-align: left;">{{c.created_by.id}}</td>
-        <td nowrap style="font-family: monospace;font-size:1.1em;}">
-        {{c.created_at|date:'Y-m-d H:i:s'}}
-        </td>
         <td nowrap>
         {% if czech.tested_positive %}
           <i class="fa fa-check green" title="Tested Positive">
@@ -161,13 +151,11 @@
       {% endfor %}
       {% else %}
       <tr>
-        <td nowrap style="text-align: left;">
-          {{s.roster.lastname}}, {{s.roster.firstname}}</a>
-        </td>
+        <td nowrap style="text-align: left;"> {{s.roster.lastname}}, {{s.roster.firstname}}</a></td>
         <td nowrap style="text-align: left;">{{s.roster.student_id}}</td>
         <td></td>
-        <td nowrap>{{s.roster.course}}</td>
-        <td nowrap style="text-align: left;">{{s.roster.title}}</td>
+        <td></td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>

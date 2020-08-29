@@ -31,10 +31,13 @@ def home(request):
     user = request.user
     faculty = in_group(user, settings.FACULTY_GROUP)
     admins = in_group(user, settings.ADMIN_GROUP)
+    athletics = in_group(user, settings.ATHLETICS_GROUP)
     coach = get_coach(user.id)
+    sport = '666'
+    sports = None
     students = []
     czechs = None
-    if admins or faculty or coach:
+    if admins or faculty or athletics or coach:
         date_start = request.POST.get('date_start')
         if not date_start:
             date_start = TODAY - timedelta(days=1)
@@ -46,23 +49,31 @@ def home(request):
             date_end = TODAY + timedelta(days=1)
         else:
             date_end = datetime.strptime(date_end, '%Y-%m-%d').date() + timedelta(days=1)
-        '''
-        date_end = request.POST.get(
-            #'date_end', TODAY + timedelta(days=1)
-            'date_end', TODAY
-        ) + timedelta(days=2)
-        date_end = request.POST.get('date_end', TODAY)
-        '''
         if admins:
             czechs = HealthCheck.objects.filter(
                 created_at__range=(date_start, date_end)
             ).order_by('-created_at')
-            #czechs = HealthCheck.objects.filter(
-            #    Q(created_at__gte=date_start) & Q(created_at__lte=date_end)
-            #).order_by('-created_at')
-
         else:
-            if coach:
+            if athletics:
+                date = settings.START_DATE
+                if date.month < settings.SPORTS_MONTH:
+                    year = date.year
+                else:
+                    year = date.year + 1
+
+                sportsql = os.path.join(settings.BASE_DIR, 'sql/sports_all.sql')
+                with open(sportsql) as incantation:
+                    with get_connection() as connection:
+                        sports = xsql(incantation.read(), connection).fetchall()
+                # simple protection against sql injection
+                for spor in sports:
+                    if spor[0] == request.POST.get('sport'):
+                        sport = spor[0]
+                        break
+                phile = os.path.join(
+                    settings.BASE_DIR, 'sql/students_sport.sql',
+                )
+            elif coach:
                 phile = os.path.join(
                     settings.BASE_DIR, 'sql/students_coach.sql',
                 )
@@ -72,7 +83,10 @@ def home(request):
                 )
             with open(phile) as incantation:
                 sql = incantation.read()
-                sql = sql.replace('{CID}', str(user.id))
+                if athletics:
+                    sql = sql.replace('{YEAR}', str(year)).replace('{SPORT}', sport)
+                else:
+                    sql = sql.replace('{CID}', str(user.id))
             with get_connection() as connection:
                 roster = xsql(sql, connection).fetchall()
             for ros in roster:
@@ -90,9 +104,12 @@ def home(request):
             'dashboard/home.html',
             {
                 'admins': admins,
+                'athletics': athletics,
                 'coach': coach,
                 'faculty': faculty,
                 'czechs': czechs,
+                'sport': sport,
+                'sports': sports,
                 'students': students,
                 'date_start': date_start,
                 'date_end': date_end - timedelta(days=1),

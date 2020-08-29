@@ -39,6 +39,17 @@ $(function() {
               <input type="text" name="date_end"
                 value="{{date_end|date:'Y-m-d'}}" placeholder="To..."
                 class="form-control" id="id_date_end">
+              {% if athletics %}
+                <label style="margin:0 10px;">Sport</label>
+                <select name="sport" class="form-control">
+                <option value="">----Select----</option>
+                {% for s in sports %}
+                <option value="{{s.0}}"{% if s.0 == sport %} selected{% endif %}>
+                {{s.1|safe}}
+                </option>
+                {% endfor %}
+                </select>
+              {% endif %}
               <input type="submit" name="submit" value="submit" id="submit-toggle" style="margin:0 10px;" class="btn btn-primary">
             </div>
           </form>
@@ -49,10 +60,11 @@ $(function() {
         <div class="panel-body" id="data-panel">
           {% if admins %}
             {% include "dashboard/data.admins.inc.html" %}
-          {% else %}{% if coach %}
+          {% else %}{% if coach or athletics %}
             {% include "dashboard/data.coach.inc.html" %}
           {% else %}{% if faculty %}
             {% include "dashboard/data.faculty.inc.html" %}
+          {% else %}{
           {% endif %}{% endif %}{% endif %}
         </div>
         <!-- /.panel-body -->
