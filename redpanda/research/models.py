@@ -13,8 +13,8 @@ class SmellStudy(models.Model):
 
     created_by = models.ForeignKey(
         User,
-        verbose_name="Created by",
-        related_name="smellstudy_created_by",
+        verbose_name='Created by',
+        related_name='smellstudy',
         editable=False, null=True, blank=True,
         on_delete=models.SET_NULL
     )
@@ -49,6 +49,21 @@ class SmellStudy(models.Model):
         if self.eight:
             smell += 1
         return smell
+
+
+class SmellStudyInquiry(models.Model):
+    """Data class model for the smell acuity daily inquiry form."""
+    created_by = models.ForeignKey(
+        User,
+        verbose_name='Created by',
+        related_name='inquiry',
+        editable=False, null=True, blank=True,
+        on_delete=models.SET_NULL
+    )
+    created_at = models.DateTimeField(
+        "Date Created", auto_now_add=True
+    )
+    uuid = models.CharField(max_length=128)
 
 
 class Registration(models.Model):
@@ -88,7 +103,7 @@ class Registration(models.Model):
     biological_sex = models.CharField(max_length=8, null=True, blank=True)
     race = models.ManyToManyField(
         GenericChoice,
-        related_name="user_profile_race",
+        related_name='race',
         help_text = 'Check all that apply',
         null=True,
         blank=True,
@@ -106,6 +121,6 @@ class Registration(models.Model):
         get_latest_by = 'created_at'
 
     def __str__(self):
-        return "{0}, {1}".format(
+        return '{0}, {1}'.format(
             self.user.last_name, self.user.first_name
         )

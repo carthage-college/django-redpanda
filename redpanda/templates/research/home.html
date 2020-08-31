@@ -27,7 +27,7 @@ a:hover {color: #cacaca;}
 <script type="text/javascript" charset="utf-8">
   var $clearCacheUrl = '{% url "clear_cache" "blurbs" %}';
   $(function() {
-    var googleFormURL = 'https://docs.google.com/forms/d/e/1FAIpQLSf-pBEkYY6xEYVmJMdYFAxg35Pr4lyf6ko6ElUynfnkWrQrkA/viewform?usp=pp_url&entry.419058539=';
+    var googleFormURL = '{% url "research_home" %}?uuid=';
     var participantID = Math.random().toString(36).substring(2, 8) + Math.random().toString(36).substring(2, 8);
     $('#participantLink').attr({'href':googleFormURL + participantID});
     $('input[name="customID"]').val(participantID);

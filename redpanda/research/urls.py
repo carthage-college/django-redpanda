@@ -7,6 +7,6 @@ from redpanda.research import views
 
 
 urlpatterns = [
-    path('opt-in', view=views.opt_in, name='opt_in'),
+    path('opt-in/', view=views.opt_in, name='opt_in'),
     path('', view=views.home, name='research_home'),
 ]

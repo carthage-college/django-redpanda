@@ -10,8 +10,7 @@ from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from djimix.decorators.auth import portal_auth_required
 from redpanda.research.forms import SmellStudyForm
-from redpanda.research.models import Registration
-
+from redpanda.research.models import Registration, SmellStudyInquiry
 
 
 @portal_auth_required(
@@ -23,8 +22,15 @@ def home(request):
     profile = Registration.objects.get_or_create(
         user=request.user,
     )[0]
-
-    if request.method == 'POST':
+    if request.method == 'GET' and request.GET.get('uuid'):
+        uuid = uuid=request.GET['uuid']
+        inquiry = SmellStudyInquiry.objects.create(
+            created_by=request.user, uuid=uuid,
+        )
+        return HttpResponseRedirect(
+            '{0}{1}'.format(settings.REDPANDA_SURVEY_FORM, uuid),
+        )
+    elif request.method == 'POST':
         # messages displayed after submit
         base = '<p class="mt-4 p-2 alert" id="lossSmell">{message}</p>'.format
         message = base(message="Thank you for participating.")

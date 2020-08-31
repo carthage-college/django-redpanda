@@ -300,7 +300,7 @@ REDPANDA_SERVER_URL = ''
 REDPANDA_ROOT_URL = '/'
 REDPANDA_SHORT_URL_API = 'lynx/api/'
 REDPANDA_FACSTAFF_TO_LIST = []
-
+REDPANDA_SURVEY_FORM = ''
 ##################
 # LOCAL SETTINGS #
 ##################
