@@ -14,7 +14,7 @@ class SmellStudy(models.Model):
     created_by = models.ForeignKey(
         User,
         verbose_name='Created by',
-        related_name='smellstudy',
+        related_name='study',
         editable=False, null=True, blank=True,
         on_delete=models.SET_NULL
     )
