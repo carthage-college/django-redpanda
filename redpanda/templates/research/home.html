@@ -96,7 +96,9 @@ a:hover {color: #cacaca;}
     {% csrf_token %}
     <div class="form-group">
       <input type="radio" name="opt_in" id="studyOptIn" value="Yes"{% if profile.opt_in == 'Yes' %} checked{% endif %}>
-      <label class="form-check-label" for="studyOptIn">I agree to participate in the study</label>
+      <label class="form-check-label" for="studyOptIn">
+        I agree to participate in the study and have read the consent statement.
+      </label>
     </div>
     <div class="smellTestOpt" id="studyOptYes" style="display:none;">
       <p>Click <a href="https://docs.google.com/forms/d/e/1FAIpQLSf-pBEkYY6xEYVmJMdYFAxg35Pr4lyf6ko6ElUynfnkWrQrkA/viewform?usp=pp_url&amp;entry.419058539=wdwn8f6ci1do" id="participantLink">HERE</a> to begin the study</p>
@@ -180,7 +182,7 @@ a:hover {color: #cacaca;}
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Covid-19 Odor Identification Study Consent</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Covid-19 and Sense of Smell Study</h5>
           <button type="button" class="close" data-dismiss="modal"
             aria-label="Close" aria-hidden="true">
             <span aria-hidden="true">&times;</span>
