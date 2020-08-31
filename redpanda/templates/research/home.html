@@ -27,10 +27,6 @@ a:hover {color: #cacaca;}
 <script type="text/javascript" charset="utf-8">
   var $clearCacheUrl = '{% url "clear_cache" "blurbs" %}';
   $(function() {
-    var googleFormURL = '{% url "research_home" %}?uuid=';
-    var participantID = Math.random().toString(36).substring(2, 8) + Math.random().toString(36).substring(2, 8);
-    $('#participantLink').attr({'href':googleFormURL + participantID});
-    $('input[name="customID"]').val(participantID);
     {% if profile.opt_in == 'Yes' %}
     $("#studyOptYes").show('slow');
     {% endif %}
@@ -101,7 +97,7 @@ a:hover {color: #cacaca;}
       </label>
     </div>
     <div class="smellTestOpt" id="studyOptYes" style="display:none;">
-      <p>Click <a href="https://docs.google.com/forms/d/e/1FAIpQLSf-pBEkYY6xEYVmJMdYFAxg35Pr4lyf6ko6ElUynfnkWrQrkA/viewform?usp=pp_url&amp;entry.419058539=wdwn8f6ci1do" id="participantLink">HERE</a> to begin the study</p>
+        <p>Click <a href="{% url "research_home" %}?uuid={{uuid}}">HERE</a> to begin the study</p>
     </div>
     <div class="form-group">
       <input type="radio" name="opt_in" id="studyOptOut" value="No"{% if profile.opt_in == 'No' %} checked{% endif %}>

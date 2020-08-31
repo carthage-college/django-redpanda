@@ -119,8 +119,8 @@ def home(request):
         return HttpResponseRedirect(reverse_lazy('home'))
 
 
-def search(request):
-    """Dashboard search."""
+def research(request):
+    """Dashboard for smell study."""
     return render(
-        request, 'dashboard/search.html', {}
+        request, 'dashboard/research.html', {}
     )

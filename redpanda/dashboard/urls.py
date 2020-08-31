@@ -9,8 +9,8 @@ from redpanda.dashboard import views
 
 urlpatterns = [
     path(
-        'search/',
-        views.search, name='dashboard_search'
+        'research/',
+        views.research, name='dashboard_research'
     ),
     path('', views.home, name='dashboard'),
 ]

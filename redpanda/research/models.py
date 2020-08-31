@@ -63,7 +63,7 @@ class SmellStudyInquiry(models.Model):
     created_at = models.DateTimeField(
         "Date Created", auto_now_add=True
     )
-    uuid = models.CharField(max_length=128)
+    uuid = models.CharField(max_length=128, null=True, blank=True)
 
 
 class Registration(models.Model):
@@ -97,6 +97,7 @@ class Registration(models.Model):
         null=True,
         blank=True,
     )
+    uuid = models.CharField(max_length=128, null=True, blank=True)
     name = models.CharField(max_length=128, null=True, blank=True)
     contact = models.CharField(max_length=128, null=True, blank=True)
     age = models.CharField(max_length=4, null=True, blank=True)

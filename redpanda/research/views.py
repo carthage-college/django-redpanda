@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import random
+import string
+
 from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponse
@@ -24,9 +27,9 @@ def home(request):
     )[0]
     if request.method == 'GET' and request.GET.get('uuid'):
         uuid = uuid=request.GET['uuid']
-        inquiry = SmellStudyInquiry.objects.create(
-            created_by=request.user, uuid=uuid,
-        )
+        if not profile.uuid:
+            profile.uuid = uuid
+            profile.save()
         return HttpResponseRedirect(
             '{0}{1}'.format(settings.REDPANDA_SURVEY_FORM, uuid),
         )
@@ -56,9 +59,18 @@ def home(request):
             )
             return HttpResponseRedirect(reverse_lazy('research_home'))
     else:
+        uuid = profile.uuid
+        if not uuid:
+            uuid = ''.join(
+                random.SystemRandom().choice(
+                    string.ascii_lowercase + string.digits
+                ) for _ in range(12)
+            )
         form = SmellStudyForm()
     return render(
-        request, 'research/home.html', {'form': form, 'profile': profile},
+        request, 'research/home.html', {
+            'form': form, 'profile': profile, 'uuid': uuid,
+        },
     )
 
 
