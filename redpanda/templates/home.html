@@ -7,6 +7,30 @@
 <img src="{% static 'img/clogo.png' %}" height="30" class="mr-2">
 <a class="navbar-brand" href="{{root_url}}" style="font-size:.9em">#StaySafeCarthage Daily Check-in</a>
 {% endblock %}
+{% block navbar-top-links %}
+<ul class="navbar-nav ml-auto">
+  <li class="dropdown user-dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+      <i class="fa fa-user"></i> {{user.username|default:"Greetings"}}
+      <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+      <li class="divider"></li>
+      <li>
+        {% if user.is_anonymous %}
+        <a href="{% url 'auth_login' %}">
+          <i class="fa fa-sign-in"></i> Sign In
+        </a>
+        {% else %}
+        <a href="{% url 'auth_logout' %}">
+          <i class="fa fa-sign-out"></i> Sign Out
+        </a>
+        {% endif %}
+      </li>
+    </ul>
+  </li>
+</ul>
+{% endblock %}
 {% block breadcrumb %}
   {% if messages %}
     {% for message in messages %}

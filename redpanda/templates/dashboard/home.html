@@ -29,7 +29,6 @@ $(function() {
     <div class="col-lg-12">
       <div class="panel panel-default">
         <div class="panel-heading">
-        {% if not research %}
           <form class="form-inline" method="post" role="form">
           {% csrf_token %}
             <div class="form-group">
@@ -54,7 +53,6 @@ $(function() {
               <input type="submit" name="submit" value="submit" id="submit-toggle" style="margin:0 10px;" class="btn btn-primary">
             </div>
           </form>
-        {% endif %}
         </div>
         <!-- /.panel-heading -->
       </div>

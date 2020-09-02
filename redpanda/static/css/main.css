@@ -61,10 +61,20 @@ label img {
   z-index: -1;
 }
 
-.navbar-toggler {display:none;}
-
 .navbar {
   justify-content:center;
+  padding: 0;
+}
+@media (min-width: 992px) {
+  .navbar-expand-lg .navbar-nav {margin-right: 42px;}
+  .navbar {padding:2px 0 2px 8px;}
+}
+.navbar-toggler {
+  padding: .5rem;
+}
+.navbar-toggler-icon {
+    width: 1.1em;
+    height: 1.1em;
 }
 .container-fluid {
   padding-left: 0;

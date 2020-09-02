@@ -142,12 +142,13 @@ def research(request):
     if admins or study:
         czechs = HealthCheck.objects.filter(
             created_at__range=(date_start, date_end)
+        ).filter(
+            created_by__profile__opt_in__in=('Yes','No'),
         ).order_by('-created_at')
-        users = User.objects.filter(profile__opt_in__in=('Yes','No'))
         response =  render(
             request,
             'dashboard/research.html',
-            {'users': users, 'research': study},
+            {'czechs': czechs, 'research': study},
         )
     else:
         response = HttpResponseRedirect(reverse_lazy('home'))
