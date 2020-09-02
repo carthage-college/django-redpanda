@@ -139,7 +139,7 @@ def research(request):
     else:
         date_end = datetime.strptime(date_end, '%Y-%m-%d').date() + timedelta(days=1)
 
-    if admins or faculty:
+    if admins or study:
         czechs = HealthCheck.objects.filter(
             created_at__range=(date_start, date_end)
         ).order_by('-created_at')
