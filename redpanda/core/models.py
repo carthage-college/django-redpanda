@@ -47,8 +47,8 @@ class HealthCheck(models.Model):
 
     created_by = models.ForeignKey(
         User,
-        verbose_name="Created by",
-        related_name="health_check_created_by",
+        verbose_name='Created by',
+        related_name='health_check',
         editable=False, null=True, blank=True,
         on_delete=models.SET_NULL
     )
@@ -178,7 +178,8 @@ class Annotation(models.Model):
         on_delete=models.PROTECT,
     )
     created_by = models.ForeignKey(
-        User, verbose_name="Created by",
+        User,
+        verbose_name="Created by",
         related_name='note_creator',
         on_delete=models.PROTECT,
     )
@@ -190,15 +191,9 @@ class Annotation(models.Model):
         null=True,
         blank=True,
     )
-    created_at = models.DateTimeField(
-        "Date Created", auto_now_add=True,
-    )
-    updated_at = models.DateTimeField(
-        "Date Updated", auto_now=True,
-    )
-    recipients = models.ManyToManyField(
-        User, blank=True,
-    )
+    created_at = models.DateTimeField("Date Created", auto_now_add=True)
+    updated_at = models.DateTimeField("Date Updated", auto_now=True)
+    recipients = models.ManyToManyField(User, blank=True)
     body = models.TextField()
     status = models.BooleanField(default=True, verbose_name="Active?")
     tags = TaggableManager(blank=True)

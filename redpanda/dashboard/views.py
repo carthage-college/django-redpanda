@@ -5,6 +5,7 @@
 import os
 
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db.models.query import Q
 from django.shortcuts import render
@@ -43,7 +44,6 @@ def home(request):
             date_start = TODAY - timedelta(days=1)
         else:
             date_start = datetime.strptime(date_start, '%Y-%m-%d').date()
-
         date_end = request.POST.get('date_end')
         if not date_end:
             date_end = TODAY + timedelta(days=1)
@@ -119,8 +119,36 @@ def home(request):
         return HttpResponseRedirect(reverse_lazy('home'))
 
 
+@portal_auth_required(
+    session_var='REDPANDA_AUTH',
+    redirect_url=reverse_lazy('access_denied'),
+)
 def research(request):
     """Dashboard for smell study."""
-    return render(
-        request, 'dashboard/research.html', {}
-    )
+    user = request.user
+    admins = in_group(user, settings.ADMIN_GROUP)
+    study = in_group(user, settings.RESEARCH_GROUP)
+    date_start = request.POST.get('date_start')
+    if not date_start:
+        date_start = TODAY - timedelta(days=1)
+    else:
+        date_start = datetime.strptime(date_start, '%Y-%m-%d').date()
+    date_end = request.POST.get('date_end')
+    if not date_end:
+        date_end = TODAY + timedelta(days=1)
+    else:
+        date_end = datetime.strptime(date_end, '%Y-%m-%d').date() + timedelta(days=1)
+
+    if admins or faculty:
+        czechs = HealthCheck.objects.filter(
+            created_at__range=(date_start, date_end)
+        ).order_by('-created_at')
+        users = User.objects.filter(profile__opt_in__in=('Yes','No'))
+        response =  render(
+            request,
+            'dashboard/research.html',
+            {'users': users, 'research': study},
+        )
+    else:
+        response = HttpResponseRedirect(reverse_lazy('home'))
+    return response

@@ -29,14 +29,15 @@ $(function() {
     <div class="col-lg-12">
       <div class="panel panel-default">
         <div class="panel-heading">
+        {% if not research %}
           <form class="form-inline" method="post" role="form">
           {% csrf_token %}
             <div class="form-group">
               <label>Show date range</label>
-              <input type="text" name="date_start"
+              <input type="text" name="date_start" autocomplete="off"
                 value="{{date_start|date:'Y-m-d'}}" placeholder="From..."
                 class="form-control" id="id_date_start">
-              <input type="text" name="date_end"
+              <input type="text" name="date_end" autocomplete="off"
                 value="{{date_end|date:'Y-m-d'}}" placeholder="To..."
                 class="form-control" id="id_date_end">
               {% if athletics %}
@@ -53,11 +54,13 @@ $(function() {
               <input type="submit" name="submit" value="submit" id="submit-toggle" style="margin:0 10px;" class="btn btn-primary">
             </div>
           </form>
+        {% endif %}
         </div>
         <!-- /.panel-heading -->
       </div>
       <div class="panel panel-default">
         <div class="panel-body" id="data-panel">
+        {% block groups %}
           {% if admins %}
             {% include "dashboard/data.admins.inc.html" %}
           {% else %}{% if coach or athletics %}
@@ -66,6 +69,7 @@ $(function() {
             {% include "dashboard/data.faculty.inc.html" %}
           {% else %}{
           {% endif %}{% endif %}{% endif %}
+        {% endblock %}
         </div>
         <!-- /.panel-body -->
       </div>

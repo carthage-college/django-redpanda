@@ -4,6 +4,8 @@
       <tr>
         <th>Name</th>
         <th>CID</th>
+        <th>PID</th>
+        <th>Opt In</th>
         <th>Created At</th>
         <th>Tested +</th>
         <th>Tested -</th>
@@ -24,14 +26,15 @@
       </tr>
     </thead>
     <tbody>
-    {% for s in students %}
-      {% if s.czechs %}
-      {% for czech in s.czechs %}
+    {% for u in users %}
+      {% for czech in u.health_check.all %}
       <tr>
         <td nowrap style="text-align: left;">
-          {{s.roster.lastname}}, {{s.roster.firstname}}
+          <a href="mailto:{{u.email}}">{{u.last_name}}, {{u.first_name}}</a>
         </td>
         <td nowrap style="text-align: left;">{{czech.created_by.id}}</td>
+        <td nowrap style="text-align: left;">{{u.profile.uuid}}</td>
+        <td nowrap style="text-align: left;">{{u.profile.opt_in}}</td>
         <td nowrap style="font-family: monospace;font-size:1.1em;}">
         {{czech.created_at|date:'Y-m-d H:i:s'}}
         </td>
@@ -149,35 +152,14 @@
         </td>
       </tr>
       {% endfor %}
-      {% else %}
-      <tr>
-        <td nowrap style="text-align: left;">{{s.roster.lastname}}, {{s.roster.firstname}}</td>
-        <td nowrap style="text-align: left;">{{s.roster.student_id}}</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      {% endif %}
     {% endfor %}
     </tbody>
     <tfoot>
       <tr>
         <th>Name</th>
         <th>CID</th>
+        <th>PID</th>
+        <th>Opt In</th>
         <th>Created At</th>
         <th>Tested +</th>
         <th>Tested -</th>
