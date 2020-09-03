@@ -27,8 +27,10 @@
         </a>
         {% endif %}
       </li>
+      {% if user.is_staff %}
       <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
       <li><a href="{% url 'dashboard_research' %}">Research</a></li>
+      {% endif %}
     </ul>
   </li>
 </ul>
