@@ -76,6 +76,7 @@ label img {
     width: 1.1em;
     height: 1.1em;
 }
+.dropdown-menu{min-width: 7rem;}
 .container-fluid {
   padding-left: 0;
 }

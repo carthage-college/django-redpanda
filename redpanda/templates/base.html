@@ -74,9 +74,11 @@
         Carthage College
         {% if user.is_superuser %}
         <a href="{% url 'admin:index' %}">&copy;</a>
-        {% else %}
+        {% else %}{% if user.is_staff %}
         <a href="{% url 'dashboard' %}">&copy;</a>
-        {% endif %}
+        {% else %}
+        &copy;
+        {% endif %}{% endif %}
         |
         <a href="https://www.carthage.edu/privacy/" target="_blank">Privacy Policy</a>
       </small>
