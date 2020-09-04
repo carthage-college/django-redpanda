@@ -144,7 +144,7 @@ def research(request):
         czechs = HealthCheck.objects.filter(
             created_at__range=(date_start, date_end)
         ).filter(
-            created_by__profile__opt_in__in=('Yes','No'),
+            created_by__profile__opt_in='Yes',
         ).order_by('-created_at')
         response =  render(
             request,
