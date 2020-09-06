@@ -45,7 +45,6 @@ $(function() {
     drawCallback: function() {
       spinner.stop(target);
     },
-    fixedHeader: true,
     order: [[2, 'desc']],
     dom: 'lfrBtip',
     responsive: true,
