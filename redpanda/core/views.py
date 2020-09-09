@@ -46,6 +46,11 @@ def home(request):
                 page for more information.<br>
                 Check in again tomorrow.
             """
+            tested_negative = """
+                We have recorded this negative test, so tomorrow please
+                <strong>ONLY</strong>
+                report your symptoms and isolation plans.
+            """
             pending = """
                 Thank you for reporting your test results.
                 Please consult your health care provider and visit our
@@ -77,7 +82,11 @@ def home(request):
                 message = pending
                 kind = messages.SUCCESS
                 tag = 'alert-success'
-            elif check.tested_negative or check.negative:
+            elif check.tested_negative:
+                message = tested_negative
+                kind = messages.SUCCESS
+                tag = 'alert-success'
+            elif check.negative:
                 message = default
                 kind = messages.SUCCESS
                 tag = 'alert-success'
