@@ -13,7 +13,8 @@ from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from djimix.decorators.auth import portal_auth_required
 from redpanda.research.forms import SmellStudyForm
-from redpanda.research.models import Registration, SmellStudyInquiry
+from redpanda.research.models import Registration
+from redpanda.research.models import SmellStudyInquiry
 
 
 @portal_auth_required(

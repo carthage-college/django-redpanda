@@ -21,7 +21,15 @@ var target = document.getElementById('alert-container');
 var spinner = new Spinner(opts).spin(target);
 spinner.stop(target);
 
-$(function() {
+function set_icon(check){
+    icon = '';
+    if (check == true) {
+        icon = '<i class="fa fa-check green" title="Tested Positive"><span style="display:none;">x</span></i>';
+    }
+    return icon;
+}
+
+$(function(){
   /* datepicker */
   $('input[id^="id_date"]').datepicker({
     firstDay:0,
@@ -33,21 +41,18 @@ $(function() {
     buttonImageOnly:true
   });
   /* datatables initialization */
-  var redpandaTable = $('#data-table').DataTable({
+  $('#redpandaTable').DataTable({
     'lengthMenu': [
       [100, 250, 500, 1000, 2000, -1],
       [100, 250, 500, 1000, 2000, 'All']
     ],
     'language': {
       'search': 'Filter records:',
-      'lengthMenu': 'Display _MENU_'
-    },
-    drawCallback: function() {
-      spinner.stop(target);
+      'lengthMenu': 'Display _MENU_',
+      'processing': 'Loading...'
     },
     order: [[2, 'desc']],
     dom: 'lfrBtip',
-    responsive: true,
     buttons: [
       {
         extend: 'excelHtml5',
@@ -55,50 +60,163 @@ $(function() {
           columns: ':visible'
         }
       }
-    ]
-    /*
+    ],
+    //destroy: true,
+    responsive: true,
     serverSide: true,
-    pageLength=25,
+    processing: true,
+    paging: true,
+    pageLength: 100,
     ajax: {
-       url: '{% url %}',
+       'url': $homeAjaxUrl,
        'type': 'post',
-       dataSrc: function ( json ) {
-         return json;
-       },
-       beforeSend: function(){
-         spinner.spin(target);
-       },
-       success: function(data) {
-         spinner.stop(target);
+       'processData': true,
+       'dataType': 'json',
+       // debugging
+       //dataFilter: function(reps) {
+         //console.log(reps);
+         //return reps;
+       //},
+       //error: function(err){
+         //console.log(err);
+       //},
+       'data': {
+            'date_start': $dateStart,
+            'date_end': $dateEnd,
+            'sport': $sport,
+            'csrfmiddlewaretoken': $csrfToken
        }
     },
-    "columns": [
+    'columns': [
         {
-            'data': 'created_by',
-            'render': function(data, type, row){
-                return $("<div>").append($("<a/>").attr("href", "mailto:" + row.created_by + "/").text(data)).html();
-            }
+          'data': 'full_name',
+          'className': 'full_name',
+          'render': function(data, type, row){
+              return $("<div>").append($("<a/>").attr("href", "mailto:" + row.email + "/").text(data)).html();
+          }
         },
         { 'data': 'cid' },
-        { 'data': 'created_at' },
-        { 'data': 'tested_positive' },
-        { 'data': 'tested_negative' },
-        { 'data': 'tested_pending' },
-        { 'data': 'negative' },
-        { 'data': 'temperature' },
-        { 'data': 'cough' },
-        { 'data': 'loss_taste_smell' },
-        { 'data': 'sore_throat' },
-        { 'data': 'congestion' },
-        { 'data': 'fatigue' },
-        { 'data': 'body_aches' },
-        { 'data': 'headache' },
-        { 'data': 'nausea' },
-        { 'data': 'diarrhea' },
-        { 'data': 'quarantine'},
-        { 'data': 'notification'}
+        {
+            'data': 'created_at',
+            'className': 'created_at'
+        },
+        {
+            'data': 'group',
+            'className': 'group'
+        },
+        {
+            'data': 'tested_positive',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        },
+        {
+            'data': 'tested_negative',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        },
+        {
+            'data': 'tested_pending',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        },
+        {
+            'data': 'negative',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        },
+        {
+            'data': 'temperature',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        },
+        {
+            'data': 'cough',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        },
+        {
+            'data': 'short_breath',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        },
+        {
+            'data': 'loss_taste_smell',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        },
+        {
+            'data': 'sore_throat',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        },
+        {
+            'data': 'congestion',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        },
+        {
+            'data': 'fatigue',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        },
+        {
+            'data': 'body_aches',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        },
+        {
+            'data': 'headache',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        },
+        {
+            'data': 'nausea',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        },
+        {
+            'data': 'diarrhea',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        },
+        {
+            'data': 'quarantine',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        }
     ]
-    */
   });
   /* clear django cache object by cache key and refresh content */
   $('.clear-cache').on('click', function(e){

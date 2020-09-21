@@ -75,7 +75,7 @@
     {% for field in form.hidden_fields %}
       {% include "form_field.inc.html" %}
     {% endfor %}
-    <fieldset>
+    <fieldset id="czechs">
       <ol style="padding:0 0 0 4px;">
         <li class="list-item col-6 border-top">
           <input type="checkbox" name="tested_positive" id="id_positive">
@@ -224,7 +224,19 @@
         </li>
       </ol>
     </fieldset>
-    <input class="btn btn-primary btn-block" type="submit" value="Submit">
+    {% if facstaff %}
+    <div class="row ml-2 mb-2">
+      <div class="float-left">
+          <input type="checkbox" name="mobile" id="id_mobile"{% if user.profile.mobile %} checked{% endif %}>
+      </div>
+      <div class="float-left col-11">
+        <small style="display:block;font-weight:600;">
+        I would like to receive health check reminders at my mobile phone.
+        </small>
+      </div>
+    </div>
+    {% endif %}
+    <button class="btn btn-primary btn-block" type="button" type="submit"  value="Submit">Submit</button>
   </form>
   <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4 ml-2">
     <div class="row list-group">

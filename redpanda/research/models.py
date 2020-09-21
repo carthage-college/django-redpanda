@@ -97,6 +97,10 @@ class Registration(models.Model):
         null=True,
         blank=True,
     )
+    mobile = models.BooleanField(
+        "I would like to receive health check reminders at my mobile phone.",
+        default=False,
+    )
     uuid = models.CharField(max_length=128, null=True, blank=True)
     name = models.CharField(max_length=128, null=True, blank=True)
     contact = models.CharField(max_length=128, null=True, blank=True)

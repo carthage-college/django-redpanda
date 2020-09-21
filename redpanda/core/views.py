@@ -14,7 +14,9 @@ from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from djimix.decorators.auth import portal_auth_required
+from djtools.utils.users import in_group
 from redpanda.core.forms import HealthCheckForm
+from redpanda.research.models import Registration
 
 
 @portal_auth_required(
@@ -27,12 +29,18 @@ def home(request):
     # check in once a day
     # check any and all icons and then submit
 
+    user = request.user
     if request.method == 'POST':
         form = HealthCheckForm(request.POST)
         if form.is_valid():
             check = form.save(commit=False)
-            check.created_by = request.user
+            check.created_by = user
             check.save()
+            # mobile phone reminders for health check
+            if request.POST.get('mobile'):
+                profile = Registration.objects.get_or_create(user=user)[0]
+                profile.mobile=True
+                profile.save()
             now = datetime.datetime.now().strftime('%B %d, %Y')
             # messages displayed after submit
             default = """
@@ -104,7 +112,13 @@ def home(request):
             return HttpResponseRedirect(reverse_lazy('home'))
     else:
         form = HealthCheckForm()
-    return render(request, 'home.html', {'form': form})
+
+    facstaff = False
+    faculty = in_group(user, settings.FACULTY_GROUP)
+    staff = in_group(user, settings.STAFF_GROUP)
+    if faculty or staff:
+        facstaff = True
+    return render(request, 'home.html', {'form': form, 'facstaff': facstaff})
 
 
 @csrf_exempt

@@ -138,6 +138,7 @@ ATHLETICS_GROUP = ''
 FACULTY_GROUP = ''
 RESEARCH_GROUP = ''
 STAFF_GROUP = ''
+STUDENT_GROUP = ''
 # LDAP Constants
 LDAP_SERVER = ''
 LDAP_PORT = ''
@@ -287,6 +288,7 @@ LOGGING = {
         },
         'django.request': {
             'handlers': ['mail_admins'],
+            'filters': ['require_debug_true'], # run logger in production
             'level': 'ERROR',
             'propagate': True,
         },

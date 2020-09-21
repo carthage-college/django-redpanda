@@ -52,7 +52,10 @@ class HealthCheckAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     readonly_fields = ('created_by',)
     search_fields = (
-        'user__username', 'user__last_name', 'user__first_name', 'user__id',
+        'created_by__username',
+        'created_by__last_name',
+        'created_by__first_name',
+        'created_by__id',
     )
     raw_id_fields = ('created_by',)
 
