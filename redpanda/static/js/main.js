@@ -40,16 +40,41 @@ $(function(){
     showOn:'both',
     buttonImageOnly:true
   });
-  /* datatables initialization */
-  $('#redpandaTable').DataTable({
+  /* datatables initialization for managers */
+  $('#redpandaManagers').DataTable({
     'lengthMenu': [
       [100, 250, 500, 1000, 2000, -1],
       [100, 250, 500, 1000, 2000, 'All']
     ],
     'language': {
       'search': 'Filter records:',
-      'lengthMenu': 'Display _MENU_',
-      'processing': 'Loading...'
+      'lengthMenu': 'Display _MENU_'
+    },
+    drawCallback: function() {
+      spinner.stop(target);
+    },
+    order: [[2, 'desc']],
+    dom: 'lfrBtip',
+    responsive: true,
+    buttons: [
+      {
+        extend: 'excelHtml5',
+        exportOptions: {
+          columns: ':visible'
+        }
+      }
+    ]
+  });
+  /* datatables initialization for administrators */
+  $('#redpandaAdmins').DataTable({
+    'lengthMenu': [
+      [100, 250, 500, 1000, 2000, -1],
+      [100, 250, 500, 1000, 2000, 'All']
+    ],
+    'language': {
+      'search': 'Filter records:',
+      'processing': 'Loading...',
+      'lengthMenu': 'Display _MENU_'
     },
     order: [[2, 'desc']],
     dom: 'lfrBtip',
@@ -84,6 +109,7 @@ $(function(){
             'date_start': $dateStart,
             'date_end': $dateEnd,
             'sport': $sport,
+            'group': $group,
             'csrfmiddlewaretoken': $csrfToken
        }
     },
@@ -102,7 +128,9 @@ $(function(){
         },
         {
             'data': 'group',
-            'className': 'group'
+            'className': 'group',
+            'searchable': false,
+            'orderable': false
         },
         {
             'data': 'tested_positive',

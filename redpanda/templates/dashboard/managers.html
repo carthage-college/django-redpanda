@@ -1,0 +1,8 @@
+{% extends "dashboard/home.html" %}
+{% block groups %}
+  {% if coach or athletics %}
+    {% include "dashboard/data.coach.inc.html" %}
+  {% else %}{% if faculty %}
+    {% include "dashboard/data.faculty.inc.html" %}
+  {% endif %}{% endif %}
+{% endblock %}

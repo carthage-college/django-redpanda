@@ -2,8 +2,9 @@
 
 """Data models."""
 
-from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.db import models
 
 from taggit.managers import TaggableManager
 
@@ -44,6 +45,28 @@ class GenericChoice(models.Model):
 
 class HealthCheck(models.Model):
     """Data class model for the Health Check app."""
+
+    COLUMNS = {
+        0: 'created_by__last_name',
+        1: 'created_by__id',
+        2: 'created_at',
+        3: 'created_by__groups__name',
+        4: 'tested_positive',
+        5: 'tested_negative',
+        6: 'tested_pending',
+        7: 'negative',
+        8: 'temperature',
+        9: 'cought',
+        10: 'short_breath',
+        11: 'loss_taste_smell',
+        12: 'sore_throat',
+        13: 'congestion',
+        14: 'fatigue',
+        15: 'body_ache',
+        16: 'headache',
+        17: 'diarrhea',
+        18: 'quarantine',
+    }
 
     created_by = models.ForeignKey(
         User,
@@ -155,6 +178,7 @@ class HealthCheck(models.Model):
         return ('health_check_detail', [self.id])
 
     def any_symptoms(self):
+        """Determine if the health check contained any symptoms."""
         return (
             self.temperature or
             self.cough or
@@ -169,6 +193,15 @@ class HealthCheck(models.Model):
             self.diarrhea
         )
 
+    def group(self):
+        """To which group does the creator belong."""
+        if self.created_by.groups.filter(name=settings.FACULTY_GROUP).exists():
+            group = 'Faculty'
+        elif self.created_by.groups.filter(name=settings.STUDENT_GROUP).exists():
+            group = 'Student'
+        else:
+            group = 'Staff'
+        return group
 
 class Annotation(models.Model):
 

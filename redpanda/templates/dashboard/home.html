@@ -19,6 +19,7 @@ var $homeAjaxUrl = '{% url "home_ajax" %}';
 var $dateStart = '{{date_start|date:'Y-m-d'}}';
 var $dateEnd = '{{date_end|date:'Y-m-d'}}';
 var $sport = '{{sport}}';
+var $group = '{{group|default:""}}';
 var $csrfToken = '{{csrf_token}}';
 $(function() {
   $("body").toggleClass("sidenav-toggled");
@@ -45,12 +46,21 @@ $(function() {
                 value="{{date_end|date:'Y-m-d'}}" placeholder="To..."
                 class="form-control" id="id_date_end">
               {% if athletics %}
-                <label style="margin:0 10px;">Sport</label>
                 <select name="sport" class="form-control">
-                <option value="">----Select----</option>
+                <option value="">----Sport----</option>
                 {% for s in sports %}
                 <option value="{{s.0}}"{% if s.0 == sport %} selected{% endif %}>
                 {{s.1|safe}}
+                </option>
+                {% endfor %}
+                </select>
+              {% endif %}
+              {% if admins %}
+                <select name="group" class="form-control">
+                <option value="">----Group----</option>
+                {% for g in groups %}
+                <option value="{{g.0}}"{% if g.0 == group %} selected{% endif %}>
+                {{g.1|safe}}
                 </option>
                 {% endfor %}
                 </select>
@@ -64,14 +74,7 @@ $(function() {
       <div class="panel panel-default">
         <div class="panel-body" id="data-panel">
         {% block groups %}
-          {% if admins %}
-            {% include "dashboard/data.admins.inc.html" %}
-          {% else %}{% if coach or athletics %}
-            {% include "dashboard/data.coach.inc.html" %}
-          {% else %}{% if faculty %}
-            {% include "dashboard/data.faculty.inc.html" %}
-          {% else %}{
-          {% endif %}{% endif %}{% endif %}
+          {% include "dashboard/data.admins.inc.html" %}
         {% endblock %}
         </div>
         <!-- /.panel-body -->
