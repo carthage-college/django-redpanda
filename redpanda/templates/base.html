@@ -46,6 +46,12 @@
   type="text/javascript" language="javascript"></script>
 <script type="text/javascript" charset="utf-8">
   var $clearCacheUrl = "{% url 'clear_cache' 'blurbs' %}";
+  var $homeAjaxUrl = '{% url "home_ajax" %}';
+  var $dateStart = '';
+  var $dateEnd = '';
+  var $sport = '';
+  var $group = '';
+  var $csrfToken = '';
   $(function() {
     $("body").toggleClass("sidenav-toggled");
   });

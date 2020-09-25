@@ -272,6 +272,6 @@ $(function(){
   /* override the submit event for the alert form to handle some things */
   $('form#health-check').submit(function(){
     // disable submit button after users clicks it
-    $(this).children('input[type=submit]').attr('disabled', 'disabled');
+    //$(this).children('input[type=submit]').attr('disabled', 'disabled');
   });
 });
