@@ -2,6 +2,7 @@
 
 import datetime
 import json
+import os
 import requests
 
 from django.conf import settings
@@ -13,6 +14,8 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
+from djimix.core.database import get_connection
+from djimix.core.database import xsql
 from djimix.decorators.auth import portal_auth_required
 from djtools.utils.users import in_group
 from redpanda.core.forms import HealthCheckForm
@@ -30,17 +33,27 @@ def home(request):
     # check any and all icons and then submit
 
     user = request.user
+    # mobile phone reminders for health check
+    profile = Registration.objects.get_or_create(user=user)[0]
+    # ens
+    phile = os.path.join(settings.BASE_DIR, 'sql/ens.sql')
+    with open(phile) as incantation:
+        sql = incantation.read()
+        sql = sql.replace('{CID}', str(user.id))
+    with get_connection() as connection:
+        ens = xsql(sql, connection).fetchone()
+
     if request.method == 'POST':
         form = HealthCheckForm(request.POST)
         if form.is_valid():
             check = form.save(commit=False)
             check.created_by = user
             check.save()
-            # mobile phone reminders for health check
             if request.POST.get('mobile'):
-                profile = Registration.objects.get_or_create(user=user)[0]
                 profile.mobile=True
-                profile.save()
+            else:
+                profile.mobile=False
+            profile.save()
             now = datetime.datetime.now().strftime('%B %d, %Y')
             # messages displayed after submit
             default = """
@@ -118,7 +131,11 @@ def home(request):
     staff = in_group(user, settings.STAFF_GROUP)
     if faculty or staff:
         facstaff = True
-    return render(request, 'home.html', {'form': form, 'facstaff': facstaff})
+    return render(
+        request,
+        'home.html',
+        {'form': form, 'facstaff': facstaff, 'ens': ens},
+    )
 
 
 @csrf_exempt
