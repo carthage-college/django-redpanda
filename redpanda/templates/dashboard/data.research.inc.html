@@ -5,7 +5,6 @@
         <th>Name</th>
         <th>CID</th>
         <th>PID</th>
-        <th>Opt In</th>
         <th>Created At</th>
         <th>Tested +</th>
         <th>Tested -</th>
@@ -32,8 +31,7 @@
           <a href="mailto:{{czech.created_by.email}}">{{czech.created_by.last_name}}, {{czech.created_by.first_name}}</a>
         </td>
         <td nowrap style="text-align: left;">{{czech.created_by.id}}</td>
-        <td nowrap style="text-align: left;">{{czech.created_by.profile.uuid}}</td>
-        <td nowrap style="text-align: left;">{{czech.created_by.profile.opt_in}}</td>
+        <td nowrap style="text-align: left;">{{czech.created_by.profile.uuid|default:''}}</td>
         <td nowrap style="font-family: monospace;font-size:1.1em;}">
         {{czech.created_at|date:'Y-m-d H:i:s'}}
         </td>
@@ -157,7 +155,6 @@
         <th>Name</th>
         <th>CID</th>
         <th>PID</th>
-        <th>Opt In</th>
         <th>Created At</th>
         <th>Tested +</th>
         <th>Tested -</th>
