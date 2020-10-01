@@ -2,6 +2,18 @@
 {% load livewhale_api %}
 {% load static %}
 {% load ifusergroup %}
+{% block extra_javascript %}
+{{ block.super }}
+<script type="text/javascript" charset="utf-8">
+$(function() {
+  /* override the submit event to handle some things */
+  $('form#health-check').submit(function(){
+    // disable submit button after users clicks it
+    $(this).children('button[type=submit]').attr('disabled', 'disabled');
+  });
+});
+</script>
+{% endblock %}
 {% block navbar-header %}
 <a href="{% url 'home' %}" class="mr-sm-3 mr-lg-3">
 <img src="{% static 'img/clogo.png' %}" height="30" class="mr-2">
@@ -242,7 +254,7 @@
       </div>
     </div>
     {% endif %}
-    <button class="btn btn-primary btn-block" type="submit"  value="Submit">Submit</button>
+    <button class="btn btn-primary btn-block" type="submit" value="Submit" id="submit-button">Submit</button>
   </form>
   <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4 ml-2">
     <div class="row list-group">
