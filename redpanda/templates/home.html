@@ -247,8 +247,13 @@ $(function() {
             I would like to receive health check reminders at my mobile phone.
           </label>
           <span class="float-left">
+          {% ifusergroup 'carthageStaffStatus' %}
             <a href="https://my.carthage.edu/ICS/Staff_Home.jnz?portlet=Emergency_Contact_Information" target="_blank">
               <i class="fa fa-phone fa-2x" aria-hidden="true"></i></a>
+          {% else %}
+            <a href="https://my.carthage.edu/ICS/Faculty_Home.jnz?portlet=Emergency_Contact" target="_blank">
+              <i class="fa fa-phone fa-2x" aria-hidden="true"></i></a>
+          {% endifusergroup %}
           </span>
         </small>
       </div>
