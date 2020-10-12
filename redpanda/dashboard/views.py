@@ -44,7 +44,7 @@ def _get_dates(request):
 
 
 def _get_sports(request):
-    sport = request.POST.get('sport', 666)
+    sport = request.POST.get('sport', '666')
     sports = None
     sportsql = os.path.join(settings.BASE_DIR, 'sql/sports_all.sql')
     with open(sportsql) as incantation:
