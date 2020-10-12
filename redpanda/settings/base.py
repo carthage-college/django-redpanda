@@ -288,7 +288,7 @@ LOGGING = {
         },
         'django.request': {
             'handlers': ['mail_admins'],
-            'filters': ['require_debug_true'], # run logger in production
+            'filters': ['require_debug_false'],
             'level': 'ERROR',
             'propagate': True,
         },
