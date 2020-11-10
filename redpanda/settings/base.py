@@ -288,7 +288,6 @@ LOGGING = {
         },
         'django.request': {
             'handlers': ['mail_admins'],
-            'filters': ['require_debug_false'],
             'level': 'ERROR',
             'propagate': True,
         },
