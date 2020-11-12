@@ -183,11 +183,10 @@ SERVER_MAIL = ''
 # app specific settings
 # logging
 LOG_FILEPATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs/')
-LOG_FILENAME = '{0}{1}'.format(LOG_FILEPATH, 'debug.log')
-DEBUG_LOG_FILENAME = '{0}{1}'.format(LOG_FILEPATH, 'debug.log')
-INFO_LOG_FILENAME = '{0}{1}'.format(LOG_FILEPATH, 'info.log')
-ERROR_LOG_FILENAME = '{0}{1}'.format(LOG_FILEPATH, 'error.log')
-CUSTOM_LOG_FILENAME = '{0}{1}'.format(LOG_FILEPATH, 'custom.log')
+DEBUG_LOG_FILENAME = LOG_FILEPATH + 'debug.log'
+INFO_LOG_FILENAME = LOG_FILEPATH + 'info.log'
+ERROR_LOG_FILENAME = LOG_FILEPATH + 'error.log'
+CUSTOM_LOG_FILENAME = LOG_FILEPATH + 'custom.log'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -200,37 +199,23 @@ LOGGING = {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s',
             'datefmt' : '%Y/%b/%d %H:%M:%S'
         },
+        'custom': {
+            'format': '%(asctime)s: %(levelname)s: %(message)s',
+            'datefmt' : '%m/%d/%Y %I:%M:%S %p'
+        },
         'simple': {
             'format': '%(levelname)s %(message)s'
         },
     },
     'filters': {
         'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse',
+            '()': 'django.utils.log.RequireDebugFalse'
         },
         'require_debug_true': {
             '()': 'django.utils.log.RequireDebugTrue',
         },
     },
     'handlers': {
-        'logfile': {
-            'level':'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': LOG_FILENAME,
-            'formatter': 'standard',
-        },
-        'console':{
-            'level':'INFO',
-            'class':'logging.StreamHandler',
-            'formatter': 'standard'
-        },
-        'mail_admins': {
-            'level': 'ERROR',
-            'include_html': True,
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
         'custom_logfile': {
             'level':'ERROR',
             'filters': ['require_debug_true'], # do not run error logger in production
@@ -249,30 +234,56 @@ LOGGING = {
         },
         'debug_logfile': {
             'level': 'DEBUG',
+            'filters': ['require_debug_true'], # do not run debug logger in production
             'class': 'logging.FileHandler',
             'filename': DEBUG_LOG_FILENAME,
-            'handlers':['logfile'],
             'formatter': 'verbose'
         },
         'error_logfile': {
             'level': 'ERROR',
-            'filters': ['require_debug_true'], # do not run error logger in production
+            #'filters': ['require_debug_true'], # do not run error logger in production
             'class': 'logging.FileHandler',
             'filename': ERROR_LOG_FILENAME,
             'formatter': 'verbose'
         },
+        'console':{
+            'level':'INFO',
+            'class':'logging.StreamHandler',
+            'formatter': 'standard'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            #'filters': ['require_debug_false'],
+            'include_html': True,
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
         'redpanda': {
-            'handlers':['logfile'],
+            'handlers':['debug_logfile'],
             'propagate': True,
             'level':'DEBUG',
         },
         'redpanda.lynx': {
-            'handlers':['logfile'],
+            'handlers':['debug_logfile'],
             'propagate': True,
             'level':'DEBUG',
         },
         'redpanda.core': {
-            'handlers':['logfile'],
+            'handlers':['debug_logfile'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+        'error_logger': {
+            'handlers': ['error_logfile'],
+            'level': 'ERROR'
+         },
+        'info_logger': {
+            'handlers': ['info_logfile'],
+            'level': 'INFO'
+        },
+        'debug_logger': {
+            'handlers':['debug_logfile'],
             'propagate': True,
             'level':'DEBUG',
         },
@@ -287,7 +298,7 @@ LOGGING = {
             'propagate': False,
         },
         'django.request': {
-            'handlers': ['mail_admins'],
+            'handlers': ['mail_admins', 'error_logfile'],
             'level': 'ERROR',
             'propagate': True,
         },
