@@ -1,0 +1,28 @@
+<div class="table-responsive mb-5">
+  <table class="table table-striped table-bordered table-hover display" id="redpandaManagers">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Count</th>
+        <th>Group</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+        <td nowrap style="text-align: left;">
+          {{user.last_name}}, {{user.first_name}}
+        </td>
+        <td nowrap style="text-align: left;">{{user.count}}</td>
+        <td nowrap style="text-align: left;">{{user.group}}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Name</th>
+        <th>Count</th>
+        <th>Group</th>
+      </tr>
+    </tfoot>
+  </table>
+</div>

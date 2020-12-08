@@ -13,6 +13,10 @@ urlpatterns = [
         views.managers, name='dashboard_managers',
     ),
     path(
+        'participation/',
+        views.participation, name='dashboard_participation',
+    ),
+    path(
         'research/',
         views.research, name='dashboard_research',
     ),
