@@ -284,21 +284,23 @@ def research(request):
 @portal_auth_required(
     session_var='REDPANDA_AUTH',
     redirect_url=reverse_lazy('access_denied'),
-    group=settings.ADMIN_GROUP,
 )
 def participation(request):
     """Dashboard for stats on folks who have participated."""
 
-    participants = []
-    users = User.objects.all().order_by('last_name')
-    for user in users:
-        user.count = HealthCheck.objects.filter(created_by=user).count()
-        if user.groups.filter(name=settings.FACULTY_GROUP).exists():
-            user.group = 'Faculty'
-        elif user.groups.filter(name=settings.STUDENT_GROUP).exists():
-            user.group = 'Student'
-        else:
-            user.group = 'Staff'
-        participants.append(user)
+    if in_group(request.user, settings.ADMIN_GROUP):
+        participants = []
+        users = User.objects.all().order_by('last_name')
+        for user in users:
+            user.count = HealthCheck.objects.filter(created_by=user).count()
+            if user.groups.filter(name=settings.FACULTY_GROUP).exists():
+                user.group = 'Faculty'
+            elif user.groups.filter(name=settings.STUDENT_GROUP).exists():
+                user.group = 'Student'
+            else:
+                user.group = 'Staff'
+            participants.append(user)
+        return render(request, 'dashboard/participation.html', {'users': participants})
+    else:
+        response = HttpResponseRedirect(reverse_lazy('dashboard_managers'))
 
-    return render(request, 'dashboard/participation.html', {'users': participants})
