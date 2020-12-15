@@ -22,6 +22,7 @@ from redpanda.core.forms import HealthCheckForm
 from redpanda.research.models import Registration
 
 
+@csrf_exempt
 @portal_auth_required(
     session_var='REDPANDA_AUTH',
     redirect_url=reverse_lazy('access_denied'),
@@ -43,8 +44,11 @@ def home(request):
     with get_connection() as connection:
         ens = xsql(sql, connection).fetchone()
 
-    if request.method == 'POST':
-        form = HealthCheckForm(request.POST)
+    if request.method == 'POST' or request.GET.get('negative'):
+        if request.method == 'POST':
+            form = HealthCheckForm(request.POST)
+        else:
+            form = HealthCheckForm(request.GET)
         if form.is_valid():
             check = form.save(commit=False)
             check.created_by = user
@@ -57,15 +61,15 @@ def home(request):
             now = datetime.datetime.now().strftime('%B %d, %Y')
             # messages displayed after submit
             default = """
-                Thank you for checking in.<br>Please follow social distancing
-                guidelines and check in again tomorrow.
+                Thank you for checking in and honoring your #StaySafeCarthage pledge.
+                Please check in again tomorrow.
             """
             positive = """
-                Thank you for reporting your test results.<br>
-                Please consult our
-                <a href="https://www.carthage.edu/carthage-covid-19/stay-safe-carthage/symptom-monitoring/">covid resources</a>
-                page for more information.<br>
-                Check in again tomorrow.
+                The CDC advises that you <strong>seek emergency medical care
+                immediately</strong. if you experience trouble breathing,
+                persistent pain or pressure in the chest, new confusion,
+                inability to wake or stay awake, bluish lips or face, or other
+                symptoms that are severe or concerning to you. Get well soon!
             """
             tested_negative = """
                 We have recorded this negative test, so tomorrow please
@@ -79,16 +83,19 @@ def home(request):
                 page for more information.<br>
             """
             quarantine = """
-                Thank you for reporting that you are staying home.<br>
-                We will let your professors know.<br>
-                Please contact your supervisors directly.<br>
-                Check in again tomorrow.
+                CDC guidelines: Get tested if you have symptoms of COVID-19,
+                have had close contact (within 6 feet for a total of 15 minutes
+                or more) with someone with confirmed COVID-19, or have taken
+                part in activities that put you at higher risk due to lack of
+                social distancing.
             """
             symptoms = """
-                Sorry to hear you are not feeling well.<br>
-                Please consult your health care provider and visit our
-                <a href="https://www.carthage.edu/carthage-covid-19/stay-safe-carthage/symptom-monitoring/">covid resources</a>
-                page for more information.<br>
+                Please get tested/report results and get well soon!
+                The CDC advises that you <strong>seek emergency medical care
+                immediately</strong>if you experience trouble breathing,
+                persistent pain or pressure in the chest, new confusion,
+                inability to wake or stay awake, bluish lips or face,
+                or other symptoms that are severe or concerning to you.
             """
             tag = 'alert-warning'
             kind = messages.WARNING
