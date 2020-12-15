@@ -44,7 +44,15 @@ label img {
   transform: scale(1);
 }
 :checked+label img {z-index: -1;}
-.navbar {justify-content:center;padding: 0;}
+.navbar {
+  justify-content:center;padding: 0;
+  border-top: 5px solid #3ab0c8;
+  background: url(https://www.carthage.edu/themes/korra/assets/img/main-header-gradient.png) left top repeat-x;
+}
+.navbar-dark .navbar-brand {color:#000;font-weight:600;font-size:.9em;}
+.navbar-dark .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0, 60, 75, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
 @media (min-width: 992px) {
   .navbar-expand-lg .navbar-nav {margin-right: 42px;}
   .navbar {padding:2px 0 2px 8px;}
@@ -99,11 +107,13 @@ table.dataTable > tbody > tr > td.group {text-align: left;}
 .card-footer { padding: .25rem .5rem;}
 .content-wrapper { margin-top:60px; }
 .text-purple{color:#cbbde2;}
-nav a {color: #cbbde2;}
-nav a:hover {color:#fff;}
+nav a {color: #003c4b;}
+nav a:hover {color:black;}
 nav .input-group-btn {font-size:1.3em;}
+.navbar-nav .dropdown-menu a {color: white;}
+.navbar-nav .dropdown-menu a:hove {color: #666;}
+.navbar-nav .dropdown-menu {padding: 5px; background-color:#003c4b;}
 .navbar-toggler-icon {color:yellow;}
-.navbar-nav .dropdown-menu {padding: 5px; background-color:#563d7c;}
 .navbar-nav .dropdown, .dropup { padding: 3px; }
 .success a { color: #007bff; }
 .panel-primary > .panel-heading {color: inherit;}
