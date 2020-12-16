@@ -37,12 +37,20 @@ def home(request):
     # mobile phone reminders for health check
     profile = Registration.objects.get_or_create(user=user)[0]
     # ens
-    phile = os.path.join(settings.BASE_DIR, 'sql/ens.sql')
-    with open(phile) as incantation:
-        sql = incantation.read()
-        sql = sql.replace('{CID}', str(user.id))
-    with get_connection() as connection:
-        ens = xsql(sql, connection).fetchone()
+    sql_key = 'sql_key_{0}'.format(user.id)
+    sql = cache.get(sql_key)
+    if not sql:
+        phile = os.path.join(settings.BASE_DIR, 'sql/ens.sql')
+        with open(phile) as incantation:
+            sql = incantation.read()
+            sql = sql.replace('{CID}', str(user.id))
+            cache.set(sql_key, sql)
+    ens_key = 'ens_key_{0}'.format(user.id)
+    ens = cache.get(ens_key)
+    if not ens:
+        with get_connection() as connection:
+            ens = xsql(sql, connection).fetchone()
+            cache.set(ens_key, ens, 604800)
 
     if request.method == 'POST' or request.GET.get('negative'):
         if request.method == 'POST':
