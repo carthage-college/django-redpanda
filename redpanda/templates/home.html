@@ -4,8 +4,18 @@
 {% load ifusergroup %}
 {% block extra_javascript %}
 {{ block.super }}
-<script type="text/javascript" charset="utf-8">
-$(function() {
+<script type="text/javascript" language="javascript">
+$(function(){
+  /* automatically submit the form when user clicks 'no symptoms' */
+  $('#id_negative').on('change', function(e){
+    // submit the form
+    $("form#health-check").submit();
+    // deactivate submit button
+    $('form#health-check').children('button[type=submit]').attr('disabled', 'disabled');
+    // deactivate all checkboxes
+    //$(this).attr('disabled','disabled');
+    $(':checkbox').attr('disabled','disabled');
+  });
   /* override the submit event to handle some things */
   $('form#health-check').submit(function(){
     // disable submit button after users clicks it
