@@ -44,7 +44,7 @@ def home(request):
         with open(phile) as incantation:
             sql = incantation.read()
             sql = sql.replace('{CID}', str(user.id))
-            cache.set(sql_key, sql)
+            cache.set(sql_key, sql, 0)
     ens_key = 'ens_key_{0}'.format(user.id)
     ens = cache.get(ens_key)
     if not ens:
