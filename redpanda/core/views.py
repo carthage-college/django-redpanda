@@ -63,7 +63,7 @@ def home(request):
             check.save()
             if request.POST.get('mobile'):
                 profile.mobile=True
-            else:
+            elif request.method == "POST":
                 profile.mobile=False
             profile.save()
             now = datetime.datetime.now().strftime('%B %d, %Y')
