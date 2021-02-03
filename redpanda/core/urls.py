@@ -38,10 +38,7 @@ urlpatterns = [
         {'template_name': 'registration/logged_out.html'},
         name='auth_loggedout',
     ),
-    path(
-        'accounts/',
-        RedirectView.as_view(url=reverse_lazy('auth_login')),
-    ),
+    path('accounts/', RedirectView.as_view(url=reverse_lazy('auth_login'))),
     path(
         'denied/',
         TemplateView.as_view(template_name='denied.html'),
@@ -55,19 +52,11 @@ urlpatterns = [
     # dashboard
     path('dashboard/', include('redpanda.dashboard.urls')),
     # clear cache via ajax post
-    path(
-        'cache/<str:ctype>/clear/', views.clear_cache, name='clear_cache',
-    ),
+    path('cache/<str:ctype>/clear/', views.clear_cache, name='clear_cache'),
     # short URLs
-    path(
-        'lynx/', include('redpanda.lynx.urls'),
-    ),
+    path('lynx/', include('redpanda.lynx.urls')),
     # Smell Study Research
-    path(
-        'research/', include('redpanda.research.urls'),
-    ),
+    path('research/', include('redpanda.research.urls')),
     # home SPA
-    path(
-        '', views.home, name='home'
-    ),
+    path('', views.home, name='home'),
 ]
