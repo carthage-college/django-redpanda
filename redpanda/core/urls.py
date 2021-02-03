@@ -67,7 +67,5 @@ urlpatterns = [
         'research/', include('redpanda.research.urls'),
     ),
     # home SPA
-    path(
-        '', views.home, name='home'
-    ),
+    path('', views.home, name='home'),
 ]
