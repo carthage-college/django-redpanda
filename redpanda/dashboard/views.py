@@ -207,6 +207,8 @@ def managers(request):
             year = date.year
         else:
             year = date.year + 1
+            if coach:
+                year = date.year - 1
         if athletics:
             phile = os.path.join(
                 settings.BASE_DIR, 'sql/students_sport.sql',
