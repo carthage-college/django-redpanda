@@ -202,12 +202,12 @@ def managers(request):
     if faculty or athletics or coach:
         date_start, date_end = _get_dates(request)
         sport, sports = _get_sports(request)
+        date = settings.START_DATE
+        if date.month < settings.SPORTS_MONTH:
+            year = date.year
+        else:
+            year = date.year + 1
         if athletics:
-            date = settings.START_DATE
-            if date.month < settings.SPORTS_MONTH:
-                year = date.year
-            else:
-                year = date.year + 1
             phile = os.path.join(
                 settings.BASE_DIR, 'sql/students_sport.sql',
             )
@@ -223,6 +223,8 @@ def managers(request):
             sql = incantation.read()
             if athletics:
                 sql = sql.replace('{YEAR}', str(year)).replace('{SPORT}', sport)
+            elif coach:
+                sql = sql.replace('{YEAR}', str(year)).replace('{CID}', str(user.id))
             else:
                 sql = sql.replace('{CID}', str(user.id))
         with get_connection() as connection:

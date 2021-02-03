@@ -11,7 +11,7 @@ AND
 AND
     STU_INV.ctgry = 'ATHLETIC'
 AND
-    STU_INV.yr >= YEAR(TODAY)
+    STU_INV.yr >= {YEAR}
 INNER JOIN
     id_rec STU
 ON
