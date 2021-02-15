@@ -17,6 +17,10 @@ from djimix.settings.local import MSSQL_EARL
 from djimix.settings.local import ODBCINI
 from djimix.settings.local import ONCONFIG
 
+TERM = 'RA'
+if datetime.date.today().month < 7:
+    TERM = 'RC'
+
 # Debug
 DEBUG = False
 INFORMIX_DEBUG = ''

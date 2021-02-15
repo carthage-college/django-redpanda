@@ -105,9 +105,9 @@ FROM
 WHERE
     ACTIVE.fac_id = {CID}
 AND
-    ACTIVE.yr = 2020
+    ACTIVE.yr = {YEAR}
 AND
-    ACTIVE.sess = 'RA'
+    ACTIVE.sess = '{TERM}'
 GROUP BY
      Course, ACTIVE.title, Schedule, lastname, firstname, STU.id
 ORDER BY

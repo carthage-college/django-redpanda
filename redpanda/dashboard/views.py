@@ -228,7 +228,9 @@ def managers(request):
             elif coach:
                 sql = sql.replace('{YEAR}', str(year)).replace('{CID}', str(user.id))
             else:
-                sql = sql.replace('{CID}', str(user.id))
+                sql = sql.replace(
+                    '{YEAR}', str(year),
+                ).replace('{CID}', str(user.id)).replace('{TERM}', settings.TERM)
         with get_connection() as connection:
             roster = xsql(sql, connection).fetchall()
         for ros in roster:
