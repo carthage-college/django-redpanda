@@ -101,6 +101,10 @@ class Registration(models.Model):
         "I would like to receive health check reminders at my mobile phone.",
         default=False,
     )
+    vaccine = models.BooleanField(
+        "I have received a vaccine.",
+        default=False,
+    )
     uuid = models.CharField(max_length=128, null=True, blank=True)
     name = models.CharField(max_length=128, null=True, blank=True)
     contact = models.CharField(max_length=128, null=True, blank=True)

@@ -199,8 +199,8 @@ $(function(){
     </fieldset>
     {% if facstaff %}
     <div class="row ml-2 mb-2">
-        <div class="float-left">
-          <input type="checkbox" name="mobile" id="id_mobile"{% if user.profile.mobile %} checked{% endif %}>
+      <div class="float-left">
+        <input type="checkbox" name="mobile" id="id_mobile"{% if user.profile.mobile %} checked{% endif %}>
       </div>
       <div class="float-left col-11">
         <small style="display:block;font-weight:600;">
@@ -220,6 +220,22 @@ $(function(){
       </div>
     </div>
     {% endif %}
+    <div class="row ml-2 mb-2">
+      <div class="float-left">
+        {% if user.profile.vaccine %}
+          <img src="{{static_url}}img/vaccine.png" style="width:22px;" title="I have received the vaccine.">
+        {% else %}
+          <input type="checkbox" name="vaccine" id="id_vaccine">
+        {% endif %}
+      </div>
+      <div class="float-left col-11">
+        <small style="display:block;font-weight:600;">
+          <label for="id_vaccine" class="float-left mr-1" style="padding:0;display:inherit;">
+            I have received the vaccine.
+          </label>
+        </small>
+      </div>
+    </div>
     <button class="btn btn-primary btn-block" type="submit" value="Submit" id="submit-button">Submit</button>
   </form>
   <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4 ml-2">

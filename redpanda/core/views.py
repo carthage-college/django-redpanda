@@ -33,7 +33,6 @@ def home(request):
     # check any and all icons and then submit
 
     user = request.user
-    # mobile phone reminders for health check
     profile = Registration.objects.get_or_create(user=user)[0]
     # ens
     sql_key = 'sql_key_{0}'.format(user.id)
@@ -60,10 +59,16 @@ def home(request):
             check = form.save(commit=False)
             check.created_by = user
             check.save()
+            # mobile phone reminders for health check
             if request.POST.get('mobile'):
                 profile.mobile=True
             elif request.method == "POST":
                 profile.mobile=False
+            # vaccination status
+            if request.POST.get('vaccine'):
+                profile.vaccine=True
+            elif request.method == "POST":
+                profile.vaccine=False
             profile.save()
             now = datetime.datetime.now().strftime('%B %d, %Y')
             # messages displayed after submit
