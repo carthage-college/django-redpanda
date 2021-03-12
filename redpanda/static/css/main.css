@@ -151,3 +151,16 @@ table.dataTable thead span.sort-icon {
 }
 .form-group .control-label { font-weight:700; }
 h6 {font-weight: 800;}
+
+.vaccine-true {
+    position:relative;
+}
+.vaccine-true:after {
+    content: "\f00c";
+    width:100%;
+    color: green;
+    font-family: FontAwesome;
+    margin-left:15px;
+    position:absolute;
+    top:0;
+}
