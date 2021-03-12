@@ -3,6 +3,7 @@
     <thead>
       <tr>
         <th>Name</th>
+        <th>Vax</th>
         <th>CID</th>
         <th>Created At</th>
         <th>Tested +</th>
@@ -30,6 +31,13 @@
       <tr>
         <td nowrap style="text-align: left;">
           {{s.roster.lastname}}, {{s.roster.firstname}}
+        </td>
+        <td nowrap style="text-align: left;">
+          {% if czech.created_by.profile.vaccine %}
+          <i class="fa fa-check green" title="Vaccine">
+            <span style="display:none;">x</span>
+          </i>
+          {% endif %}
         </td>
         <td nowrap style="text-align: left;">{{czech.created_by.id}}</td>
         <td nowrap style="font-family: monospace;font-size:1.1em;}">
@@ -177,6 +185,7 @@
     <tfoot>
       <tr>
         <th>Name</th>
+        <th>Vax</th>
         <th>CID</th>
         <th>Created At</th>
         <th>Tested +</th>

@@ -3,6 +3,7 @@
     <thead>
       <tr>
         <th>Name</th>
+        <th>Vax</th>
         <th>CID</th>
         <th>PID</th>
         <th>Created At</th>
@@ -29,6 +30,13 @@
       <tr>
         <td nowrap style="text-align: left;">
           <a href="mailto:{{czech.created_by.email}}">{{czech.created_by.last_name}}, {{czech.created_by.first_name}}</a>
+        </td>
+        <td nowrap style="text-align: left;">
+          {% if czech.created_by.profile.vaccine %}
+          <i class="fa fa-check green" title="Vaccine">
+            <span style="display:none;">x</span>
+          </i>
+          {% endif %}
         </td>
         <td nowrap style="text-align: left;">{{czech.created_by.id}}</td>
         <td nowrap style="text-align: left;">{{czech.created_by.profile.uuid|default:''}}</td>
@@ -153,6 +161,7 @@
     <tfoot>
       <tr>
         <th>Name</th>
+        <th>Vax</th>
         <th>CID</th>
         <th>PID</th>
         <th>Created At</th>
