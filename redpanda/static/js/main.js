@@ -53,7 +53,7 @@ $(function(){
     drawCallback: function() {
       spinner.stop(target);
     },
-    order: [[2, 'desc']],
+    order: [[3, 'desc']],
     dom: 'lfrBtip',
     responsive: true,
     buttons: [
@@ -76,7 +76,7 @@ $(function(){
       'processing': 'Loading...',
       'lengthMenu': 'Display _MENU_'
     },
-    order: [[2, 'desc']],
+    order: [[3, 'desc']],
     dom: 'lfrBtip',
     buttons: [
       {
@@ -121,9 +121,17 @@ $(function(){
               return $("<div>").append($("<a/>").attr("href", "mailto:" + row.email + "/").text(data)).html();
           }
         },
+        {
+            'data': 'vaccine',
+            'searchable': false,
+            'render': function(data, type, row){
+                return set_icon(data);
+            }
+        },
         { 'data': 'cid' },
         {
             'data': 'created_at',
+            'searchable': false,
             'className': 'created_at'
         },
         {
