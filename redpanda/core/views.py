@@ -22,6 +22,35 @@ from redpanda.core.forms import HealthCheckForm
 from redpanda.research.models import Registration
 
 
+sql_ens = '''
+SELECT
+    CUR.id, TRIM(IR.lastname) AS lastname,
+    TRIM(IR.firstname) AS firstname,
+    ENS.beg_date,
+    ENS.end_date,
+    TRIM(NVL(ENS.line1, '')) AS alt_email,
+    NVL(ENS.phone,'') AS mobile,
+    ENS.opt_out,
+    cur.username
+FROM
+    provisioning_vw CUR
+INNER JOIN
+    id_rec IR
+ON
+    CUR.id = IR.id
+LEFT JOIN
+    aa_rec ENS
+ON
+    CUR.id = ENS.id
+AND
+    ENS.aa = "ENS"
+AND
+    TODAY BETWEEN ENS.beg_date AND NVL(ENS.end_date, TODAY)
+WHERE
+    CUR.id = {cid}
+'''.format
+
+
 #@csrf_exempt
 @portal_auth_required(
     session_var='REDPANDA_AUTH',
@@ -35,14 +64,7 @@ def home(request):
     user = request.user
     profile = Registration.objects.get_or_create(user=user)[0]
     # ens
-    sql_key = 'sql_key_{0}'.format(user.id)
-    sql = cache.get(sql_key)
-    if not sql:
-        phile = os.path.join(settings.BASE_DIR, 'sql/ens.sql')
-        with open(phile) as incantation:
-            sql = incantation.read()
-            sql = sql.replace('{CID}', str(user.id))
-            cache.set(sql_key, sql, 0)
+    sql = sql_ens(cid=user.id)
     ens_key = 'ens_key_{0}'.format(user.id)
     ens = cache.get(ens_key)
     if not ens:
