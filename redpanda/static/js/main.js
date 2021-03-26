@@ -68,15 +68,18 @@ $(function(){
   /* datatables initialization for administrators */
   $('#redpandaAdmins').DataTable({
     'lengthMenu': [
-      [100, 250, 500, 1000, 2000, -1],
+      [100, 250, 500, 1000, 2000, 0],
       [100, 250, 500, 1000, 2000, 'All']
     ],
     'language': {
       'search': 'Filter records:',
-      'processing': 'Loading...',
+      'processing': '<i class="fa fa-spinner fa-spin fa-4x fa-fw"></i><span class="sr-only">Loading...</span>',
       'lengthMenu': 'Display _MENU_'
     },
     order: [[3, 'desc']],
+    drawCallback: function() {
+      spinner.stop(target);
+    },
     dom: 'lfrBtip',
     buttons: [
       {
