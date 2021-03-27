@@ -56,6 +56,9 @@ $(function(){
       {% else %}{% ifusergroup 'carthageFacultyStatus' %}
       <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
       {% endifusergroup %}{% endifusergroup %}
+      {% ifusergroup 'StaySafeCarthage' %}
+      <li><a href="{% url 'dashboard_participation' %}">Participation</a></li>
+      {% endifusergroup %}
       {% ifusergroup 'Research' %}
       <li><a href="{% url 'dashboard_research' %}">Research</a></li>
       {% endifusergroup %}
