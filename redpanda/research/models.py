@@ -15,11 +15,13 @@ class SmellStudy(models.Model):
         User,
         verbose_name='Created by',
         related_name='study',
-        editable=False, null=True, blank=True,
-        on_delete=models.SET_NULL
+        editable=False,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
     )
     created_at = models.DateTimeField(
-        "Date Created", auto_now_add=True
+        "Date Created", auto_now_add=True,
     )
     one = models.BooleanField()
     two = models.BooleanField()
@@ -57,11 +59,13 @@ class SmellStudyInquiry(models.Model):
         User,
         verbose_name='Created by',
         related_name='inquiry',
-        editable=False, null=True, blank=True,
-        on_delete=models.SET_NULL
+        editable=False,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
     )
     created_at = models.DateTimeField(
-        "Date Created", auto_now_add=True
+        "Date Created", auto_now_add=True,
     )
     uuid = models.CharField(max_length=128, null=True, blank=True)
 
@@ -76,10 +80,10 @@ class Registration(models.Model):
         null=True,
         blank=True,
         #on_delete=models.CASCADE,
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL,
     )
     created_at = models.DateTimeField(
-        "Date Created", auto_now_add=True
+        "Date Created", auto_now_add=True,
     )
     odor_identification = models.CharField(
         verbose_name="""
