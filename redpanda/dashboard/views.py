@@ -10,6 +10,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.core.paginator import Paginator
@@ -26,6 +27,7 @@ from djimix.decorators.auth import portal_auth_required
 from djtools.utils.users import in_group
 from redpanda.core.models import HealthCheck
 from redpanda.core.utils import get_coach
+from redpanda.research.models import Registration
 
 
 def _get_dates(request):
@@ -299,20 +301,25 @@ def research(request):
 )
 def participation(request):
     """Dashboard for stats on folks who have participated."""
-
     if in_group(request.user, settings.ADMIN_GROUP):
-        participants = []
-        users = User.objects.all().order_by('last_name')
-        for user in users:
-            user.count = HealthCheck.objects.filter(created_by=user).count()
-            if user.groups.filter(name=settings.FACULTY_GROUP).exists():
-                user.group = 'Faculty'
-            elif user.groups.filter(name=settings.STUDENT_GROUP).exists():
-                user.group = 'Student'
-            else:
-                user.group = 'Staff'
-            participants.append(user)
-        return render(request, 'dashboard/participation.html', {'users': participants})
+        groups = {
+            'carthageStaffStatus': [],
+            'carthageFacultyStatus': [],
+            'carthageStudentStatus': [],
+        }
+        for group in groups:
+            groups[group] = cache.get(group)
+            if not groups[group]:
+                groups[group] = User.objects.filter(
+                    groups__name=group,
+                ).filter(profile__vaccine=True)
+                cache.set(group, groups[group], 86400)
+            groups[group] = groups[group].count()
+        return render(
+            request,
+            'dashboard/participation.html',
+            {'groups': groups},
+        )
     else:
         response = HttpResponseRedirect(reverse_lazy('dashboard_managers'))
 
