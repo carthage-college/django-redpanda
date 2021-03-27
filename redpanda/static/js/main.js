@@ -43,8 +43,8 @@ $(function(){
   /* datatables initialization for managers */
   $('#redpandaManagers').DataTable({
     'lengthMenu': [
-      [100, 250, 500, 1000, 2000, -1],
-      [100, 250, 500, 1000, 2000, 'All']
+      [100, 250, 500, 1000, 2000, 5000, 10000],
+      [100, 250, 500, 1000, 2000, 5000, 10000]
     ],
     'language': {
       'search': 'Filter records:',
