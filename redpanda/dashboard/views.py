@@ -307,18 +307,16 @@ def participation(request):
             'carthageFacultyStatus': [],
             'carthageStudentStatus': [],
         }
+        vaccines = User.objects.filter(profile__vaccine=True).count()
         for group in groups:
-            groups[group] = cache.get(group)
-            if not groups[group]:
-                groups[group] = User.objects.filter(
-                    groups__name=group,
-                ).filter(profile__vaccine=True)
-                cache.set(group, groups[group], 86400)
-            groups[group] = groups[group].count()
+            vax = User.objects.filter(profile__vaccine=True).filter(
+                groups__name=group,
+            )
+            groups[group] = vax.count()
         return render(
             request,
             'dashboard/participation.html',
-            {'groups': groups},
+            {'groups': groups, 'vax': vaccines},
         )
     else:
         response = HttpResponseRedirect(reverse_lazy('dashboard_managers'))
