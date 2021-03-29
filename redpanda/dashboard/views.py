@@ -319,5 +319,5 @@ def participation(request):
             {'groups': groups, 'vax': vaccines},
         )
     else:
-        response = HttpResponseRedirect(reverse_lazy('dashboard_managers'))
+        return HttpResponseRedirect(reverse_lazy('dashboard_managers'))
 
