@@ -14,6 +14,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
+#from djauth.decorators import portal_auth_required
 from djimix.core.database import get_connection
 from djimix.core.database import xsql
 from djimix.decorators.auth import portal_auth_required
@@ -64,6 +65,7 @@ def home(request):
     user = request.user
     profile = Registration.objects.get_or_create(user=user)[0]
     # ens
+    '''
     sql = sql_ens(cid=user.id)
     ens_key = 'ens_key_{0}'.format(user.id)
     ens = cache.get(ens_key)
@@ -71,6 +73,7 @@ def home(request):
         with get_connection() as connection:
             ens = xsql(sql, connection).fetchone()
             cache.set(ens_key, ens, 604800)
+    '''
 
     if request.method == 'POST' or request.GET.get('negative'):
         if request.method == 'POST':
@@ -175,7 +178,7 @@ def home(request):
     return render(
         request,
         'home.html',
-        {'form': form, 'facstaff': facstaff, 'ens': ens},
+        {'form': form, 'facstaff': facstaff, 'ens': None},
     )
 
 
