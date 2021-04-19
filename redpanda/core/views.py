@@ -2,7 +2,6 @@
 
 import datetime
 import json
-import os
 import requests
 
 from django.conf import settings
@@ -15,10 +14,9 @@ from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 #from djauth.decorators import portal_auth_required
-from djimix.core.database import get_connection
-from djimix.core.database import xsql
 from djimix.decorators.auth import portal_auth_required
 from djtools.utils.users import in_group
+
 from redpanda.core.forms import HealthCheckForm
 from redpanda.research.models import Registration
 
@@ -64,16 +62,6 @@ def home(request):
 
     user = request.user
     profile = Registration.objects.get_or_create(user=user)[0]
-    # ens
-    '''
-    sql = sql_ens(cid=user.id)
-    ens_key = 'ens_key_{0}'.format(user.id)
-    ens = cache.get(ens_key)
-    if not ens:
-        with get_connection() as connection:
-            ens = xsql(sql, connection).fetchone()
-            cache.set(ens_key, ens, 604800)
-    '''
 
     if request.method == 'POST' or request.GET.get('negative'):
         if request.method == 'POST':
@@ -86,20 +74,21 @@ def home(request):
             check.save()
             # mobile phone reminders for health check
             if request.POST.get('mobile'):
-                profile.mobile=True
+                profile.mobile = True
             elif request.method == "POST":
-                profile.mobile=False
+                profile.mobile = False
             # vaccination status
             if request.POST.get('vaccine'):
-                profile.vaccine=True
+                profile.vaccine = True
             elif request.method == "POST":
-                profile.vaccine=False
+                if not profile.vaccine:
+                    profile.vaccine = False
             profile.save()
             now = datetime.datetime.now().strftime('%B %d, %Y')
             # messages displayed after submit
             default = """
-                Thank you for checking in and honoring your #StaySafeCarthage pledge.
-                Please check in again tomorrow.
+                Thank you for checking in and honoring your #StaySafeCarthage
+                pledge. Please check in again tomorrow.
             """
             positive = """
                 The CDC advises that you <strong>seek emergency medical care
