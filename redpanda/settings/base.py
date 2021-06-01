@@ -244,7 +244,7 @@ LOGGING = {
         },
         'error_logfile': {
             'level': 'ERROR',
-            #'filters': ['require_debug_true'], # do not run error logger in production
+            'filters': ['require_debug_true'], # do not run error logger in production
             'class': 'logging.FileHandler',
             'filename': ERROR_LOG_FILENAME,
             'formatter': 'verbose'
@@ -256,7 +256,6 @@ LOGGING = {
         },
         'mail_admins': {
             'level': 'ERROR',
-            'filters': ['require_debug_false'],
             'include_html': True,
             'class': 'django.utils.log.AdminEmailHandler'
         }
