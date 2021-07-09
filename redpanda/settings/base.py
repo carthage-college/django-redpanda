@@ -55,7 +55,7 @@ STATIC_URL = '/static/{0}/'.format(PROJECT_APP)
 MEDIA_URL = '/media/{0}/'.format(PROJECT_APP)
 UPLOADS_DIR = '{0}files/'.format(MEDIA_ROOT)
 UPLOADS_URL = '{0}files/'.format(MEDIA_URL)
-FILE_UPLOAD_PERMISSIONS=0o644
+FILE_UPLOAD_PERMISSIONS = 0o644
 STATICFILES_DIRS = ()
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -163,7 +163,7 @@ LDAP_ID_ATTR = ''
 LDAP_AUTH_USER_PK = False
 # auth backends
 AUTHENTICATION_BACKENDS = (
-    'djauth.ldapBackend.LDAPBackend',
+    'djauth.backends.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 LOGIN_URL = '{0}accounts/login/'.format(ROOT_URL)
