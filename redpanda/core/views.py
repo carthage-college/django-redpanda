@@ -13,15 +13,15 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
-#from djauth.decorators import portal_auth_required
-from djimix.decorators.auth import portal_auth_required
+from djauth.decorators import portal_auth_required
 from djtools.utils.users import in_group
 
 from redpanda.core.forms import HealthCheckForm
+from redpanda.research.forms import VaccineForm
 from redpanda.research.models import Registration
 
 
-sql_ens = '''
+sql_ens = """
 SELECT
     CUR.id, TRIM(IR.lastname) AS lastname,
     TRIM(IR.firstname) AS firstname,
@@ -47,16 +47,15 @@ AND
     TODAY BETWEEN ENS.beg_date AND NVL(ENS.end_date, TODAY)
 WHERE
     CUR.id = {cid}
-'''.format
+""".format
 
 
-#@csrf_exempt
 @portal_auth_required(
     session_var='REDPANDA_AUTH',
     redirect_url=reverse_lazy('access_denied'),
 )
-def home(request):
-    """Application home."""
+def health_check(request):
+    """Daily health check."""
     # check in once a day
     # check any and all icons and then submit
 
@@ -155,7 +154,7 @@ def home(request):
                 mark_safe('{0}<br>{1}'.format(now, message)),
                 extra_tags=tag,
             )
-            return HttpResponseRedirect(reverse_lazy('home'))
+            return HttpResponseRedirect(reverse_lazy('health_check'))
     else:
         form = HealthCheckForm()
 
@@ -166,8 +165,37 @@ def home(request):
         facstaff = True
     return render(
         request,
-        'home.html',
+        'health_check.html',
         {'form': form, 'facstaff': facstaff, 'ens': None},
+    )
+
+
+@portal_auth_required(
+    session_var='REDPANDA_AUTH',
+    redirect_url=reverse_lazy('access_denied'),
+)
+def vaccine(request):
+    """Vaccine verification."""
+    user = request.user
+    profile = Registration.objects.get_or_create(user=user)[0]
+
+    if request.method == 'POST':
+        form = VaccineForm(request.POST)
+        if form.is_valid():
+            vax = form.save(commit=False)
+            vax.created_by = user
+            vax.save()
+    else:
+        form = VaccineForm()
+    facstaff = False
+    faculty = in_group(user, settings.FACULTY_GROUP)
+    staff = in_group(user, settings.STAFF_GROUP)
+    if faculty or staff:
+        facstaff = True
+    return render(
+        request,
+        'vaccine.html',
+        {'form': form, 'facstaff': facstaff,},
     )
 
 

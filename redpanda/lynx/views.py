@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
-from djimix.decorators.auth import portal_auth_required
+from djauth.decorators import portal_auth_required
 from djimix.core.encryption import encrypt
 from redpanda.lynx.models import URL
 

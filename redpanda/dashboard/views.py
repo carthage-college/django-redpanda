@@ -20,10 +20,9 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
-#from djauth.decorators import portal_auth_required
+from djauth.decorators import portal_auth_required
 from djimix.core.database import get_connection
 from djimix.core.database import xsql
-from djimix.decorators.auth import portal_auth_required
 from djtools.utils.users import in_group
 from redpanda.core.models import HealthCheck
 from redpanda.core.utils import get_coach

@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% load livewhale_api %}
+{% load static %}
+{% load ifusergroup %}
+{% block extra_javascript %}
+{{ block.super }}
+<script type="text/javascript" language="javascript">
+$(function(){
+  // override the submit event to handle some things
+  $('form#health-check').submit(function(){
+    // disable submit button after users clicks it
+    $(this).children('button[type=submit]').attr('disabled', 'disabled');
+  });
+});
+</script>
+{% endblock %}
+{% block navbar-header %}
+<a href="{% url 'home' %}" class="mr-sm-3 mr-lg-3">
+  <img src="{% static 'img/clogo.png' %}" height="30" class="mr-2"></a>
+  #StaySafeCarthage
+{% endblock %}
+{% block navbar-top-links %}
+<ul class="navbar-nav ml-auto">
+  <li class="dropdown user-dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+      <i class="fa fa-user"></i> {{user.username|default:"Greetings"}}
+      <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+      <li class="divider"></li>
+      <li>
+        {% if user.is_anonymous %}
+        <a href="{% url 'auth_login' %}">
+          <i class="fa fa-sign-in"></i> Sign In
+        </a>
+        {% else %}
+        <a href="{% url 'auth_logout' %}">
+          <i class="fa fa-sign-out"></i> Sign Out
+        </a>
+        {% endif %}
+      </li>
+      {% ifusergroup 'carthageStaffStatus' %}
+      <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+      {% else %}{% ifusergroup 'carthageFacultyStatus' %}
+      <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+      {% endifusergroup %}{% endifusergroup %}
+      {% ifusergroup 'StaySafeCarthage' %}
+      <li><a href="{% url 'dashboard_participation' %}">Participation</a></li>
+      {% endifusergroup %}
+      {% ifusergroup 'Research' %}
+      <li><a href="{% url 'dashboard_research' %}">Research</a></li>
+      {% endifusergroup %}
+      {% if user.is_superuser %}
+      <li class="divider"></li>
+      <li><a href="{% url 'admin:index' %}">Admin</a></li>
+      {% endif %}
+    </ul>
+  </li>
+</ul>
+{% endblock %}
+{% block breadcrumb %}
+  {% if messages %}
+    {% for message in messages %}
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ml-2">
+      <div class=" alert {{message.tags}}">
+        <strong>{{ message }}</strong>
+      </div>
+    </div>
+    {% endfor %}
+  {% endif %}
+{% endblock %}
+{% block content %}
+<div class="forms-container col-lg-8 col-md-8 col-sm-12 col-xs-12 mb-4" style="padding-right:0px !important;">
+  <h3 class="red">Vaccine Verification</h3>
+  <p style="font-size:.8em;">
+  </p>
+  {% if form.errors %}
+  <div class="error">
+    {% for error in form.non_field_errors %}
+    {{error}}
+    {% endfor %}
+  </div>
+  {% endif %}
+  <form method="post" action="." autocomplete="false" class="form"
+    role="form" id="vaccine-verify">
+    {% csrf_token %}
+    {% for field in form.hidden_fields %}
+      {% include "form_field.inc.html" %}
+    {% endfor %}
+    {% for field in form.visible_fields %}
+      {% include "form_field.inc.html" %}
+    {% endfor %}
+    <button class="btn btn-primary btn-block" type="submit" value="Submit" id="submit-button">Submit</button>
+  </form>
+  <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4 ml-2">
+    <div class="row list-group">
+      <p class="ml-2">
+        <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapsePrivacy" aria-expanded="false" aria-controls="collapsePrivacy">
+        Questions?
+        </button>
+      </p>
+      {% get_lw_content as help blurbs 3006 %}
+      <div class="collapse" id="collapsePrivacy">
+        <div class="card card-body">
+          <div id="lw_success_3006">{{help.body|safe}}</div>
+          {% if user.is_superuser %}
+          <p>
+            <a href="https://www.carthage.edu/livewhale/?blurbs_edit&tid=285&id=3006"
+              target="_blank">
+              <i class="fa fa-pencil green" aria-hidden="true"
+              title="Manage the content above in LiveWhale"></i></a>
+            <a href="#" data-cid="3006" data-target="lw_success_3006" class="clear-cache">
+              <i class="fa fa-refresh green" aria-hidden="true"
+              title="Clear the cache for this content"></i></a>
+          </p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.col-* -->
+  <p>&nbsp;</p>
+</div>
+<!-- /.forms-container /.col-* -->
+{% endblock content %}
+{% block modal %}{% endblock %}

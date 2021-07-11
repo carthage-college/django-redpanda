@@ -4,8 +4,14 @@
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import FileExtensionValidator
 from djtools.fields import BINARY_CHOICES
+from djtools.fields.helpers import upload_to_path
 from redpanda.core.models import GenericChoice
+
+ALLOWED_IMAGE_EXTENSIONS = (
+    'jpg', 'jpeg', 'png', 'JPG', 'JPEG', 'PNG', 'pdf', 'PDF',
+)
 
 
 class SmellStudy(models.Model):
@@ -109,6 +115,27 @@ class Registration(models.Model):
         "I have received a vaccine.",
         default=False,
     )
+    covid19_vaccine_card_front = models.FileField(
+        "Vaccine card front",
+        upload_to=upload_to_path,
+        help_text="Photo or scan of your COVID-19 vaccine card.",
+        validators=[
+            FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS),
+        ],
+        null=True,
+        blank=True,
+    )
+    covid19_vaccine_card_back = models.FileField(
+        "Vaccine card back",
+        upload_to=upload_to_path,
+        max_length=255,
+        help_text="Photo or scan of your COVID-19 vaccine card.",
+        validators=[
+            FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS),
+        ],
+        null=True,
+        blank=True,
+    )
     uuid = models.CharField(max_length=128, null=True, blank=True)
     name = models.CharField(max_length=128, null=True, blank=True)
     contact = models.CharField(max_length=128, null=True, blank=True)
@@ -137,3 +164,6 @@ class Registration(models.Model):
         return '{0}, {1}'.format(
             self.user.last_name, self.user.first_name
         )
+
+    def get_slug(self):
+        return 'registration'
