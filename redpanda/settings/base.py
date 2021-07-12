@@ -53,8 +53,6 @@ MEDIA_ROOT = '{0}/assets/'.format(ROOT_DIR)
 STATIC_ROOT = '{0}/static/'.format(ROOT_DIR)
 STATIC_URL = '/static/{0}/'.format(PROJECT_APP)
 MEDIA_URL = '/media/{0}/'.format(PROJECT_APP)
-UPLOADS_DIR = '{0}files/'.format(MEDIA_ROOT)
-UPLOADS_URL = '{0}files/'.format(MEDIA_URL)
 FILE_UPLOAD_PERMISSIONS = 0o644
 STATICFILES_DIRS = ()
 STATICFILES_FINDERS = (
@@ -143,6 +141,14 @@ FACULTY_GROUP = ''
 RESEARCH_GROUP = ''
 STAFF_GROUP = ''
 STUDENT_GROUP = ''
+ALL_GROUPS = (
+    (FACULTY_GROUP, 'Faculty'),
+    (STAFF_GROUP, 'Staff'),
+    (STUDENT_GROUP, 'Students'),
+    (ATHLETICS_GROUP, 'Athletics'),
+    (ADMIN_GROUP, 'Admin'),
+    (RESEARCH_GROUP, 'Research'),
+)
 # LDAP Constants
 LDAP_SERVER = ''
 LDAP_PORT = ''

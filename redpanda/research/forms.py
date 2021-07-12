@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from djtools.fields import BINARY_CHOICES
 from redpanda.research.models import Registration
@@ -34,7 +35,7 @@ class VaccineForm(forms.ModelForm):
         choices=VACCINE_CHOICES,
         help_text="""
         Valid reasons for not receiving the vaccine are for: religious beliefs;
-        health reasons; or personal conviction. If that is the case, you resolve 
+        health reasons; or personal conviction. If that is the case, you resolve
         to continue wearing masks indoors this fall.
         """,
         widget=forms.RadioSelect(),
@@ -59,3 +60,44 @@ class VaccineForm(forms.ModelForm):
             'vaccine_card_back',
             'vax_rationale',
         )
+
+    def __init__(self, *args, **kwargs):
+        """Override init method to obtain the request object."""
+        self.request = kwargs.pop('request', None)
+        super(VaccineForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        """Verify data based on the user response to vaccine status."""
+        user = self.request.user
+        perms = user.profile.get_perms()
+        faculty = perms.get(settings.FACULTY_GROUP)
+        staff = perms.get(settings.STAFF_GROUP)
+        cd = self.cleaned_data
+        vax = cd.get('vaccine')
+        date = cd.get('vaccine_date')
+        back = cd.get('vaccine_card_back')
+        front = cd.get('vaccine_card_front')
+        rationale = cd.get('vax_rationale')
+        if vax == 'No' and not rationale:
+            self.add_error(
+                'vax_rationale',
+                "Please provide a rationale for not obtaining the vaccine.",
+            )
+        elif vax == 'Yes':
+            if not date:
+                self.add_error(
+                    'vaccine_date',
+                    "Please provide a date for your first vaccine shot.",
+                )
+            if not front:
+                self.add_error(
+                    'vaccine_card_front',
+                    "Please upload a photo or scan of the front of your vaccine card.",
+                )
+            if not back and (faculty or staff):
+                self.add_error(
+                    'vaccine_card_back',
+                    "Please upload a photo or scan of the back of your vaccine card.",
+                )
+
+        return cd

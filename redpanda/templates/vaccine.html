@@ -19,21 +19,33 @@ $(function(){
   {% if profile.vaccine == 'Yes' %}
   $('#vaccine_date_container').slideDown('200');
   $('#vaccine_card_front_container').slideDown('200');
+  {% if facstaff == "True" %}
   $('#vaccine_card_back_container').slideDown('200');
+  {% else %}
+  $('#vaccine_card_back_container').slideUp('200');
+  {% endif %}
+  $('#vax_rationale_container').slideUp('200');
   {% else %}{% if profile.vaccine == 'No' %}
   $('#vax_rationale_container').slideDown('200');
-  {% endif %}
+  $('#vaccine_date_container').slideUp('200');
+  $('#vaccine_card_front_container').slideUp('200');
+  $('#vaccine_card_back_container').slideUp('200');
+  {% else %}
   $('#vaccine_date_container').slideUp('200');
   $('#vaccine_card_front_container').slideUp('200');
   $('#vaccine_card_back_container').slideUp('200');
   $('#vax_rationale_container').slideUp('200');
-  {% endif %}
+  {% endif %}{% endif %}
   $("[name=vaccine]").click(function(){
     var $dis = $(this).val();
     if ($dis == 'Yes') {
       $('#vaccine_date_container').slideDown('200');
       $('#vaccine_card_front_container').slideDown('200');
+      {% if facstaff == "True" %}
       $('#vaccine_card_back_container').slideDown('200');
+      {% else %}
+      $('#vaccine_card_back_container').slideUp('200');
+      {% endif %}
       $('#vax_rationale_container').slideUp('200');
     }
     if ($dis == 'No') {
@@ -114,10 +126,14 @@ $(function(){
 {% block content %}
 <div class="forms-container col-lg-8 col-md-8 col-sm-12 col-xs-12 mb-4" style="padding-right:0px !important;">
   <h3 class="red">Vaccine Verification</h3>
-  {{form.errors}}
-  profile = {{profile.vaccine}}
   <form method="post" action="." autocomplete="false" class="form"
-    role="form" id="vaccine-verify">
+    role="form" id="vaccine-verify" enctype="multipart/form-data">
+      {% if form.errors %}
+        <div class="alert alert-danger mt-4">
+          Please correct the errors below.
+          {{form.errors}}
+        </div>
+      {% endif %}
     {% csrf_token %}
     <ul class="nobull">
     {% for field in form.visible_fields %}

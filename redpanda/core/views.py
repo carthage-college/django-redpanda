@@ -14,7 +14,6 @@ from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from djauth.decorators import portal_auth_required
-from djtools.utils.users import in_group
 
 from redpanda.core.forms import HealthCheckForm
 from redpanda.research.forms import VaccineForm
@@ -159,9 +158,8 @@ def health_check(request):
         form = HealthCheckForm()
 
     facstaff = False
-    faculty = in_group(user, settings.FACULTY_GROUP)
-    staff = in_group(user, settings.STAFF_GROUP)
-    if faculty or staff:
+    perms = user.profile.get_perms()
+    if perms.get(settings.FACULTY_GROUP) or perms.get(settings.STAFF_GROUP):
         facstaff = True
     return render(
         request,
@@ -182,18 +180,23 @@ def vaccine(request):
     if request.method == 'POST':
         form = VaccineForm(
             request.POST,
+            request.FILES,
             instance=profile,
-            use_required_attribute=False,
+            request=request,
+            use_required_attribute=settings.REQUIRED_ATTRIBUTE,
         )
         if form.is_valid():
             vax = form.save()
             return HttpResponseRedirect(reverse_lazy('vaccine_success'))
     else:
-        form = VaccineForm(instance=profile, use_required_attribute=False)
+        form = VaccineForm(
+            instance=profile,
+            request=request,
+            use_required_attribute=settings.REQUIRED_ATTRIBUTE,
+        )
     facstaff = False
-    faculty = in_group(user, settings.FACULTY_GROUP)
-    staff = in_group(user, settings.STAFF_GROUP)
-    if faculty or staff:
+    perms = user.profile.get_perms()
+    if perms.get(settings.FACULTY_GROUP) or perms.get(settings.STAFF_GROUP):
         facstaff = True
     return render(
         request,

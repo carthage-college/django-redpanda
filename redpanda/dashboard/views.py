@@ -23,7 +23,6 @@ from django.views.decorators.csrf import csrf_exempt
 from djauth.decorators import portal_auth_required
 from djimix.core.database import get_connection
 from djimix.core.database import xsql
-from djtools.utils.users import in_group
 from redpanda.core.models import HealthCheck
 from redpanda.core.utils import get_coach
 from redpanda.research.models import Registration
@@ -67,16 +66,12 @@ def _get_sports(request):
 def home(request):
     """Dashboard home for administrators."""
     user = request.user
-    admins = in_group(user, settings.ADMIN_GROUP)
-    if not admins:
+    perms = user.profile.get_perms()
+    admins = perms.get(settings.ADMIN_GROUP)
+    if not perms.get(settings.ADMIN_GROUP):
         response = HttpResponseRedirect(reverse_lazy('dashboard_managers'))
     else:
         group = request.POST.get('group')
-        groups = (
-            (settings.FACULTY_GROUP, 'Faculty'),
-            (settings.STAFF_GROUP, 'Staff'),
-            (settings.STUDENT_GROUP, 'Students'),
-        )
         sport, sports = _get_sports(request)
         date_start, date_end = _get_dates(request)
         response = render(
@@ -85,7 +80,7 @@ def home(request):
             {
                 'admins': admins,
                 'group': group,
-                'groups': groups,
+                'groups': settings.ALL_GROUPS,
                 'sport': sport,
                 'sports': sports,
                 'date_start': date_start,
@@ -202,8 +197,9 @@ def home_ajax(request):
 def managers(request):
     """Dashboard home for managers."""
     user = request.user
-    faculty = in_group(user, settings.FACULTY_GROUP)
-    athletics = in_group(user, settings.ATHLETICS_GROUP)
+    perms = user.profile.get_perms()
+    faculty = perms.get(settings.FACULTY_GROUP)
+    athletics = perms.get(settings.ATHLETICS_GROUP)
     coach = get_coach(user.id)
     students = []
     if faculty or athletics or coach:
@@ -274,8 +270,9 @@ def managers(request):
 def research(request):
     """Dashboard for smell study."""
     user = request.user
-    admins = in_group(user, settings.ADMIN_GROUP)
-    study = in_group(user, settings.RESEARCH_GROUP)
+    perms = user.profile.get_perms()
+    admins = perms.get(settings.ADMIN_GROUP)
+    study = perms.get(settings.RESEARCH_GROUP)
     date_start, date_end = _get_dates(request)
 
     if admins or study:
@@ -300,7 +297,9 @@ def research(request):
 )
 def participation(request):
     """Dashboard for stats on folks who have participated."""
-    if in_group(request.user, settings.ADMIN_GROUP):
+    user = request.user
+    perms = user.profile.get_perms()
+    if perms.get(settings.ADMIN_GROUP):
         groups = {
             'carthageStaffStatus': [],
             'carthageFacultyStatus': [],

@@ -2,8 +2,10 @@
 
 """Data models."""
 
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.validators import FileExtensionValidator
 from djtools.fields import BINARY_CHOICES
 from djtools.fields.helpers import upload_to_path
@@ -125,7 +127,14 @@ class Registration(models.Model):
         to continue wearing masks indoors this fall.
         """,
     )
-    vaccine_date = models.DateField(null=True, blank=True)
+    vaccine_date = models.DateField(
+        help_text="""
+        The date of the initial dose for Johnson and Johnson
+        or the date of the second dose for Pfizer and Moderna.
+        """,
+        null=True,
+        blank=True,
+    )
     vaccine_card_front = models.FileField(
         "Vaccine card front",
         upload_to=upload_to_path,
@@ -176,6 +185,18 @@ class Registration(models.Model):
         return '{0}, {1}'.format(
             self.user.last_name, self.user.first_name
         )
+
+    def get_perms(self):
+        key = 'user_permissions_{0}'.format(self.user.id)
+        perms = cache.get(key)
+        if not perms:
+            perms = {}
+            for group in settings.ALL_GROUPS:
+                perm = self.user.groups.filter(name=group[0]).exists()
+                if perm:
+                    perms[group[0]] = group[1]
+            cache.set(key, perms)
+        return perms
 
     def get_slug(self):
         return 'registration'
