@@ -191,119 +191,88 @@ DEFAULT_FROM_EMAIL = ''
 SERVER_EMAIL = ''
 SERVER_MAIL = ''
 # logging
-LOG_FILEPATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs/')
-DEBUG_LOG_FILENAME = LOG_FILEPATH + 'debug.log'
-INFO_LOG_FILENAME = LOG_FILEPATH + 'info.log'
-ERROR_LOG_FILENAME = LOG_FILEPATH + 'error.log'
-CUSTOM_LOG_FILENAME = LOG_FILEPATH + 'custom.log'
+LOG_FILEPATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs/',
+)
+LOG_FILENAME = '{0}{1}'.format(LOG_FILEPATH, 'debug.log')
+DEBUG_LOG_FILENAME = '{0}{1}'.format(LOG_FILEPATH, 'debug.log')
+INFO_LOG_FILENAME = '{0}{1}'.format(LOG_FILEPATH, 'info.log')
+ERROR_LOG_FILENAME = '{0}{1}'.format(LOG_FILEPATH, 'error.log')
+CUSTOM_LOG_FILENAME = '{0}{1}'.format(LOG_FILEPATH, 'custom.log')
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
         'standard': {
-            'format' : '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',
-            'datefmt' : '%Y/%b/%d %H:%M:%S'
+            'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',
+            'datefmt': '%Y/%b/%d %H:%M:%S',
         },
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s',
-            'datefmt' : '%Y/%b/%d %H:%M:%S'
-        },
-        'custom': {
-            'format': '%(asctime)s: %(levelname)s: %(message)s',
-            'datefmt' : '%m/%d/%Y %I:%M:%S %p'
+            'datefmt': '%Y/%b/%d %H:%M:%S',
         },
         'simple': {
-            'format': '%(levelname)s %(message)s'
+            'format': '%(levelname)s %(message)s',
         },
     },
     'filters': {
         'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
+            '()': 'django.utils.log.RequireDebugFalse',
         },
         'require_debug_true': {
             '()': 'django.utils.log.RequireDebugTrue',
         },
     },
     'handlers': {
+        'logfile': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': LOG_FILENAME,
+            'formatter': 'standard',
+        },
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'include_html': True,
+            'class': 'django.utils.log.AdminEmailHandler',
+        },
+    },
+    'loggers': {
         'custom_logfile': {
-            'level':'ERROR',
-            'filters': ['require_debug_true'], # do not run error logger in production
+            'level': 'ERROR',
             'class': 'logging.FileHandler',
             'filename': CUSTOM_LOG_FILENAME,
             'formatter': 'custom',
         },
         'info_logfile': {
-            'level':'INFO',
-            'class':'logging.handlers.RotatingFileHandler',
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
             'backupCount': 10,
             'maxBytes': 50000,
-            'filters': ['require_debug_false'], # run logger in production
             'filename': INFO_LOG_FILENAME,
             'formatter': 'simple',
         },
         'debug_logfile': {
             'level': 'DEBUG',
-            'filters': ['require_debug_true'], # do not run debug logger in production
+            'handlers': ['logfile'],
             'class': 'logging.FileHandler',
             'filename': DEBUG_LOG_FILENAME,
-            'formatter': 'verbose'
+            'formatter': 'verbose',
         },
         'error_logfile': {
             'level': 'ERROR',
-            'filters': ['require_debug_true'], # do not run error logger in production
             'class': 'logging.FileHandler',
             'filename': ERROR_LOG_FILENAME,
-            'formatter': 'verbose'
-        },
-        'console':{
-            'level':'INFO',
-            'class':'logging.StreamHandler',
-            'formatter': 'standard'
-        },
-        'mail_admins': {
-            'level': 'ERROR',
-            'include_html': True,
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'djimix': {
-            'handlers':['debug_logfile'],
-            'propagate': True,
-            'level':'DEBUG',
-        },
-        'redpanda': {
-            'handlers':['debug_logfile'],
-            'propagate': True,
-            'level':'DEBUG',
-        },
-        'redpanda.lynx': {
-            'handlers':['debug_logfile'],
-            'propagate': True,
-            'level':'DEBUG',
-        },
-        'redpanda.core': {
-            'handlers':['debug_logfile'],
-            'propagate': True,
-            'level':'DEBUG',
-        },
-        'error_logger': {
-            'handlers': ['error_logfile'],
-            'level': 'ERROR'
-         },
-        'info_logger': {
-            'handlers': ['info_logfile'],
-            'level': 'INFO'
-        },
-        'debug_logger': {
-            'handlers':['debug_logfile'],
-            'propagate': True,
-            'level':'DEBUG',
+            'formatter': 'verbose',
         },
         'django': {
-            'handlers':['console'],
+            'handlers': ['console'],
             'propagate': True,
-            'level':'WARN',
+            'level': 'WARN',
         },
         'django.db.backends': {
             'handlers': ['console'],
@@ -315,7 +284,7 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-    }
+    },
 }
 # app constants
 START_DATE = datetime.datetime(datetime.datetime.now().year, 6, 1)
