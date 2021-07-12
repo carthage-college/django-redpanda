@@ -1,0 +1,14 @@
+<li class="form-group ctrlHolder" {% if dominatrix %}id="{{dominatrix}}"{% else %}id="{{ field.html_name }}_container"{% endif %}>
+    {% if field.label %}<h3>{{ field.label_tag }}</h3>{% endif %}
+    {% if field.errors %}
+    <div class="required warning">
+      <div class="error">{{ field.errors|join:", "}}</div>
+    {% else %}
+    <div{% if field.field.required %} class="required"{% endif %}>
+    {% endif %}
+    {% if field.help_text %}
+        <p class="help">{{field.help_text|safe}}</p>
+    {% endif %}
+    {{field}}
+    </div>
+</li>
