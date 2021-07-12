@@ -2,8 +2,10 @@
 
 from django import forms
 from django.core.exceptions import ValidationError
+from djtools.fields import BINARY_CHOICES
 from redpanda.research.models import Registration
 from redpanda.research.models import SmellStudy
+from redpanda.research.models import VACCINE_CHOICES
 
 
 class SmellStudyForm(forms.ModelForm):
@@ -27,17 +29,33 @@ class SmellStudyForm(forms.ModelForm):
 
 class VaccineForm(forms.ModelForm):
     """Data model for the health check app."""
-    covid19_vaccine_card_front = forms.FileField(
+    vaccine = forms.ChoiceField(
+        label="Vaccine status",
+        choices=VACCINE_CHOICES,
+        help_text="""
+        Valid reasons for not receiving the vaccine are for: religious beliefs;
+        health reasons; or personal conviction. If that is the case, you resolve 
+        to continue wearing masks indoors this fall.
+        """,
+        widget=forms.RadioSelect(),
+    )
+    vaccine_card_front = forms.FileField(
         label="Vaccine card front",
         help_text="Photo or scan of the front of your COVID-19 vaccine card.",
-        required=True,
+        required=False,
     )
-    covid19_vaccine_card_back = forms.FileField(
+    vaccine_card_back = forms.FileField(
         label="Vaccine card back",
         help_text="Photo or scan of the back of your COVID-19 vaccine card.",
-        required=True,
+        required=False,
     )
 
     class Meta:
         model = Registration
-        fields = ('covid19_vaccine_card_front', 'covid19_vaccine_card_back')
+        fields = (
+            'vaccine',
+            'vaccine_date',
+            'vaccine_card_front',
+            'vaccine_card_back',
+            'vax_rationale',
+        )

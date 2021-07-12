@@ -1,49 +1,3 @@
-ul { list-style-type: none;}
-li { display: inline-block; vertical-align: text-top;}
-#czechs input[type="checkbox"] {display: none !important;}
-label {
-  border: 1px solid #fff;
-  padding: 10px 10px 10px 0;
-  display: block;
-  position: relative;
-  cursor: pointer;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  margin-bottom: 0;
-}
-label::before {
-  background-color: white;
-  color: white;
-  content: " ";
-  display: block;
-  border-radius: 50%;
-  border: 1px solid grey;
-  position: absolute;
-  top: -5px;
-  left: -5px;
-  width: 25px;
-  height: 25px;
-  text-align: center;
-  line-height: 28px;
-  transition-duration: 0.4s;
-  transform: scale(0);
-}
-label img {
-  height: 100px;
-  width: 100px;
-  transition-duration: 0.2s;
-  transform-origin: 50% 50%;
-}
-:checked+label::before {
-  content: "✓";
-  background-color: green;
-  transform: scale(1);
-}
-:checked+label img {z-index: -1;}
 .navbar {
   justify-content:center;padding: 0;
   border-top: 5px solid #3ab0c8;
@@ -63,6 +17,11 @@ label img {
 .container-fluid {padding-left: 0;}
 .col-5, .col-6, .col-12 {padding:0;}
 .form fieldset {padding:0;}
+.error, .notice, .success, .info {
+    padding: .2em;
+    margin-bottom: .25em;
+    border: 2px solid #ddd;
+}
 body.sidenav-toggled .content-wrapper {margin-left: 0px;}
 .content-wrapper {margin-left: 0;}
 body.sidenav-toggled footer.sticky-footer {width: 100%;}
@@ -149,7 +108,7 @@ nav .input-group-btn {font-size:1.3em;}
 }
 .form-group .control-label { font-weight:700; }
 h6 {font-weight: 800;}
-
+.form-check-input {position: inherit;}
 .vaccine-true {
     position:relative;
 }
@@ -162,3 +121,4 @@ h6 {font-weight: 800;}
     position:absolute;
     top:0;
 }
+ul#id_vaccine {list-style: none outside none;}

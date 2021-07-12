@@ -180,13 +180,16 @@ def vaccine(request):
     profile = Registration.objects.get_or_create(user=user)[0]
 
     if request.method == 'POST':
-        form = VaccineForm(request.POST)
+        form = VaccineForm(
+            request.POST,
+            use_required_attribute=False,
+        )
         if form.is_valid():
             vax = form.save(commit=False)
             vax.created_by = user
             vax.save()
     else:
-        form = VaccineForm()
+        form = VaccineForm(instance=profile, use_required_attribute=False)
     facstaff = False
     faculty = in_group(user, settings.FACULTY_GROUP)
     staff = in_group(user, settings.STAFF_GROUP)
@@ -195,7 +198,7 @@ def vaccine(request):
     return render(
         request,
         'vaccine.html',
-        {'form': form, 'facstaff': facstaff,},
+        {'form': form, 'facstaff': facstaff, 'profile': profile},
     )
 
 

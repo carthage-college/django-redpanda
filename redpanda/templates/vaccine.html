@@ -1,11 +1,48 @@
 {% extends "base.html" %}
 {% load livewhale_api %}
+{% load bootstrap4 %}
 {% load static %}
 {% load ifusergroup %}
 {% block extra_javascript %}
 {{ block.super }}
+<script src="//www.carthage.edu/static/vendor/jquery/ui/datepicker/js/jquery-ui-1.10.4.custom.min.js"
+  type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" language="javascript">
 $(function(){
+  $("#id_vaccine_date").datepicker({
+      firstDay:0, appendText: "(format yyyy-mm-dd)",
+      changeFirstDay:false, dateFormat: "yy-mm-dd",
+      showOn: "both",
+      buttonImage: "//www.carthage.edu/themes/shared/img/ico/calendar.gif",
+      buttonImageOnly: true
+  });
+  {% if profile.vaccine == 'Yes' %}
+  $('#vaccine_date_container').slideDown('200');
+  $('#vaccine_card_front_container').slideDown('200');
+  $('#vaccine_card_back_container').slideDown('200');
+  {% else %}{% if profile.vaccine == 'No' %}
+  $('#vax_rationale_container').slideDown('200');
+  {% endif %}
+  $('#vaccine_date_container').slideUp('200');
+  $('#vaccine_card_front_container').slideUp('200');
+  $('#vaccine_card_back_container').slideUp('200');
+  $('#vax_rationale_container').slideUp('200');
+  {% endif %}
+  $("[name=vaccine]").click(function(){
+    var $dis = $(this).val();
+    if ($dis == 'Yes') {
+      $('#vaccine_date_container').slideDown('200');
+      $('#vaccine_card_front_container').slideDown('200');
+      $('#vaccine_card_back_container').slideDown('200');
+      $('#vax_rationale_container').slideUp('200');
+    }
+    if ($dis == 'No') {
+      $('#vaccine_date_container').slideUp('200');
+      $('#vaccine_card_front_container').slideUp('200');
+      $('#vaccine_card_back_container').slideUp('200');
+      $('#vax_rationale_container').slideDown('200');
+    }
+  });
   // override the submit event to handle some things
   $('form#health-check').submit(function(){
     // disable submit button after users clicks it
@@ -13,6 +50,11 @@ $(function(){
   });
 });
 </script>
+{% endblock %}
+{% block extra_style %}
+{{block.super}}
+<link href="//www.carthage.edu/static/vendor/jquery/ui/datepicker/css/smoothness/jquery-ui-1.10.4.custom.min.css"
+  rel="stylesheet" type="text/css">
 {% endblock %}
 {% block navbar-header %}
 <a href="{% url 'home' %}" class="mr-sm-3 mr-lg-3">
@@ -72,50 +114,20 @@ $(function(){
 {% block content %}
 <div class="forms-container col-lg-8 col-md-8 col-sm-12 col-xs-12 mb-4" style="padding-right:0px !important;">
   <h3 class="red">Vaccine Verification</h3>
-  <p style="font-size:.8em;">
-  </p>
-  {% if form.errors %}
-  <div class="error">
-    {% for error in form.non_field_errors %}
-    {{error}}
-    {% endfor %}
-  </div>
-  {% endif %}
+  {{form.errors}}
+  profile = {{profile.vaccine}}
   <form method="post" action="." autocomplete="false" class="form"
     role="form" id="vaccine-verify">
     {% csrf_token %}
-    {% for field in form.hidden_fields %}
-      {% include "form_field.inc.html" %}
-    {% endfor %}
+    <ul class="nobull">
     {% for field in form.visible_fields %}
       {% include "form_field.inc.html" %}
     {% endfor %}
+    </ul>
     <button class="btn btn-primary btn-block" type="submit" value="Submit" id="submit-button">Submit</button>
   </form>
   <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4 ml-2">
     <div class="row list-group">
-      <p class="ml-2">
-        <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapsePrivacy" aria-expanded="false" aria-controls="collapsePrivacy">
-        Questions?
-        </button>
-      </p>
-      {% get_lw_content as help blurbs 3006 %}
-      <div class="collapse" id="collapsePrivacy">
-        <div class="card card-body">
-          <div id="lw_success_3006">{{help.body|safe}}</div>
-          {% if user.is_superuser %}
-          <p>
-            <a href="https://www.carthage.edu/livewhale/?blurbs_edit&tid=285&id=3006"
-              target="_blank">
-              <i class="fa fa-pencil green" aria-hidden="true"
-              title="Manage the content above in LiveWhale"></i></a>
-            <a href="#" data-cid="3006" data-target="lw_success_3006" class="clear-cache">
-              <i class="fa fa-refresh green" aria-hidden="true"
-              title="Clear the cache for this content"></i></a>
-          </p>
-          {% endif %}
-        </div>
-      </div>
     </div>
     <!-- /.row -->
   </div>

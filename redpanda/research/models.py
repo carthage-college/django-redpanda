@@ -12,6 +12,10 @@ from redpanda.core.models import GenericChoice
 ALLOWED_IMAGE_EXTENSIONS = (
     'jpg', 'jpeg', 'png', 'JPG', 'JPEG', 'PNG', 'pdf', 'PDF',
 )
+VACCINE_CHOICES = (
+    ('Yes', 'I have been vaccinated.'),
+    ('No', 'I have a reason not to be vaccinated.')
+)
 
 
 class SmellStudy(models.Model):
@@ -111,11 +115,18 @@ class Registration(models.Model):
         "I would like to receive health check reminders at my mobile phone.",
         default=False,
     )
-    vaccine = models.BooleanField(
+    vaccine = models.CharField(
         "I have received a vaccine.",
-        default=False,
+        max_length=4,
+        choices=VACCINE_CHOICES,
+        help_text="""
+        Valid reasons for not receiving the vaccine are for: religious beliefs;
+        health reasons; or personal conviction. If that is the case, you resolve
+        to continue wearing masks indoors this fall.
+        """,
     )
-    covid19_vaccine_card_front = models.FileField(
+    vaccine_date = models.DateField(null=True, blank=True)
+    vaccine_card_front = models.FileField(
         "Vaccine card front",
         upload_to=upload_to_path,
         help_text="Photo or scan of your COVID-19 vaccine card.",
@@ -125,7 +136,7 @@ class Registration(models.Model):
         null=True,
         blank=True,
     )
-    covid19_vaccine_card_back = models.FileField(
+    vaccine_card_back = models.FileField(
         "Vaccine card back",
         upload_to=upload_to_path,
         max_length=255,
@@ -136,6 +147,7 @@ class Registration(models.Model):
         null=True,
         blank=True,
     )
+    vax_rationale = models.TextField(null=True, blank=True)
     uuid = models.CharField(max_length=128, null=True, blank=True)
     name = models.CharField(max_length=128, null=True, blank=True)
     contact = models.CharField(max_length=128, null=True, blank=True)
