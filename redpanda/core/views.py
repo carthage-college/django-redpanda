@@ -182,12 +182,12 @@ def vaccine(request):
     if request.method == 'POST':
         form = VaccineForm(
             request.POST,
+            instance=profile,
             use_required_attribute=False,
         )
         if form.is_valid():
-            vax = form.save(commit=False)
-            vax.created_by = user
-            vax.save()
+            vax = form.save()
+            return HttpResponseRedirect(reverse_lazy('vaccine_success'))
     else:
         form = VaccineForm(instance=profile, use_required_attribute=False)
     facstaff = False
