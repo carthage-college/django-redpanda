@@ -19,7 +19,7 @@ $(function(){
   {% if profile.vaccine == 'Yes' %}
   $('#vaccine_date_container').slideDown('200');
   $('#vaccine_card_front_container').slideDown('200');
-  {% if facstaff == "True" %}
+  {% if facstaff == True %}
   $('#vaccine_card_back_container').slideDown('200');
   {% else %}
   $('#vaccine_card_back_container').slideUp('200');
@@ -41,7 +41,7 @@ $(function(){
     if ($dis == 'Yes') {
       $('#vaccine_date_container').slideDown('200');
       $('#vaccine_card_front_container').slideDown('200');
-      {% if facstaff == "True" %}
+      {% if facstaff == True %}
       $('#vaccine_card_back_container').slideDown('200');
       {% else %}
       $('#vaccine_card_back_container').slideUp('200');
