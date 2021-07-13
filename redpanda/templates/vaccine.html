@@ -18,21 +18,14 @@ $(function(){
   {% if profile.vaccine == 'Yes' %}
   $('#vaccine_date_container').slideDown('200');
   $('#vaccine_card_front_container').slideDown('200');
-  {% if facstaff == True %}
-  $('#vaccine_card_back_container').slideDown('200');
-  {% else %}
-  $('#vaccine_card_back_container').slideUp('200');
-  {% endif %}
   $('#vax_rationale_container').slideUp('200');
   {% else %}{% if profile.vaccine == 'No' %}
   $('#vax_rationale_container').slideDown('200');
   $('#vaccine_date_container').slideUp('200');
   $('#vaccine_card_front_container').slideUp('200');
-  $('#vaccine_card_back_container').slideUp('200');
   {% else %}
   $('#vaccine_date_container').slideUp('200');
   $('#vaccine_card_front_container').slideUp('200');
-  $('#vaccine_card_back_container').slideUp('200');
   $('#vax_rationale_container').slideUp('200');
   {% endif %}{% endif %}
   $("[name=vaccine]").click(function(){
@@ -40,17 +33,11 @@ $(function(){
     if ($dis == 'Yes') {
       $('#vaccine_date_container').slideDown('200');
       $('#vaccine_card_front_container').slideDown('200');
-      {% if facstaff == True %}
-      $('#vaccine_card_back_container').slideDown('200');
-      {% else %}
-      $('#vaccine_card_back_container').slideUp('200');
-      {% endif %}
       $('#vax_rationale_container').slideUp('200');
     }
     if ($dis == 'No') {
       $('#vaccine_date_container').slideUp('200');
       $('#vaccine_card_front_container').slideUp('200');
-      $('#vaccine_card_back_container').slideUp('200');
       $('#vax_rationale_container').slideDown('200');
     }
   });

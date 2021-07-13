@@ -45,11 +45,6 @@ class VaccineForm(forms.ModelForm):
         help_text="Photo or scan of the front of your COVID-19 vaccine card.",
         required=False,
     )
-    vaccine_card_back = forms.FileField(
-        label="Vaccine card back",
-        help_text="Photo or scan of the back of your COVID-19 vaccine card.",
-        required=False,
-    )
 
     class Meta:
         model = Registration
@@ -57,7 +52,6 @@ class VaccineForm(forms.ModelForm):
             'vaccine',
             'vaccine_date',
             'vaccine_card_front',
-            'vaccine_card_back',
             'vax_rationale',
         )
 
@@ -75,7 +69,6 @@ class VaccineForm(forms.ModelForm):
         cd = self.cleaned_data
         vax = cd.get('vaccine')
         date = cd.get('vaccine_date')
-        back = cd.get('vaccine_card_back')
         front = cd.get('vaccine_card_front')
         rationale = cd.get('vax_rationale')
         if vax == 'No' and not rationale:
@@ -94,10 +87,4 @@ class VaccineForm(forms.ModelForm):
                     'vaccine_card_front',
                     "Please upload a photo or scan of the front of your vaccine card.",
                 )
-            if not back and (faculty or staff):
-                self.add_error(
-                    'vaccine_card_back',
-                    "Please upload a photo or scan of the back of your vaccine card.",
-                )
-
         return cd

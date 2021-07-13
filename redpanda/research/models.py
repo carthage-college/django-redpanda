@@ -145,17 +145,6 @@ class Registration(models.Model):
         null=True,
         blank=True,
     )
-    vaccine_card_back = models.FileField(
-        "Vaccine card back",
-        upload_to=upload_to_path,
-        max_length=255,
-        help_text="Photo or scan of your COVID-19 vaccine card.",
-        validators=[
-            FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS),
-        ],
-        null=True,
-        blank=True,
-    )
     vax_rationale = models.TextField(null=True, blank=True)
     uuid = models.CharField(max_length=128, null=True, blank=True)
     name = models.CharField(max_length=128, null=True, blank=True)
