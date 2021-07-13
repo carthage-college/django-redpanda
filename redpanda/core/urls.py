@@ -62,6 +62,6 @@ urlpatterns = [
     # vaccine verification
     path('vax/', views.vaccine, name='vaccine'),
     # home
-    #path('', views.vaccine, name='home'),
-    path('', views.health_check, name='home'),
+    #path('', views.health_check, name='home'),
+    path('', views.vaccine, name='home'),
 ]

@@ -193,7 +193,7 @@ def vaccine(request):
                 "Thank you for submitting your vaccine status.",
                 extra_tags='alert-success',
             )
-            return HttpResponseRedirect(reverse_lazy('vaccine'))
+            return HttpResponseRedirect(reverse_lazy('home'))
     else:
         form = VaccineForm(
             instance=profile,

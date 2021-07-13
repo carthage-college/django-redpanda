@@ -145,7 +145,11 @@ class Registration(models.Model):
         null=True,
         blank=True,
     )
-    vax_rationale = models.TextField(null=True, blank=True)
+    vax_rationale = models.TextField(
+        "Exemption Rationale",
+        null=True,
+        blank=True,
+    )
     uuid = models.CharField(max_length=128, null=True, blank=True)
     name = models.CharField(max_length=128, null=True, blank=True)
     contact = models.CharField(max_length=128, null=True, blank=True)
