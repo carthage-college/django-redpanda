@@ -187,7 +187,13 @@ def vaccine(request):
         )
         if form.is_valid():
             vax = form.save()
-            return HttpResponseRedirect(reverse_lazy('vaccine_success'))
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Thank you for submitting your vaccine status.",
+                extra_tags='alert-success',
+            )
+            return HttpResponseRedirect(reverse_lazy('vaccine'))
     else:
         form = VaccineForm(
             instance=profile,

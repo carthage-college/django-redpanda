@@ -60,11 +60,6 @@ urlpatterns = [
     # health check
     path('health-check/', views.health_check, name='health_check'),
     # vaccine verification
-    path(
-        'vax/success/',
-        TemplateView.as_view(template_name='vaccine_success.html'),
-        name='vaccine_success',
-    ),
     path('vax/', views.vaccine, name='vaccine'),
     # home
     #path('', views.vaccine, name='home'),

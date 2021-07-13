@@ -154,10 +154,12 @@ def home_ajax(request):
             vax = czech.created_by.profile.vaccine
         except Exception:
             vax = None
+        if vax == 'Yes':
+            vax = True
         data.append({
             'email': czech.created_by.email,
             'full_name': full_name,
-            'vaccine': '',
+            'vaccine': vax,
             'cid': czech.created_by.id,
             'created_at': czech.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             'group': czech.group(),
