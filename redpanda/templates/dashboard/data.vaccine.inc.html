@@ -14,36 +14,37 @@
     <tbody>
     {% for profile in profiles %}
       <tr>
-        {% cache 31536000 user_fullname request.user.id %}
+        {% cache 31536000 user_fullname profile.user.id %}
         <td nowrap style="text-align: left;">
             <a href="mailto:{{profile.user.email}}">{{profile.user.last_name}}, {{profile.user.first_name}}</a>
         </td>
         {% endcache %}
-        {% cache 31536000 user_cid request.user.id %}{{profile.user.id}}{% endcache %}
+        {% cache 31536000 user_cid profile.user.id %}
         <td nowrap style="text-align: left;">
           {{profile.user.id}}
         </td>
         {% endcache %}
-        {% cache 31536000 user_group request.user.id %}
+        {% cache 31536000 user_group profile.user.id %}
         <td nowrap style="text-align: left;">
           {{profile.user.group}}
         </td>
         {% endcache %}
-        <td nowrap style="text-align: left;">
-          {% if profile.user.vaccine %}
+        <td nowrap style="text-align: center;">
+          {% if profile.vaccine == 'Yes' %}
           <i class="fa fa-check green" title="Vaccine">
             <span style="display:none;">x</span>
           </i>
           {% else %}
-          <i class="fa fa-times red" title="Vaccine"><span style="display:none;">i{{profile.user.vax_rationale}}</span></i>
+          {{profile.vaccine}}
+          <i class="fa fa-times red" title="Vaccine"><span style="display:none;">{{profile.vax_rationale}}</span></i>
           {% endif %}
         </td>
         <td nowrap style="font-family: monospace;font-size:1.1em;">
-          {{profile.user.vaccine_date|date:'Y-m-d'}}
+          {{profile.vaccine_date|date:'Y-m-d'}}
         </td>
         <td nowrap>
-        {% if profile.user.vaccine == 'Yes' %}
-          <i class="fa fa-picture-o" title="Vaccine card"><span style="display:none;">{{profile.user.vaccine_card_front}}</span></i>
+        {% if profile.vaccine == 'Yes' %}
+        <i class="fa fa-picture-o" title="Vaccine card"><a href="{{profile.vaccine_card_front}}"></a><span style="display:none;">{{profile.vaccine_card_front}}</span></i>
         {% endif %}
         </td>
       </tr>
