@@ -68,6 +68,7 @@ $(function(){
       {% endifusergroup %}
       {% if user.is_superuser %}
       <li class="divider"></li>
+      <li><a href="{% url 'vax_dash' %}">Vax data</a></li>
       <li><a href="{% url 'admin:index' %}">Admin</a></li>
       {% endif %}
     </ul>
