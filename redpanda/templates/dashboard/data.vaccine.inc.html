@@ -20,13 +20,13 @@
         </td>
         {% endcache %}
         {% cache 31536000 user_cid profile.user.id %}
-        <td nowrap style="text-align: left;">
+        <td nowrap style="font-family: monospace;font-size:1.1em; text-align: center;">
           {{profile.user.id}}
         </td>
         {% endcache %}
         {% cache 31536000 user_group profile.user.id %}
-        <td nowrap style="text-align: left;">
-          {{profile.user.group}}
+        <td nowrap style="text-align: center;">
+          {{profile.get_group}}
         </td>
         {% endcache %}
         <td nowrap style="text-align: center;">

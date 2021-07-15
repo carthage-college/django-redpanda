@@ -98,7 +98,7 @@ class Registration(models.Model):
         "Date Created", auto_now_add=True,
     )
     updated_at = models.DateTimeField(
-        "Date updated", auto_now=True,
+        "Date updated",
     )
     odor_identification = models.CharField(
         verbose_name="""
@@ -193,6 +193,21 @@ class Registration(models.Model):
                     perms[group[0]] = group[1]
             cache.set(key, perms)
         return perms
+
+    def get_group(self):
+        perms = self.get_perms()
+        groups = []
+        for perm, display in perms.items():
+            groups.append(display)
+        if 'Staff' in groups :
+            group = 'Staff'
+        elif 'Faculty' in groups:
+            group = 'Faculty'
+        elif 'Students' in groups:
+            group = 'Student'
+        else:
+            group = 'Staff'
+        return group
 
     def get_slug(self):
         return 'registration'
