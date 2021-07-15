@@ -306,7 +306,9 @@ def vaccine(request):
         response = HttpResponseRedirect(reverse_lazy('home'))
     else:
         group = request.POST.get('group')
-        profiles = Registration.objects.filter(user__last_login__gte=settings.START_DATE_VAX)
+        profiles = Registration.objects.filter(
+            user__last_login__gte=settings.START_DATE_VAX,
+        ).order_by('user__last_name')
         response = render(
             request,
             'dashboard/vaccine.html',

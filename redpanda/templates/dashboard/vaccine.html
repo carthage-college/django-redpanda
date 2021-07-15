@@ -7,7 +7,7 @@
 {% endblock %}
 {% block extra_javascript %}
 {{ block.super }}
-<script src="{% static 'js/main.js' %}?0420"
+<script src="{% static 'js/vaccine.js' %}?0420"
   type="text/javascript" language="javascript"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"
   type="text/javascript" charset="utf-8" language="javascript"></script>
@@ -18,13 +18,6 @@
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"
   type="text/javascript" charset="utf-8" language="javascript"></script>
 <script type="text/javascript" charset="utf-8">
-/*
-var $vaccineAjaxUrl = '{# url "vaccine_ajax" #}';
-var $dateStart = '{{date_start|date:'Y-m-d'}}';
-var $dateEnd = '{{date_end|date:'Y-m-d'}}';
-var $group = '{{group|default:""}}';
-var $csrfToken = '{{csrf_token}}';
-*/
 $(function() {
   $("body").toggleClass("sidenav-toggled");
 });
@@ -35,36 +28,10 @@ $(function() {
   <div class="col-lg-12">
     <div class="col-lg-8">
       <h1>Vaccine verification data</h1>
+      <p>Click on the <i class="fa fa-commenting red" aria-hidden="true"></i> icon to view exemption rationale.</p>
     </div>
     <div class="col-lg-12">
-      {% block reporting %}
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <form class="form-inline" method="post" role="form">
-          {% csrf_token %}
-            <div class="form-group">
-              <label>Show date range</label>
-              <input type="text" name="date_start" autocomplete="off"
-                value="{{date_start|date:'Y-m-d'}}" placeholder="From..."
-                class="form-control" id="id_date_start">
-              <input type="text" name="date_end" autocomplete="off"
-                value="{{date_end|date:'Y-m-d'}}" placeholder="To..."
-                class="form-control" id="id_date_end">
-              <select name="group" class="form-control">
-                <option value="">----Group----</option>
-                {% for g in groups %}
-                <option value="{{g.0}}"{% if g.0 == group %} selected{% endif %}>
-                {{g.1|safe}}
-                </option>
-                {% endfor %}
-              </select>
-              <input type="submit" name="submit" value="submit" id="submit-toggle" style="margin:0 10px;" class="btn btn-primary">
-            </div>
-          </form>
-        </div>
-        <!-- /.panel-heading -->
-      </div>
-      {% endblock %}
+      {% block reporting %}{% endblock %}
       <div class="panel panel-default">
         <div class="panel-body" id="data-panel">
         {% block groups %}

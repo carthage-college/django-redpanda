@@ -97,6 +97,9 @@ class Registration(models.Model):
     created_at = models.DateTimeField(
         "Date Created", auto_now_add=True,
     )
+    updated_at = models.DateTimeField(
+        "Date updated", auto_now=True,
+    )
     odor_identification = models.CharField(
         verbose_name="""
             How many items did you answer correctly (out of 8)
