@@ -297,6 +297,33 @@ def research(request):
     session_var='REDPANDA_AUTH',
     redirect_url=reverse_lazy('access_denied'),
 )
+def vaccine(request):
+    """Dashboard home for vaccine verification."""
+    user = request.user
+    perms = user.profile.get_perms()
+    admins = perms.get(settings.ADMIN_GROUP)
+    if not perms.get(settings.ADMIN_GROUP):
+        response = HttpResponseRedirect(reverse_lazy('home'))
+    else:
+        group = request.POST.get('group')
+        profiles = Registration.objects.filter(user__last_login__gte=settings.START_DATE_VAX)
+        response = render(
+            request,
+            'dashboard/vaccine.html',
+            {
+                'profiles': profiles,
+                'admins': admins,
+                'group': group,
+                'groups': settings.ALL_GROUPS,
+            },
+        )
+    return response
+
+
+@portal_auth_required(
+    session_var='REDPANDA_AUTH',
+    redirect_url=reverse_lazy('access_denied'),
+)
 def participation(request):
     """Dashboard for stats on folks who have participated."""
     user = request.user

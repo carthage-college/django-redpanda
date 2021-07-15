@@ -288,6 +288,7 @@ LOGGING = {
 }
 # app constants
 START_DATE = datetime.datetime(datetime.datetime.now().year, 6, 1)
+START_DATE_VAX = datetime.datetime(2021, 7, 1)
 SPORTS_MONTH = 5
 # reminder messages
 REDPANDA_TEST_CIDS = ()

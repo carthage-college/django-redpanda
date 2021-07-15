@@ -11,6 +11,7 @@ from django.views.generic import RedirectView
 from django.views.generic import TemplateView
 from djauth.views import loggedout
 from redpanda.core import views
+from redpanda.dashboard import views as dash_views
 
 admin.autodiscover()
 
@@ -60,8 +61,8 @@ urlpatterns = [
     # health check
     path('health-check/', views.health_check, name='health_check'),
     # vaccine verification
+    path('vax/dashboard/', dash_views.vaccine, name='vax_dash'),
     path('vax/', views.vaccine, name='vaccine'),
     # home
-    #path('', views.health_check, name='home'),
     path('', views.vaccine, name='home'),
 ]
