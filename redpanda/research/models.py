@@ -99,6 +99,7 @@ class Registration(models.Model):
     )
     updated_at = models.DateTimeField(
         "Date updated",
+        auto_now=True,
     )
     odor_identification = models.CharField(
         verbose_name="""
