@@ -7,7 +7,8 @@
         <th>CID</th>
         <th>Group</th>
         <th>Vax</th>
-        <th>Date</th>
+        <th>Vax Date</th>
+        <th>Submit Date</th>
         <th>Card</th>
       </tr>
     </thead>
@@ -41,6 +42,9 @@
         <td nowrap style="font-family: monospace;font-size:1.1em;">
           {{profile.vaccine_date|date:'Y-m-d'}}
         </td>
+        <td nowrap style="font-family: monospace;font-size:1.1em;">
+          {{profile.updated_at|date:'Y-m-d H:i:s'}}
+        </td>
         <td nowrap>
         {% if profile.vaccine == 'Yes' and profile.vaccine_card_front %}
         <a href="{{media_url}}{{profile.vaccine_card_front}}" target="_blank">
@@ -58,6 +62,7 @@
         <th>Group</th>
         <th>Vax</th>
         <th>Vax Date</th>
+        <th>Submit Date</th>
         <th>Card</th>
       </tr>
     </tfoot>
