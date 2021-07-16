@@ -28,7 +28,11 @@ $(function() {
   <div class="col-lg-12">
     <div class="col-lg-8">
       <h1>Vaccine verification data</h1>
-      <p>Click on the <i class="fa fa-commenting red" aria-hidden="true"></i> icon to view exemption rationale.</p>
+      <p>
+        Click on the
+        <a style="cursor: help;" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="View vaccine exemption rationale"><i class="fa fa-commenting red" aria-hidden="true"></i></a>
+        icon to view exemption rationale.
+      </p>
     </div>
     <div class="col-lg-12">
       {% block reporting %}{% endblock %}
