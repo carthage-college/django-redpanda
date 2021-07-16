@@ -336,9 +336,9 @@ def participation(request):
             'carthageFacultyStatus': [],
             'carthageStudentStatus': [],
         }
-        vaccines = User.objects.filter(profile__vaccine=True).count()
+        vaccines = User.objects.filter(profile__vaccine='Yes').count()
         for group in groups:
-            vax = User.objects.filter(profile__vaccine=True).filter(
+            vax = User.objects.filter(profile__vaccine='Yes').filter(
                 groups__name=group,
             )
             groups[group] = vax.count()
