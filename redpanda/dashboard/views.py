@@ -307,7 +307,7 @@ def vaccine(request):
     else:
         group = request.POST.get('group')
         profiles = Registration.objects.filter(
-            user__last_login__gte=settings.START_DATE_VAX,
+            vaccine__in=['Yes', 'No'],
         ).order_by('user__last_name')
         response = render(
             request,
