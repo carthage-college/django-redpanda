@@ -32,9 +32,7 @@ class SmellStudy(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
     )
-    created_at = models.DateTimeField(
-        "Date Created", auto_now_add=True,
-    )
+    created_at = models.DateTimeField("Date Created", auto_now_add=True)
     one = models.BooleanField()
     two = models.BooleanField()
     three = models.BooleanField()
@@ -67,6 +65,7 @@ class SmellStudy(models.Model):
 
 class SmellStudyInquiry(models.Model):
     """Data class model for the smell acuity daily inquiry form."""
+
     created_by = models.ForeignKey(
         User,
         verbose_name='Created by',
@@ -76,14 +75,13 @@ class SmellStudyInquiry(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
     )
-    created_at = models.DateTimeField(
-        "Date Created", auto_now_add=True,
-    )
+    created_at = models.DateTimeField("Date Created", auto_now_add=True)
     uuid = models.CharField(max_length=128, null=True, blank=True)
 
 
 class Registration(models.Model):
     """Data class model for the smell acuity research registration."""
+
     user = models.OneToOneField(
         User,
         verbose_name='Created by',
@@ -94,13 +92,8 @@ class Registration(models.Model):
         #on_delete=models.CASCADE,
         on_delete=models.SET_NULL,
     )
-    created_at = models.DateTimeField(
-        "Date Created", auto_now_add=True,
-    )
-    updated_at = models.DateTimeField(
-        "Date updated",
-        auto_now=True,
-    )
+    created_at = models.DateTimeField("Date Created", auto_now_add=True)
+    updated_at = models.DateTimeField("Date updated", auto_now=True)
     odor_identification = models.CharField(
         verbose_name="""
             How many items did you answer correctly (out of 8)
@@ -169,9 +162,7 @@ class Registration(models.Model):
     allergy_symptoms = models.CharField(max_length=4, null=True, blank=True)
     smoking_status = models.CharField(max_length=16, null=True, blank=True)
     medications = models.TextField(null=True, blank=True)
-    incorrect_items = models.ManyToManyField(
-        GenericChoice, null=True, blank=True,
-    )
+    incorrect_items = models.ManyToManyField(GenericChoice, null=True, blank=True)
 
     class Meta:
         """Information about the data class model."""
@@ -180,7 +171,7 @@ class Registration(models.Model):
 
     def __str__(self):
         return '{0}, {1}'.format(
-            self.user.last_name, self.user.first_name
+            self.user.last_name, self.user.first_name,
         )
 
     def get_perms(self):
