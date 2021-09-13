@@ -12,7 +12,7 @@ from djtools.fields.helpers import upload_to_path
 from redpanda.core.models import GenericChoice
 
 ALLOWED_IMAGE_EXTENSIONS = (
-    'jpg', 'jpeg', 'png', 'JPG', 'JPEG', 'PNG', 'pdf', 'PDF',
+    'jpg', 'jpeg', 'heic', 'pdf', 'png', 'JPG', 'JPEG', 'HEIC', 'PDF', 'PNG',
 )
 VACCINE_CHOICES = (
     ('Yes', 'I have been vaccinated.'),
