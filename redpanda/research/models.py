@@ -16,7 +16,12 @@ ALLOWED_IMAGE_EXTENSIONS = (
 )
 VACCINE_CHOICES = (
     ('Yes', 'I have been vaccinated.'),
-    ('No', 'I have a reason not to be vaccinated.')
+    ('No', 'I have a reason not to be vaccinated.'),
+)
+VACCINE_TYPES = (
+    ('Pfizer', 'Pfizer'),
+    ('Moderna', 'Moderna'),
+    ('Johnson & Johnson', 'Johnson & Johnson'),
 )
 
 
@@ -124,6 +129,10 @@ class Registration(models.Model):
         to continue wearing masks indoors this fall.
         """,
     )
+    vaccine_type = models.CharField(
+        max_length=64,
+        choices=VACCINE_TYPES,
+    )
     vaccine_date = models.DateField(
         help_text="""
         The date of the initial dose for Johnson and Johnson
@@ -136,6 +145,23 @@ class Registration(models.Model):
         "Vaccine card front",
         upload_to=upload_to_path,
         help_text="Photo or scan of your COVID-19 vaccine card.",
+        validators=[
+            FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS),
+        ],
+        null=True,
+        blank=True,
+    )
+    booster_date = models.DateField(
+        null=True,
+        blank=True,
+    )
+    booster_proof = models.FileField(
+        "Proof of booster shot",
+        upload_to=upload_to_path,
+        help_text="""
+          Your COVID-19 vaccine card with the booster date or the receipt from
+          the vaccine provider.
+        """,
         validators=[
             FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS),
         ],

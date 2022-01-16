@@ -7,9 +7,12 @@
         <th>CID</th>
         <th>Group</th>
         <th>Vax</th>
+        <th>Vax Type</th>
         <th>Vax Date</th>
-        <th>Submit Date</th>
-        <th>Card</th>
+        <th>Vax Card</th>
+        <th>Booster Date</th>
+        <th>Booster Proof</th>
+        <th>Updated At</th>
       </tr>
     </thead>
     <tbody>
@@ -35,15 +38,13 @@
           <i class="fa fa-check green" title="Vaccine"><span style="display:none;">✓</span> </i>
           {% else %}
           {% if profile.vax_rationale %}
-          <a style="cursor: help;" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="{{profile.vax_rationale}}"><i class="fa fa-commenting red" aria-hidden="true"></i></a>
+          <a style="cursor: help;" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="{{profile.vax_rationale}}"><i class="fas fa-comment-dots red" aria-hidden="true"></i></a>
           <span style="display:none;">{{profile.vax_rationale}}</span>
           {% endif %}{% endif %}
         </td>
+        <td>{{profile.vaccine_type|default:'&nbsp;'}}</td>
         <td nowrap style="font-family: monospace;font-size:1.1em;">
           {{profile.vaccine_date|date:'Y-m-d'}}
-        </td>
-        <td nowrap style="font-family: monospace;font-size:1.1em;">
-          {{profile.updated_at|date:'Y-m-d H:i:s'}}
         </td>
         <td nowrap>
         {% if profile.vaccine == 'Yes' and profile.vaccine_card_front %}
@@ -51,6 +52,18 @@
           <i class="fa fa-picture-o" title="Vaccine card"></i></a>
         <span style="display:none;">https://{{server_url}}{{media_url}}{{profile.vaccine_card_front}}</span>
         {% endif %}
+        </td>
+        <td nowrap style="font-family: monospace;font-size:1.1em;">
+          {{profile.booster_date|date:'Y-m-d H:i:s'}}
+        </td>
+        <td nowrap>
+        {% if profile.vaccine == 'Yes' and profile.booster_proof %}
+        <a href="{{media_url}}{{profile.booster_proof}}" target="_blank">
+          <i class="fa fa-picture-o" title="Booster Proof"></i></a>
+        <span style="display:none;">https://{{server_url}}{{media_url}}{{profile.booster_proof}}</span>
+        {% endif %}
+        <td nowrap style="font-family: monospace;font-size:1.1em;">
+          {{profile.updated_at|date:'Y-m-d H:i:s'}}
         </td>
       </tr>
     {% endfor %}
@@ -61,9 +74,12 @@
         <th>CID</th>
         <th>Group</th>
         <th>Vax</th>
+        <th>Vax Type</th>
         <th>Vax Date</th>
-        <th>Submit Date</th>
-        <th>Card</th>
+        <th>Vax Card</th>
+        <th>Booster Date</th>
+        <th>Booster Proof</th>
+        <th>Updated At</th>
       </tr>
     </tfoot>
   </table>

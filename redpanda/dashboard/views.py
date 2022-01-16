@@ -68,7 +68,7 @@ def home(request):
     user = request.user
     perms = user.profile.get_perms()
     admins = perms.get(settings.ADMIN_GROUP)
-    if not perms.get(settings.ADMIN_GROUP):
+    if not admins:
         response = HttpResponseRedirect(reverse_lazy('dashboard_managers'))
     else:
         group = request.POST.get('group')
@@ -302,13 +302,14 @@ def vaccine(request):
     user = request.user
     perms = user.profile.get_perms()
     admins = perms.get(settings.ADMIN_GROUP)
-    if not perms.get(settings.ADMIN_GROUP):
-        response = HttpResponseRedirect(reverse_lazy('home'))
-    else:
+    student_vax = perms.get(settings.STUDENT_VAX_DATA)
+    if admins or student_vax:
         group = request.POST.get('group')
         profiles = Registration.objects.filter(
             vaccine__in=['Yes', 'No'],
         ).order_by('user__last_name')
+        if student_vax:
+            profiles = profiles.filter(user__groups__name__in=[settings.STUDENT_GROUP])
         response = render(
             request,
             'dashboard/vaccine.html',
@@ -319,6 +320,8 @@ def vaccine(request):
                 'groups': settings.ALL_GROUPS,
             },
         )
+    else:
+        response = HttpResponseRedirect(reverse_lazy('home'))
     return response
 
 

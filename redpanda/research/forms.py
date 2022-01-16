@@ -50,8 +50,11 @@ class VaccineForm(forms.ModelForm):
         model = Registration
         fields = (
             'vaccine',
+            'vaccine_type',
             'vaccine_date',
             'vaccine_card_front',
+            'booster_date',
+            'booster_proof',
             'vax_rationale',
         )
 
@@ -68,6 +71,9 @@ class VaccineForm(forms.ModelForm):
         staff = perms.get(settings.STAFF_GROUP)
         cd = self.cleaned_data
         vax = cd.get('vaccine')
+        vax_type = cd.get('vaccine_type')
+        booster_date = cd.get('booster_date')
+        booster_proof = cd.get('booster_proof')
         date = cd.get('vaccine_date')
         front = cd.get('vaccine_card_front')
         rationale = cd.get('vax_rationale')
@@ -86,5 +92,15 @@ class VaccineForm(forms.ModelForm):
                 self.add_error(
                     'vaccine_card_front',
                     "Please upload a photo or scan of the front of your vaccine card.",
+                )
+            if booster_date and not booster_proof:
+                self.add_error(
+                    'booster_proof',
+                    "Please upload a photo or scan of proof of your booster.",
+                )
+            if booster_proof and not booster_date:
+                self.add_error(
+                    'booster_date',
+                    "Please provide the date of your booster.",
                 )
         return cd

@@ -141,10 +141,12 @@ FACULTY_GROUP = ''
 RESEARCH_GROUP = ''
 STAFF_GROUP = ''
 STUDENT_GROUP = ''
+STUDENT_VAX_DATA = ''
 ALL_GROUPS = (
     (FACULTY_GROUP, 'Faculty'),
     (STAFF_GROUP, 'Staff'),
     (STUDENT_GROUP, 'Students'),
+    (STUDENT_VAX_DATA, 'StudentVaxData'),
     (ATHLETICS_GROUP, 'Athletics'),
     (ADMIN_GROUP, 'Admin'),
     (RESEARCH_GROUP, 'Research'),

@@ -3,18 +3,70 @@
 {% load static %}
 {% load ifusergroup %}
 {% block extra_javascript %}
-{{ block.super }}
+{{block.super}}
 <script src="//www.carthage.edu/static/vendor/jquery/ui/datepicker/js/jquery-ui-1.10.4.custom.min.js"
   type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" language="javascript">
+
+function boosterDateCalc(vaxDate, vaxType) {
+  var vaxDate = new Date(vaxDate);
+  var today = new Date();
+  var booster = 150;
+
+  if (vaxType == 'Johnson & Johnson') {
+    booster = 60;
+  }
+  vaxDate.setDate(vaxDate.getDate() + booster);
+  if (today > vaxDate) {
+    booster = vaxDate.toDateString();
+    $("#boosterDate").html(booster);
+    $("label[for=id_booster_date]").html('Booster date: <span style="color:#800;display:block">On or after: ' + booster + '</span>');
+    $("#boosterModal").modal("show");
+  }
+}
+
 $(function(){
-  $("#id_vaccine_date").datepicker({
+  var $vaxDate = $("#id_vaccine_date").val();
+  var $vaxType = $("#id_vaccine_type").val();
+  var $boosterDate = $("#id_booster_date").val();
+  if ($vaxType && $vaxDate && !$boosterDate) {
+    boosterDateCalc($vaxDate, $vaxType);
+    $('#booster_date_container').slideDown('200');
+    $('#booster_proof_container').slideDown('200');
+  }
+  $("input[id$='_date']").datepicker({
       firstDay:0, appendText: "(format yyyy-mm-dd)",
       changeFirstDay:false, dateFormat: "yy-mm-dd",
       showOn: "both",
       buttonImage: "//www.carthage.edu/themes/shared/img/ico/calendar.gif",
       buttonImageOnly: true
   });
+  $("#id_vaccine_type").on("change", function(){
+    $dis = $(this);
+    $vaxDate = $("#id_vaccine_date").val();
+    if ($vaxDate) {
+      $vaxDate = boosterDateCalc($vaxDate, $dis.val());
+      if ($vaxDate) {
+        $('#booster_date_container').slideDown('200');
+        $('#booster_proof_container').slideDown('200');
+      }
+    }
+  });
+  $("#id_vaccine_date").on("change", function(){
+    $dis = $(this);
+    $vaxType = $("#id_vaccine_type").val();
+    if ( $("#id_vaccine_type").val() ) {
+      $vaxDate = boosterDateCalc($dis.val(), $vaxType);
+      $('#booster_date_container').slideDown('200');
+      $('#booster_proof_container').slideDown('200');
+    }
+  });
+  console.log($("#id_vaccine_date").val());
+  console.log($("#id_vaccine_type").val());
+  {% if profile.booster_date %}
+  $('#booster_date_container').slideDown('200');
+  $('#booster_proof_container').slideDown('200');
+  {% endif %}
   {% if profile.vaccine == 'Yes' %}
   $('#vaccine_date_container').slideDown('200');
   $('#vaccine_card_front_container').slideDown('200');
@@ -76,6 +128,9 @@ $(function(){
 {{block.super}}
 <link href="//www.carthage.edu/static/vendor/jquery/ui/datepicker/css/smoothness/jquery-ui-1.10.4.custom.min.css"
   rel="stylesheet" type="text/css">
+<style>
+#booster_date_container, #booster_proof_container {display:none;}
+</style>
 {% endblock %}
 {% block navbar-header %}
 <a href="{% url 'home' %}" class="mr-sm-3 mr-lg-3">
@@ -102,21 +157,18 @@ $(function(){
         </a>
         {% endif %}
       </li>
-      {% ifusergroup 'carthageStaffStatus' %}
-      <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-      {% else %}{% ifusergroup 'carthageFacultyStatus' %}
-      <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-      {% endifusergroup %}{% endifusergroup %}
+      <li><a href="{% url 'home' %}">Home</a></li>
       {% ifusergroup 'StaySafeCarthage' %}
       <li><a href="{% url 'dashboard_participation' %}">Participation</a></li>
       {% endifusergroup %}
-      {% ifusergroup 'Research' %}
-      <li><a href="{% url 'dashboard_research' %}">Research</a></li>
+      {% ifusergroup 'StudentVaxData' %}
+      <li><a href="{% url 'vax_dash' %}">Vax data</a></li>
       {% endifusergroup %}
       {% if user.is_superuser %}
-      <li class="divider"></li>
       <li><a href="{% url 'vax_dash' %}">Vax data</a></li>
+      {% ifusergroup 'Admin' %}
       <li><a href="{% url 'admin:index' %}">Admin</a></li>
+      {% endifusergroup %}
       {% endif %}
     </ul>
   </li>
@@ -176,4 +228,25 @@ $(function(){
 </div>
 <!-- /.forms-container /.col-* -->
 {% endblock content %}
-{% block modal %}{% endblock %}
+{% block modal %}
+<!-- Modal -->
+<div class="modal fade" id="boosterModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="boosterModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="boosterModalLabel">Booster Date</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>You must obtain a booster on or after the date below:</p>
+        <h5 id="boosterDate" class="red"></h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

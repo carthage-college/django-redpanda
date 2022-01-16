@@ -55,21 +55,18 @@ $(function(){
         </a>
         {% endif %}
       </li>
-      {% ifusergroup 'carthageStaffStatus' %}
-      <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-      {% else %}{% ifusergroup 'carthageFacultyStatus' %}
-      <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-      {% endifusergroup %}{% endifusergroup %}
+      <li><a href="{% url 'home' %}">Home</a></li>
       {% ifusergroup 'StaySafeCarthage' %}
       <li><a href="{% url 'dashboard_participation' %}">Participation</a></li>
       {% endifusergroup %}
-      {% ifusergroup 'Research' %}
-      <li><a href="{% url 'dashboard_research' %}">Research</a></li>
+      {% ifusergroup 'StudentVaxData' %}
+      <li><a href="{% url 'vax_dash' %}">Vax data</a></li>
       {% endifusergroup %}
       {% if user.is_superuser %}
-      <li class="divider"></li>
       <li><a href="{% url 'vax_dash' %}">Vax data</a></li>
+      {% ifusergroup 'Admin' %}
       <li><a href="{% url 'admin:index' %}">Admin</a></li>
+      {% endifusergroup %}
       {% endif %}
     </ul>
   </li>

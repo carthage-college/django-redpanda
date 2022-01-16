@@ -12,8 +12,6 @@
   rel="stylesheet" type="text/css">
 <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.0/css/bootstrap-select.min.css"
   rel="stylesheet" type="text/css">
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-  rel="stylesheet" type="text/css">
 <link href="https://www.carthage.edu/themes/shared/css/tables.css"
   rel="stylesheet" type="text/css">
 <link href="//www.carthage.edu/themes/shared/css/forms.css"
@@ -21,6 +19,9 @@
 <link href="{% static 'css/main.css' %}?0420" rel="stylesheet" type="text/css">
 <link href="{% static 'css/print.css' %}" rel="stylesheet" type="text/css">
 <link rel="manifest" href="{% static 'manifest.json' %}">
+{% endblock %}
+{% block font_awesome %}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
 {% endblock %}
 {% block javascript %}
 {{block.super}}
