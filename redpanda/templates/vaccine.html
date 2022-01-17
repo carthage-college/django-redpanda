@@ -12,6 +12,7 @@ function boosterDateCalc(vaxDate, vaxType) {
   var vaxDate = new Date(vaxDate);
   var today = new Date();
   var booster = 150;
+  var status = '';
 
   if (vaxType == 'Johnson & Johnson') {
     booster = 60;
@@ -22,7 +23,9 @@ function boosterDateCalc(vaxDate, vaxType) {
     $("#boosterDate").html(booster);
     $("label[for=id_booster_date]").html('Booster date: <span style="color:#800;display:block">On or after: ' + booster + '</span>');
     $("#boosterModal").modal("show");
+    status = true;
   }
+  return status;
 }
 
 $(function(){

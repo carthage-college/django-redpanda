@@ -54,7 +54,7 @@
         {% endif %}
         </td>
         <td nowrap style="font-family: monospace;font-size:1.1em;">
-          {{profile.booster_date|date:'Y-m-d H:i:s'}}
+          {{profile.booster_date|date:'Y-m-d'}}
         </td>
         <td nowrap>
         {% if profile.vaccine == 'Yes' and profile.booster_proof %}
