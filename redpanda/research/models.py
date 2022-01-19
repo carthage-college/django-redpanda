@@ -132,6 +132,8 @@ class Registration(models.Model):
     vaccine_type = models.CharField(
         max_length=64,
         choices=VACCINE_TYPES,
+        null=True,
+        blank=True,
     )
     vaccine_date = models.DateField(
         help_text="""

@@ -83,6 +83,11 @@ class VaccineForm(forms.ModelForm):
                 "Please provide a rationale for not obtaining the vaccine.",
             )
         elif vax == 'Yes':
+            if not vax_type:
+                self.add_error(
+                    'vaccine_type',
+                    "Please provide the vaccine type.",
+                )
             if not date:
                 self.add_error(
                     'vaccine_date',
