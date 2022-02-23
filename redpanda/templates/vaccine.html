@@ -150,11 +150,11 @@ $(function(){
       <li>
         {% if user.is_anonymous %}
         <a href="{% url 'auth_login' %}">
-          <i class="fa fa-sign-in"></i> Sign In
+          <i class="fa fa-sign-in-alt"></i> Sign In
         </a>
         {% else %}
         <a href="{% url 'auth_logout' %}">
-          <i class="fa fa-sign-out"></i> Sign Out
+          <i class="fa fa-sign-out-alt"></i> Sign Out
         </a>
         {% endif %}
       </li>
