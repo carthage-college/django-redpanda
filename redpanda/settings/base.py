@@ -5,6 +5,7 @@
 import datetime
 import os
 
+from django.core.validators import FileExtensionValidator
 from djimix.settings.local import DBSERVERNAME
 from djimix.settings.local import INFORMIX_ODBC
 from djimix.settings.local import INFORMIX_ODBC_TRAIN
@@ -54,11 +55,16 @@ STATIC_ROOT = '{0}/static/'.format(ROOT_DIR)
 STATIC_URL = '/static/{0}/'.format(PROJECT_APP)
 MEDIA_URL = '/media/{0}/'.format(PROJECT_APP)
 FILE_UPLOAD_PERMISSIONS = 0o644
+ALLOWED_IMAGE_EXTENSIONS = (
+    'jpg', 'jpeg', 'heic', 'pdf', 'png', 'JPG', 'JPEG', 'HEIC', 'PDF', 'PNG',
+)
+FILE_VALIDATORS = [FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)]
 STATICFILES_DIRS = ()
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
 )
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 DATABASES = {
     'default': {
         'HOST': '127.0.0.1',
