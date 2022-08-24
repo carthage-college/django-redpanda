@@ -6,14 +6,12 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.cache import cache
-from django.core.validators import FileExtensionValidator
 from djtools.fields import BINARY_CHOICES
 from djtools.fields.helpers import upload_to_path
 from redpanda.core.models import GenericChoice
+from taggit.managers import TaggableManager
 
-ALLOWED_IMAGE_EXTENSIONS = (
-    'jpg', 'jpeg', 'heic', 'pdf', 'png', 'JPG', 'JPEG', 'HEIC', 'PDF', 'PNG',
-)
+
 VACCINE_CHOICES = (
     ('Yes', 'I have been vaccinated.'),
     ('No', 'I have a reason not to be vaccinated.'),
@@ -147,9 +145,7 @@ class Registration(models.Model):
         "Vaccine card front",
         upload_to=upload_to_path,
         help_text="Photo or scan of your COVID-19 vaccine card.",
-        validators=[
-            FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS),
-        ],
+        validators=settings.FILE_VALIDATORS,
         null=True,
         blank=True,
     )
@@ -164,9 +160,6 @@ class Registration(models.Model):
           Your COVID-19 vaccine card with the booster date or the receipt from
           the vaccine provider.
         """,
-        validators=[
-            FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS),
-        ],
         null=True,
         blank=True,
     )
@@ -231,3 +224,49 @@ class Registration(models.Model):
 
     def get_slug(self):
         return 'registration'
+
+
+class Document(models.Model):
+    """Supporting documents for a user."""
+
+    created_by = models.ForeignKey(
+        User,
+        related_name='doc_creator',
+        on_delete=models.CASCADE,
+    )
+    updated_by = models.ForeignKey(
+        User,
+        related_name='doc_updated',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+    created_at = models.DateTimeField("Date Created", auto_now_add=True)
+    updated_at = models.DateTimeField("Date Updated", auto_now=True)
+    registration = models.ForeignKey(
+        Registration,
+        related_name='docs',
+        on_delete=models.CASCADE,
+    )
+    phile = models.FileField(
+        "Supporting documentation",
+        upload_to=upload_to_path,
+        validators=settings.FILE_VALIDATORS,
+        max_length=767,
+        help_text="PDF format",
+        null=True,
+        blank=True,
+    )
+    tags = TaggableManager(blank=True)
+
+    class Meta:
+        ordering  = ['created_at']
+        get_latest_by = 'created_at'
+
+    def get_slug(self):
+        """Return the slug value for this data model class."""
+        return 'registration'
+
+    def __str__(self):
+        """Default data for display."""
+        return str(self.registration)
