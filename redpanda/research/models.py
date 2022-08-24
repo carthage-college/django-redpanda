@@ -257,6 +257,10 @@ class Document(models.Model):
         null=True,
         blank=True,
     )
+    jab_date = models.DateField(
+        null=True,
+        blank=True,
+    )
     tags = TaggableManager(blank=True)
 
     class Meta:
