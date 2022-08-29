@@ -229,18 +229,6 @@ class Registration(models.Model):
 class Document(models.Model):
     """Supporting documents for a user."""
 
-    created_by = models.ForeignKey(
-        User,
-        related_name='doc_creator',
-        on_delete=models.CASCADE,
-    )
-    updated_by = models.ForeignKey(
-        User,
-        related_name='doc_updated',
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
     created_at = models.DateTimeField("Date Created", auto_now_add=True)
     updated_at = models.DateTimeField("Date Updated", auto_now=True)
     registration = models.ForeignKey(
