@@ -4,6 +4,7 @@
 
 from django.contrib import admin
 from django.db import models
+from redpanda.research.models import Document
 from redpanda.research.models import Registration
 
 
@@ -40,4 +41,40 @@ class ProfileAdmin(admin.ModelAdmin):
     profile_firstname.short_description = "first name"
 
 
+class DocumentAdmin(admin.ModelAdmin):
+    raw_id_fields = ['registration']
+    list_display = (
+        '__str__',
+        'registration',
+        'creator_name',
+        'created_at',
+        'jab_date',
+        'all_tags',
+    )
+
+    def creator_name(self, instance):
+        return "{0}, {1}".format(
+            instance.registration.user.last_name,
+            instance.registration.user.first_name,
+        )
+    #creator_name.admin_order_field  = 'created_by'
+    creator_name.short_description = "Submitted by"
+
+    def all_tags(self, instance):
+        return instance.get_tags()
+    all_tags.short_description = "Tags"
+
+    def phile(self, instance):
+        """Construct display file code for the admin dashboard."""
+        icon = mark_safe(
+            """
+            <i class="fa fa-file-circle-check green" aria-hidden="true" title="{0}"></i>
+            """.format(instance.final_motor_selection),
+        )
+        return icon
+    final_motor_selection_trunk.allow_tags = True
+    final_motor_selection_trunk.short_description = "Final Motor"
+
+
+admin.site.register(Document, DocumentAdmin)
 admin.site.register(Registration, ProfileAdmin)

@@ -229,8 +229,10 @@ class Registration(models.Model):
 class Document(models.Model):
     """Supporting documents for a user."""
 
-    created_at = models.DateTimeField("Date Created", auto_now_add=True)
-    updated_at = models.DateTimeField("Date Updated", auto_now=True)
+    #created_at = models.DateTimeField("Date Created", auto_now_add=True)
+    created_at = models.DateTimeField()
+    #updated_at = models.DateTimeField("Date Updated", auto_now=True)
+    updated_at = models.DateTimeField()
     registration = models.ForeignKey(
         Registration,
         related_name='docs',
@@ -258,6 +260,11 @@ class Document(models.Model):
     def get_slug(self):
         """Return the slug value for this data model class."""
         return 'registration'
+
+    def get_tags(self):
+        """Return tags for this data model class."""
+        return [tag for tag in self.tags.all()]
+
 
     def __str__(self):
         """Default data for display."""
