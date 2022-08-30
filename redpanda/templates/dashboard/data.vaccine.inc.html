@@ -49,7 +49,7 @@
         <td nowrap>
         {% if profile.vaccine == 'Yes' and profile.vaccine_card_front %}
         <a href="{{media_url}}{{profile.vaccine_card_front}}" target="_blank">
-          <i class="fa fa-picture-o" title="Vaccine card"></i></a>
+          <i class="fa fa-image" title="Vaccine card"></i></a>
         <span style="display:none;">https://{{server_url}}{{media_url}}{{profile.vaccine_card_front}}</span>
         {% endif %}
         </td>
@@ -59,7 +59,7 @@
         <td nowrap>
         {% if profile.vaccine == 'Yes' and profile.booster_proof %}
         <a href="{{media_url}}{{profile.booster_proof}}" target="_blank">
-          <i class="fa fa-picture-o" title="Booster Proof"></i></a>
+          <i class="fa fa-image" title="Booster Proof"></i></a>
         <span style="display:none;">https://{{server_url}}{{media_url}}{{profile.booster_proof}}</span>
         {% endif %}
         <td nowrap style="font-family: monospace;font-size:1.1em;">
