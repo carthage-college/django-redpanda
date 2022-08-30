@@ -49,6 +49,7 @@ class DocumentAdmin(admin.ModelAdmin):
         'creator_name',
         'created_at',
         'jab_date',
+        'phile',
         'all_tags',
     )
 
@@ -68,12 +69,13 @@ class DocumentAdmin(admin.ModelAdmin):
         """Construct display file code for the admin dashboard."""
         icon = mark_safe(
             """
-            <i class="fa fa-file-circle-check green" aria-hidden="true" title="{0}"></i>
-            """.format(instance.final_motor_selection),
+            <a href="{0}">
+            <i class="fa fa-check green" aria-hidden="true" title="{1}"></i></a>
+            """.format(instance.phile, instance.get_tags()),
         )
         return icon
-    final_motor_selection_trunk.allow_tags = True
-    final_motor_selection_trunk.short_description = "Final Motor"
+    phile.allow_tags = True
+    phile.short_description = "File"
 
 
 admin.site.register(Document, DocumentAdmin)
