@@ -7,7 +7,6 @@
 <script src="//www.carthage.edu/static/vendor/jquery/ui/datepicker/js/jquery-ui-1.10.4.custom.min.js"
   type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" language="javascript">
-
 function boosterDateCalc(vaxDate, vaxType) {
   var vaxDate = new Date(vaxDate);
   var today = new Date();
@@ -214,6 +213,9 @@ $(function(){
     {% csrf_token %}
     <ul class="nobull">
     {% for field in form.visible_fields %}
+      {% include "form_field.inc.html" %}
+    {% endfor %}
+    {% for field in vaxdoc.visible_fields %}
       {% include "form_field.inc.html" %}
     {% endfor %}
     </ul>

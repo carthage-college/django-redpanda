@@ -59,12 +59,6 @@ class HealthCheckAdmin(admin.ModelAdmin):
     )
     raw_id_fields = ('created_by',)
 
-    class Media:
-        """Static files like javascript and style sheets."""
-
-        js = [
-            '/static/redpanda/js/foobar.js',
-        ]
 
 admin.site.register(GenericChoice, GenericChoiceAdmin)
 admin.site.register(HealthCheck, HealthCheckAdmin)

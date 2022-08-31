@@ -42,6 +42,11 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 class DocumentAdmin(admin.ModelAdmin):
+    """Document data model admin."""
+
+    list_per_page = 500
+    ordering = ['-created_at']
+    date_hierarchy = 'created_at'
     raw_id_fields = ['registration']
     list_display = (
         '__str__',
@@ -52,6 +57,13 @@ class DocumentAdmin(admin.ModelAdmin):
         'phile',
         'all_tags',
     )
+    search_fields = (
+        'registration__user__username',
+        'registration__user__last_name',
+        'registration__user__first_name',
+        'registration__user__id',
+    )
+
 
     def creator_name(self, instance):
         return "{0}, {1}".format(

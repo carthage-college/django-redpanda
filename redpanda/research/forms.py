@@ -4,28 +4,18 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from djtools.fields import BINARY_CHOICES
+from redpanda.research.models import Document
 from redpanda.research.models import Registration
 from redpanda.research.models import SmellStudy
 from redpanda.research.models import VACCINE_CHOICES
 
 
-class SmellStudyForm(forms.ModelForm):
-    """Data model for the health check app."""
-
-    '''
-    one = forms.BooleanField(required=False)
-    two = forms.BooleanField(required=False)
-    three = forms.BooleanField(required=False)
-    four = forms.BooleanField(required=False)
-    five = forms.BooleanField(required=False)
-    six = forms.BooleanField(required=False)
-    seven = forms.BooleanField(required=False)
-    eight = forms.BooleanField(required=False)
-    '''
+class DocumentForm(forms.ModelForm):
+    """Data model for vaccine files."""
 
     class Meta:
-        model = SmellStudy
-        exclude = ('created_by', 'created_at')
+        model = Document
+        fields = ('phile', 'jab_type', 'jab_date')
 
 
 class VaccineForm(forms.ModelForm):
@@ -40,72 +30,30 @@ class VaccineForm(forms.ModelForm):
         """,
         widget=forms.RadioSelect(),
     )
-    vaccine_card_front = forms.FileField(
-        label="Vaccine card front",
-        help_text="Photo or scan of the front of your COVID-19 vaccine card.",
-        required=False,
-    )
 
     class Meta:
         model = Registration
         fields = (
             'vaccine',
-            'vaccine_type',
-            'vaccine_date',
-            'vaccine_card_front',
-            'booster_date',
-            'booster_proof',
             'vax_rationale',
         )
 
-    def __init__(self, *args, **kwargs):
-        """Override init method to obtain the request object."""
-        self.request = kwargs.pop('request', None)
-        super(VaccineForm, self).__init__(*args, **kwargs)
-
     def clean(self):
         """Verify data based on the user response to vaccine status."""
-        user = self.request.user
-        perms = user.profile.get_perms()
-        faculty = perms.get(settings.FACULTY_GROUP)
-        staff = perms.get(settings.STAFF_GROUP)
         cd = self.cleaned_data
         vax = cd.get('vaccine')
-        vax_type = cd.get('vaccine_type')
-        booster_date = cd.get('booster_date')
-        booster_proof = cd.get('booster_proof')
-        date = cd.get('vaccine_date')
-        front = cd.get('vaccine_card_front')
         rationale = cd.get('vax_rationale')
         if vax == 'No' and not rationale:
             self.add_error(
                 'vax_rationale',
                 "Please provide a rationale for not obtaining the vaccine.",
             )
-        elif vax == 'Yes':
-            if not vax_type:
-                self.add_error(
-                    'vaccine_type',
-                    "Please provide the vaccine type.",
-                )
-            if not date:
-                self.add_error(
-                    'vaccine_date',
-                    "Please provide a date for your first vaccine shot.",
-                )
-            if not front:
-                self.add_error(
-                    'vaccine_card_front',
-                    "Please upload a photo or scan of the front of your vaccine card.",
-                )
-            if booster_date and not booster_proof:
-                self.add_error(
-                    'booster_proof',
-                    "Please upload a photo or scan of proof of your booster.",
-                )
-            if booster_proof and not booster_date:
-                self.add_error(
-                    'booster_date',
-                    "Please provide the date of your booster.",
-                )
         return cd
+
+
+class SmellStudyForm(forms.ModelForm):
+    """Data model for the health check app."""
+
+    class Meta:
+        model = SmellStudy
+        exclude = ('created_by', 'created_at')

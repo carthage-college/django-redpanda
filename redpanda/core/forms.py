@@ -2,7 +2,6 @@
 
 from django import forms
 from django.core.exceptions import ValidationError
-
 from redpanda.core.models import HealthCheck
 
 

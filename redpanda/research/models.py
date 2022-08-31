@@ -127,42 +127,6 @@ class Registration(models.Model):
         to continue wearing masks indoors this fall.
         """,
     )
-    vaccine_type = models.CharField(
-        max_length=64,
-        choices=VACCINE_TYPES,
-        null=True,
-        blank=True,
-    )
-    vaccine_date = models.DateField(
-        help_text="""
-        The date of the initial dose for Johnson and Johnson
-        or the date of the second dose for Pfizer and Moderna.
-        """,
-        null=True,
-        blank=True,
-    )
-    vaccine_card_front = models.FileField(
-        "Vaccine card front",
-        upload_to=upload_to_path,
-        help_text="Photo or scan of your COVID-19 vaccine card.",
-        validators=settings.FILE_VALIDATORS,
-        null=True,
-        blank=True,
-    )
-    booster_date = models.DateField(
-        null=True,
-        blank=True,
-    )
-    booster_proof = models.FileField(
-        "Proof of booster shot",
-        upload_to=upload_to_path,
-        help_text="""
-          Your COVID-19 vaccine card with the booster date or the receipt from
-          the vaccine provider.
-        """,
-        null=True,
-        blank=True,
-    )
     vax_rationale = models.TextField(
         "Exemption Rationale",
         null=True,
@@ -176,7 +140,7 @@ class Registration(models.Model):
     race = models.ManyToManyField(
         GenericChoice,
         related_name='race',
-        help_text = 'Check all that apply',
+        help_text='Check all that apply',
         null=True,
         blank=True,
     )
@@ -225,6 +189,14 @@ class Registration(models.Model):
     def get_slug(self):
         return 'registration'
 
+    def get_vax(self):
+        """Return vax doc."""
+        return self.docs.filter(tags__name__in=['Vaccine']).first()
+
+    def get_boosters(self):
+        """Return booster docs."""
+        return self.docs.filter(tags__name__in=['Booster'])
+
 
 class Document(models.Model):
     """Supporting documents for a user."""
@@ -244,13 +216,12 @@ class Document(models.Model):
         validators=settings.FILE_VALIDATORS,
         max_length=767,
         help_text="PDF format",
-        null=True,
-        blank=True,
     )
-    jab_date = models.DateField(
-        null=True,
-        blank=True,
+    jab_type = models.CharField(
+        max_length=64,
+        choices=VACCINE_TYPES,
     )
+    jab_date = models.DateField()
     tags = TaggableManager(blank=True)
 
     class Meta:

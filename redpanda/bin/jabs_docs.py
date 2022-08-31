@@ -57,12 +57,16 @@ def main():
     ).order_by('created_at')
     for reggie in reggies:
         vax_ts = _timestamp(reggie, 'vaccine_card_front')
+        jab_type = reggie.vaccine_type
+        if not jab_type:
+            jab_type = ''
         if vax_ts:
             vax = Document.objects.create(
                 created_at=vax_ts,
                 updated_at=vax_ts,
                 registration=reggie,
                 phile=reggie.vaccine_card_front,
+                jab_type=jab_type,
                 jab_date=reggie.vaccine_date,
             )
             vax.tags.add('Vaccine')
@@ -73,6 +77,7 @@ def main():
                 updated_at=boo_ts,
                 registration=reggie,
                 phile=reggie.booster_proof,
+                jab_type=jab_type,
                 jab_date=reggie.booster_date,
             )
             boo.tags.add('Booster')

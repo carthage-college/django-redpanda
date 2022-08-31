@@ -8,10 +8,8 @@
         <th>Group</th>
         <th>Vax</th>
         <th>Vax Type</th>
-        <th>Vax Date</th>
         <th>Vax Card</th>
-        <th>Booster Date</th>
-        <th>Booster Proof</th>
+        <th>Boosters</th>
         <th>Updated At</th>
       </tr>
     </thead>
@@ -42,26 +40,22 @@
           <span style="display:none;">{{profile.vax_rationale}}</span>
           {% endif %}{% endif %}
         </td>
-        <td>{{profile.vaccine_type|default:'&nbsp;'}}</td>
-        <td nowrap style="font-family: monospace;font-size:1.1em;">
-          {{profile.vaccine_date|date:'Y-m-d'}}
-        </td>
+        <td>{{profile.get_vax.jab_type|default:'&nbsp;'}}</td>
         <td nowrap>
-        {% if profile.vaccine == 'Yes' and profile.vaccine_card_front %}
-        <a href="{{media_url}}{{profile.vaccine_card_front}}" target="_blank">
-          <i class="fa fa-image" title="Vaccine card"></i></a>
-        <span style="display:none;">https://{{server_url}}{{media_url}}{{profile.vaccine_card_front}}</span>
+        {% if profile.vaccine == 'Yes' %}
+        <a href="{{media_url}}{{profile.get_vax.phile}}" target="_blank" data-toggle="tooltip" data-placement="top" title="{{profile.get_vax.jab_date|date:'Y-m-d'}}">
+          <i class="fa fa-image" aria-hidden="true"></i></a>
+        <span style="display:none;">{{profile.get_vax.jab_date|date:'Y-m-d'}} :: https://{{server_url}}{{media_url}}{{profile.get_vax.phile}}</span>
         {% endif %}
         </td>
         <td nowrap style="font-family: monospace;font-size:1.1em;">
-          {{profile.booster_date|date:'Y-m-d'}}
+          {% if profile.vaccine == 'Yes' %}
+          {% for doc in profile.get_boosters %}
+          <a href="{{media_url}}{{doc.phile}}" target="_blank" data-toggle="tooltip" data-placement="top" title="{{doc.jab_date|date:'Y-m-d'}}"><i class="fa fa-image" aria-hidden="true"></i></a>
+          <span style="display:none;">{{doc.jab_date|date:'Y-m-d'}} :: https://{{server_url}}{{media_url}}{{doc.phile}}</span>
+          {% endfor %}
+          {% endif %}
         </td>
-        <td nowrap>
-        {% if profile.vaccine == 'Yes' and profile.booster_proof %}
-        <a href="{{media_url}}{{profile.booster_proof}}" target="_blank">
-          <i class="fa fa-image" title="Booster Proof"></i></a>
-        <span style="display:none;">https://{{server_url}}{{media_url}}{{profile.booster_proof}}</span>
-        {% endif %}
         <td nowrap style="font-family: monospace;font-size:1.1em;">
           {{profile.updated_at|date:'Y-m-d H:i:s'}}
         </td>
@@ -75,10 +69,8 @@
         <th>Group</th>
         <th>Vax</th>
         <th>Vax Type</th>
-        <th>Vax Date</th>
         <th>Vax Card</th>
-        <th>Booster Date</th>
-        <th>Booster Proof</th>
+        <th>Boosters</th>
         <th>Updated At</th>
       </tr>
     </tfoot>

@@ -16,6 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from djauth.decorators import portal_auth_required
 
 from redpanda.core.forms import HealthCheckForm
+from redpanda.research.forms import DocumentForm
 from redpanda.research.forms import VaccineForm
 from redpanda.research.models import Registration
 
@@ -182,11 +183,11 @@ def vaccine(request):
             request.POST,
             request.FILES,
             instance=profile,
-            request=request,
             use_required_attribute=settings.REQUIRED_ATTRIBUTE,
         )
         if form.is_valid():
-            vax = form.save()
+            vax = form.save(commit=False)
+            vax.user = user
             messages.add_message(
                 request,
                 messages.SUCCESS,
@@ -197,7 +198,9 @@ def vaccine(request):
     else:
         form = VaccineForm(
             instance=profile,
-            request=request,
+            use_required_attribute=settings.REQUIRED_ATTRIBUTE,
+        )
+        vaxdoc = DocumentForm(
             use_required_attribute=settings.REQUIRED_ATTRIBUTE,
         )
     facstaff = False
@@ -207,7 +210,7 @@ def vaccine(request):
     return render(
         request,
         'vaccine.html',
-        {'form': form, 'facstaff': facstaff, 'profile': profile},
+        {'form': form, 'vaxdoc': vaxdoc, 'facstaff': facstaff, 'profile': profile},
     )
 
 
