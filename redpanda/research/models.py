@@ -211,17 +211,18 @@ class Document(models.Model):
         on_delete=models.CASCADE,
     )
     phile = models.FileField(
-        "Supporting documentation",
+        "Vaccine Card",
         upload_to=upload_to_path,
         validators=settings.FILE_VALIDATORS,
         max_length=767,
         help_text="PDF format",
     )
     jab_type = models.CharField(
+        "Vaccine Type",
         max_length=64,
         choices=VACCINE_TYPES,
     )
-    jab_date = models.DateField()
+    jab_date = models.DateField("Vaccine Date")
     tags = TaggableManager(blank=True)
 
     class Meta:

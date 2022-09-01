@@ -1,7 +1,5 @@
 {% extends "base.html" %}
-{% load livewhale_api %}
-{% load static %}
-{% load ifusergroup %}
+{% load livewhale_api static bootstrap4 ifusergroup %}
 {% block extra_javascript %}
 {{block.super}}
 <script src="//www.carthage.edu/static/vendor/jquery/ui/datepicker/js/jquery-ui-1.10.4.custom.min.js"
@@ -36,7 +34,8 @@ $(function(){
     $('#booster_date_container').slideDown('200');
     $('#booster_proof_container').slideDown('200');
   }
-  $("input[id$='_date']").datepicker({
+  // $("input[id$='_date']").datepicker({
+  $(".datepicker").datepicker({
       firstDay:0, appendText: "(format yyyy-mm-dd)",
       changeFirstDay:false, dateFormat: "yy-mm-dd",
       showOn: "both",
@@ -68,29 +67,24 @@ $(function(){
   $('#booster_proof_container').slideDown('200');
   {% endif %}
   {% if profile.vaccine == 'Yes' %}
-  $('#vaccine_date_container').slideDown('200');
-  $('#vaccine_card_front_container').slideDown('200');
-  $('#vax_rationale_container').slideUp('200');
+  $('#philes').slideDown('200');
+  $('#id_vax_rationale').parent().slideUp('200');
   {% else %}{% if profile.vaccine == 'No' %}
-  $('#vax_rationale_container').slideDown('200');
-  $('#vaccine_date_container').slideUp('200');
-  $('#vaccine_card_front_container').slideUp('200');
+  $('#id_vax_rationale').parent().slideDown('200');
+  $('#philes').slideUp('200');
   {% else %}
-  $('#vaccine_date_container').slideUp('200');
-  $('#vaccine_card_front_container').slideUp('200');
-  $('#vax_rationale_container').slideUp('200');
+  $('#philes').slideUp('200');
+  $('#id_vax_rationale').parent().slideUp('200');
   {% endif %}{% endif %}
   $("[name=vaccine]").click(function(){
     var $dis = $(this).val();
     if ($dis == 'Yes') {
-      $('#vaccine_date_container').slideDown('200');
-      $('#vaccine_card_front_container').slideDown('200');
-      $('#vax_rationale_container').slideUp('200');
+      $('#philes').slideDown('200');
+      $('#id_vax_rationale').parent().slideUp('200');
     }
     if ($dis == 'No') {
-      $('#vaccine_date_container').slideUp('200');
-      $('#vaccine_card_front_container').slideUp('200');
-      $('#vax_rationale_container').slideDown('200');
+      $('#philes').slideUp('200');
+      $('#id_vax_rationale').parent().slideDown('200');
     }
   });
   /* clear django cache object by cache key and refresh content */
@@ -189,7 +183,7 @@ $(function(){
 <link href="//www.carthage.edu/static/vendor/jquery/ui/datepicker/css/smoothness/jquery-ui-1.10.4.custom.min.css"
   rel="stylesheet" type="text/css">
 <style>
-#booster_date_container, #booster_proof_container {display:none;}
+#philes {display:none;}
 </style>
 {% endblock %}
 {% block navbar-header %}
@@ -269,32 +263,32 @@ $(function(){
     {% if form.errors %}
       <div class="alert alert-danger mt-4">Please correct the errors below.</div>
     {% endif %}
-    <ul class="nobull">
-    {% for field in form.visible_fields %}
-      {% include "form_field.inc.html" %}
-    {% endfor %}
-    </ul>
-    <ul class="nobull">
-    {% for field in vaxdoc.visible_fields %}
-      {% include "form_field.inc.html" %}
-    {% endfor %}
-    </ul>
-
-
+    {% bootstrap_form form %}
+    <!-- #philes -->
+    <div id="philes" class="mt-2 mb-2">
+      {% bootstrap_form vaxdoc %}
+      <h3><label>Proof of Booster Shots</label></h3>
+      <small class="form-text text-muted mb-1">
+        For each booster you have received, upload your COVID-19 vaccine card or
+        the receipt from the vaccine provider. Provide the vaccine type and booster date as well.
+      </small>
       <div class="form_field_outer container">
         <div class="row form_field_outer_row">
           <div class="form-group col-4">
-            <input type="text" class="form-control" name="mobileb_no[]" id="mobileb_no_1" placeholder="Enter mobiel no.">
+            <input type="file" class="form-control" name="phile[]" id="phile_no_1" placeholder="Vaccine Card">
           </div>
-          <div class="form-group col-4">
-            <select name="no_type[]" id="no_type_1" class="form-control">
-              <option>--Select type--</option>
-              <option>Personal No.</option>
-              <option>Company No.</option>
-              <option>Parents No.</option>
+          <div class="form-group col-3">
+            <select name="jab_type" id="id_jab_type">
+              <option value="">---vax type---</option>
+              <option value="Pfizer">Pfizer</option>
+              <option value="Moderna">Moderna</option>
+              <option value="Johnson &amp; Johnson">Johnson &amp; Johnson</option>
             </select>
           </div>
-          <div class="form-group col-4 add_del_btn_outer">
+          <div class="form-group col-3">
+            <input type="text" name="jab_date" id="id_jab_date" class="datepicker" placeholder="Vax Date">
+          </div>
+          <div class="form-group col-2 add_del_btn_outer">
             <div class="btn_round add_node_btn_frm_field" title="Copy or clone this row">
               <i class="fas fa-copy"></i>
             </div>
@@ -304,13 +298,12 @@ $(function(){
           </div>
         </div>
       </div>
-
-
+    </div>
+    <!-- /#philes -->
     <button class="btn btn-primary btn-block" type="submit" value="Submit" id="submit-button">Submit</button>
   </form>
   <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4 ml-2">
-    <div class="row list-group">
-    </div>
+    <div class="row list-group">&nbsp;</div>
     <!-- /.row -->
   </div>
   <!-- /.col-* -->
