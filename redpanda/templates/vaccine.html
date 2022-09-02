@@ -36,7 +36,6 @@ $(function(){
   }
   // $("input[id$='_date']").datepicker({
   $(".datepicker").datepicker({
-      firstDay:0, appendText: "(format yyyy-mm-dd)",
       changeFirstDay:false, dateFormat: "yy-mm-dd",
       showOn: "both",
       buttonImage: "//www.carthage.edu/themes/shared/img/ico/calendar.gif",
@@ -266,7 +265,7 @@ $(function(){
     {% bootstrap_form form %}
     <!-- #philes -->
     <div id="philes" class="mt-2 mb-2">
-      {% bootstrap_form vaxdoc %}
+      {% bootstrap_form form_vaxdoc %}
       <h3><label>Proof of Booster Shots</label></h3>
       <small class="form-text text-muted mb-1">
         For each booster you have received, upload your COVID-19 vaccine card or
@@ -275,10 +274,10 @@ $(function(){
       <div class="form_field_outer container">
         <div class="row form_field_outer_row">
           <div class="form-group col-4">
-            <input type="file" class="form-control" name="phile[]" id="phile_no_1" placeholder="Vaccine Card">
+            <input type="file" class="form-control" name="phile[]" placeholder="Vaccine Card">
           </div>
           <div class="form-group col-3">
-            <select name="jab_type" id="id_jab_type">
+            <select name="jab_type[]">
               <option value="">---vax type---</option>
               <option value="Pfizer">Pfizer</option>
               <option value="Moderna">Moderna</option>
@@ -286,7 +285,7 @@ $(function(){
             </select>
           </div>
           <div class="form-group col-3">
-            <input type="text" name="jab_date" id="id_jab_date" class="datepicker" placeholder="Vax Date">
+            <input type="text" name="jab_date[]" class="datepicker" placeholder="Vax Date">
           </div>
           <div class="form-group col-2 add_del_btn_outer">
             <div class="btn_round add_node_btn_frm_field" title="Copy or clone this row">

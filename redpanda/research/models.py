@@ -201,10 +201,10 @@ class Registration(models.Model):
 class Document(models.Model):
     """Supporting documents for a user."""
 
-    #created_at = models.DateTimeField("Date Created", auto_now_add=True)
-    created_at = models.DateTimeField()
-    #updated_at = models.DateTimeField("Date Updated", auto_now=True)
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField("Date Created", auto_now_add=True)
+    #created_at = models.DateTimeField()
+    updated_at = models.DateTimeField("Date Updated", auto_now=True)
+    #updated_at = models.DateTimeField()
     registration = models.ForeignKey(
         Registration,
         related_name='docs',
@@ -215,7 +215,6 @@ class Document(models.Model):
         upload_to=upload_to_path,
         validators=settings.FILE_VALIDATORS,
         max_length=767,
-        help_text="PDF format",
     )
     jab_type = models.CharField(
         "Vaccine Type",

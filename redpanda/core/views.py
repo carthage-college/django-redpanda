@@ -14,40 +14,67 @@ from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from djauth.decorators import portal_auth_required
-
 from redpanda.core.forms import HealthCheckForm
 from redpanda.research.forms import DocumentForm
 from redpanda.research.forms import VaccineForm
 from redpanda.research.models import Registration
 
 
-sql_ens = """
-SELECT
-    CUR.id, TRIM(IR.lastname) AS lastname,
-    TRIM(IR.firstname) AS firstname,
-    ENS.beg_date,
-    ENS.end_date,
-    TRIM(NVL(ENS.line1, '')) AS alt_email,
-    NVL(ENS.phone,'') AS mobile,
-    ENS.opt_out,
-    cur.username
-FROM
-    provisioning_vw CUR
-INNER JOIN
-    id_rec IR
-ON
-    CUR.id = IR.id
-LEFT JOIN
-    aa_rec ENS
-ON
-    CUR.id = ENS.id
-AND
-    ENS.aa = "ENS"
-AND
-    TODAY BETWEEN ENS.beg_date AND NVL(ENS.end_date, TODAY)
-WHERE
-    CUR.id = {cid}
-""".format
+@portal_auth_required(
+    session_var='REDPANDA_AUTH',
+    redirect_url=reverse_lazy('access_denied'),
+)
+def vaccine(request):
+    """Vaccine verification."""
+    user = request.user
+    profile = Registration.objects.get_or_create(user=user)[0]
+    vaxdoc = profile.get_vax()
+    if request.method == 'POST':
+        form = VaccineForm(
+            request.POST,
+            instance=profile,
+            use_required_attribute=settings.REQUIRED_ATTRIBUTE,
+        )
+        form_vaxdoc = DocumentForm(
+            request.POST,
+            request.FILES,
+            instance=vaxdoc,
+            use_required_attribute=settings.REQUIRED_ATTRIBUTE,
+        )
+        if form.is_valid():
+            form.save()
+            vax = form.save(commit=False)
+            vax.user = user
+            if vax.vaccine == 'Yes' and form_vaxdoc.is_valid():
+                doc = form_vaxdoc.save(commit=False)
+                doc.registration = profile
+                doc.save()
+                doc.tags.add('Vaccine')
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Thank you for submitting your vaccine status.",
+                extra_tags='alert-success',
+            )
+            return HttpResponseRedirect(reverse_lazy('home'))
+    else:
+        form = VaccineForm(
+            instance=profile,
+            use_required_attribute=settings.REQUIRED_ATTRIBUTE,
+        )
+        form_vaxdoc = DocumentForm(
+            instance=vaxdoc,
+            use_required_attribute=settings.REQUIRED_ATTRIBUTE,
+        )
+    facstaff = False
+    perms = user.profile.get_perms()
+    if perms.get(settings.FACULTY_GROUP) or perms.get(settings.STAFF_GROUP):
+        facstaff = True
+    return render(
+        request,
+        'vaccine.html',
+        {'form': form, 'form_vaxdoc': form_vaxdoc, 'facstaff': facstaff, 'profile': profile},
+    )
 
 
 @portal_auth_required(
@@ -166,51 +193,6 @@ def health_check(request):
         request,
         'health_check.html',
         {'form': form, 'facstaff': facstaff, 'ens': None},
-    )
-
-
-@portal_auth_required(
-    session_var='REDPANDA_AUTH',
-    redirect_url=reverse_lazy('access_denied'),
-)
-def vaccine(request):
-    """Vaccine verification."""
-    user = request.user
-    profile = Registration.objects.get_or_create(user=user)[0]
-
-    if request.method == 'POST':
-        form = VaccineForm(
-            request.POST,
-            request.FILES,
-            instance=profile,
-            use_required_attribute=settings.REQUIRED_ATTRIBUTE,
-        )
-        if form.is_valid():
-            vax = form.save(commit=False)
-            vax.user = user
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Thank you for submitting your vaccine status.",
-                extra_tags='alert-success',
-            )
-            return HttpResponseRedirect(reverse_lazy('home'))
-    else:
-        form = VaccineForm(
-            instance=profile,
-            use_required_attribute=settings.REQUIRED_ATTRIBUTE,
-        )
-        vaxdoc = DocumentForm(
-            use_required_attribute=settings.REQUIRED_ATTRIBUTE,
-        )
-    facstaff = False
-    perms = user.profile.get_perms()
-    if perms.get(settings.FACULTY_GROUP) or perms.get(settings.STAFF_GROUP):
-        facstaff = True
-    return render(
-        request,
-        'vaccine.html',
-        {'form': form, 'vaxdoc': vaxdoc, 'facstaff': facstaff, 'profile': profile},
     )
 
 
