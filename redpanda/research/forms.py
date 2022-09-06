@@ -23,6 +23,7 @@ class VaccineForm(forms.ModelForm):
     vaccine = forms.ChoiceField(
         label="Vaccine status",
         choices=VACCINE_CHOICES,
+        required=True,
         help_text="""
         Valid reasons for not receiving the vaccine are for: religious beliefs;
         health reasons; or personal conviction. If that is the case, you resolve

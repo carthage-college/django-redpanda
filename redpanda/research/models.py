@@ -3,9 +3,10 @@
 """Data models."""
 
 from django.conf import settings
-from django.db import models
 from django.contrib.auth.models import User
 from django.core.cache import cache
+from django.db import models
+from django.dispatch import receiver
 from djtools.fields import BINARY_CHOICES
 from djtools.fields.helpers import upload_to_path
 from redpanda.core.models import GenericChoice
@@ -30,7 +31,7 @@ class SmellStudy(models.Model):
         User,
         verbose_name='Created by',
         related_name='study',
-        editable=False,
+        editable=settings.DEBUG,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -73,7 +74,7 @@ class SmellStudyInquiry(models.Model):
         User,
         verbose_name='Created by',
         related_name='inquiry',
-        editable=False,
+        editable=settings.DEBUG,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -89,11 +90,8 @@ class Registration(models.Model):
         User,
         verbose_name='Created by',
         related_name='profile',
-        editable=False,
-        null=True,
-        blank=True,
-        #on_delete=models.CASCADE,
-        on_delete=models.SET_NULL,
+        editable=settings.DEBUG,
+        on_delete=models.CASCADE,
     )
     created_at = models.DateTimeField("Date Created", auto_now_add=True)
     updated_at = models.DateTimeField("Date updated", auto_now=True)
@@ -126,6 +124,8 @@ class Registration(models.Model):
         health reasons; or personal conviction. If that is the case, you resolve
         to continue wearing masks indoors this fall.
         """,
+        null=True,
+        blank=True,
     )
     vax_rationale = models.TextField(
         "Exemption Rationale",
@@ -201,6 +201,7 @@ class Registration(models.Model):
 class Document(models.Model):
     """Supporting documents for a user."""
 
+    #id = models.AutoField(min_value=1000)
     created_at = models.DateTimeField("Date Created", auto_now_add=True)
     #created_at = models.DateTimeField()
     updated_at = models.DateTimeField("Date Updated", auto_now=True)
@@ -240,3 +241,10 @@ class Document(models.Model):
     def __str__(self):
         """Default data for display."""
         return str(self.registration)
+
+
+@receiver(models.signals.post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    """Post-save signal function to create a user profile instance."""
+    if created and not kwargs.get('raw', False):
+        Registration.objects.create(user=instance)

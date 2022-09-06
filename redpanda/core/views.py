@@ -2,6 +2,7 @@
 
 import datetime
 import json
+import logging
 import requests
 
 from django.conf import settings
@@ -20,6 +21,10 @@ from redpanda.research.forms import VaccineForm
 from redpanda.research.models import Registration
 
 
+REQ_ATTR = settings.REQUIRED_ATTRIBUTE
+logger = logging.getLogger('debug_logfile')
+
+
 @portal_auth_required(
     session_var='REDPANDA_AUTH',
     redirect_url=reverse_lazy('access_denied'),
@@ -27,29 +32,83 @@ from redpanda.research.models import Registration
 def vaccine(request):
     """Vaccine verification."""
     user = request.user
-    profile = Registration.objects.get_or_create(user=user)[0]
-    vaxdoc = profile.get_vax()
+    vaxdoc = user.profile.get_vax()
+    errors = True
+    boosters = user.profile.get_boosters()
+    jabs = {}
+    if boosters:
+        for boo in boosters:
+            prefix = 'bid{0}'.format(boo.id)
+            jabs[boo.id] = DocumentForm(instance=boo, prefix=prefix, use_required_attribute=REQ_ATTR)
     if request.method == 'POST':
         form = VaccineForm(
             request.POST,
-            instance=profile,
-            use_required_attribute=settings.REQUIRED_ATTRIBUTE,
+            instance=user.profile,
+            use_required_attribute=REQ_ATTR,
         )
         form_vaxdoc = DocumentForm(
             request.POST,
             request.FILES,
             instance=vaxdoc,
-            use_required_attribute=settings.REQUIRED_ATTRIBUTE,
+            prefix='vax',
+            use_required_attribute=REQ_ATTR,
         )
         if form.is_valid():
-            form.save()
             vax = form.save(commit=False)
-            vax.user = user
-            if vax.vaccine == 'Yes' and form_vaxdoc.is_valid():
-                doc = form_vaxdoc.save(commit=False)
-                doc.registration = profile
-                doc.save()
-                doc.tags.add('Vaccine')
+            if vax.vaccine == 'Yes':
+                if form_vaxdoc.is_valid():
+                    errors = False
+                    vax.save()
+                    doc = form_vaxdoc.save(commit=False)
+                    doc.registration = user.profile
+                    doc.save()
+                    doc.tags.add('Vaccine')
+                    booster_error = False
+                    for bid in request.POST.getlist('bids[]'):
+                        prefix = 'bid{0}'.format(bid)
+                        boo = None
+                        if int(bid) > 1000:
+                            try:
+                                boo = Document.objects.get(pk=doc)
+                            except Exception:
+                                boo = None
+                        form_boo = DocumentForm(
+                            request.POST,
+                            request.FILES,
+                            instance=boo,
+                            prefix=prefix,
+                        )
+                        if form_boo.is_valid():
+                            logger.debug(form_boo.as_table())
+                            booster = form_boo.save(commit=False)
+                            booster.registration = user.profile
+                            booster.save()
+                            booster.tags.add('Booster')
+                        else:
+                            booster_error = True
+                        jabs[bid] = form_boo
+                    if booster_error:
+                        messages.add_message(
+                            request,
+                            messages.WARNING,
+                            """
+                            There was a problem with one of your booster uploads.
+                            Please submit your booster again.
+                            """,
+                            extra_tags='alert-warning',
+                        )
+                else:
+                    messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "Please upload a photo of your vaccine card.",
+                    extra_tags='alert-warning',
+                )
+            else:
+                errors = False
+                vax.save()
+
+        if not errors:
             messages.add_message(
                 request,
                 messages.SUCCESS,
@@ -59,12 +118,13 @@ def vaccine(request):
             return HttpResponseRedirect(reverse_lazy('home'))
     else:
         form = VaccineForm(
-            instance=profile,
-            use_required_attribute=settings.REQUIRED_ATTRIBUTE,
+            instance=user.profile,
+            use_required_attribute=REQ_ATTR,
         )
         form_vaxdoc = DocumentForm(
             instance=vaxdoc,
-            use_required_attribute=settings.REQUIRED_ATTRIBUTE,
+            prefix='vax',
+            use_required_attribute=REQ_ATTR,
         )
     facstaff = False
     perms = user.profile.get_perms()
@@ -73,7 +133,12 @@ def vaccine(request):
     return render(
         request,
         'vaccine.html',
-        {'form': form, 'form_vaxdoc': form_vaxdoc, 'facstaff': facstaff, 'profile': profile},
+        {
+            'form': form,
+            'form_vaxdoc': form_vaxdoc,
+            'jabs': jabs,
+            'facstaff': facstaff,
+        },
     )
 
 
@@ -85,10 +150,7 @@ def health_check(request):
     """Daily health check."""
     # check in once a day
     # check any and all icons and then submit
-
     user = request.user
-    profile = Registration.objects.get_or_create(user=user)[0]
-
     if request.method == 'POST' or request.GET.get('negative'):
         if request.method == 'POST':
             form = HealthCheckForm(request.POST)
@@ -100,16 +162,16 @@ def health_check(request):
             check.save()
             # mobile phone reminders for health check
             if request.POST.get('mobile'):
-                profile.mobile = True
+                user.profile.mobile = True
             elif request.method == "POST":
-                profile.mobile = False
+                user.profile.mobile = False
             # vaccination status
             if request.POST.get('vaccine'):
-                profile.vaccine = True
+                user.profile.vaccine = True
             elif request.method == "POST":
-                if not profile.vaccine:
-                    profile.vaccine = False
-            profile.save()
+                if not user.profile.vaccine:
+                    user.profile.vaccine = False
+            user.profile.save()
             now = datetime.datetime.now().strftime('%B %d, %Y')
             # messages displayed after submit
             default = """

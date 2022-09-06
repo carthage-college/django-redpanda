@@ -2,8 +2,7 @@
 {% load livewhale_api static bootstrap4 ifusergroup %}
 {% block extra_javascript %}
 {{block.super}}
-<script src="//www.carthage.edu/static/vendor/jquery/ui/datepicker/js/jquery-ui-1.10.4.custom.min.js"
-  type="text/javascript" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" language="javascript">
 function boosterDateCalc(vaxDate, vaxType) {
   var vaxDate = new Date(vaxDate);
@@ -34,12 +33,20 @@ $(function(){
     $('#booster_date_container').slideDown('200');
     $('#booster_proof_container').slideDown('200');
   }
-  // $("input[id$='_date']").datepicker({
-  $(".datepicker").datepicker({
-      changeFirstDay:false, dateFormat: "yy-mm-dd",
-      showOn: "both",
-      buttonImage: "//www.carthage.edu/themes/shared/img/ico/calendar.gif",
-      buttonImageOnly: true
+  /*
+  $("#jab_date_1").datepicker({
+    changeFirstDay:false,
+    dateFormat: "yy-mm-dd",
+    showOn: "both",
+    buttonImage: "//www.carthage.edu/themes/shared/img/ico/calendar.gif",
+    buttonImageOnly: true
+  });
+  */
+  $("input[id^='jab_date_']").datepicker({
+      weekStart: 1,
+      daysOfWeekHighlighted: "6,0",
+      autoclose: true,
+      todayHighlight: true,
   });
   $("#id_vaccine_type").on("change", function(){
     $dis = $(this);
@@ -61,20 +68,19 @@ $(function(){
       $('#booster_proof_container').slideDown('200');
     }
   });
-  {% if profile.booster_date %}
-  $('#booster_date_container').slideDown('200');
-  $('#booster_proof_container').slideDown('200');
-  {% endif %}
-  {% if profile.vaccine == 'Yes' %}
+  {% if user.profile.vaccine == 'Yes' %}
   $('#philes').slideDown('200');
   $('#id_vax_rationale').parent().slideUp('200');
-  {% else %}{% if profile.vaccine == 'No' %}
+  {% else %}{% if user.profile.vaccine == 'No' %}
   $('#id_vax_rationale').parent().slideDown('200');
   $('#philes').slideUp('200');
   {% else %}
   $('#philes').slideUp('200');
   $('#id_vax_rationale').parent().slideUp('200');
   {% endif %}{% endif %}
+  {% if form.vaccine.errors %}
+  $('.invalid-feedback').css('display', 'inherit');
+  {% endif %}
   $("[name=vaccine]").click(function(){
     var $dis = $(this).val();
     if ($dis == 'Yes') {
@@ -114,73 +120,47 @@ $(function(){
     // disable submit button after users clicks it
     $(this).children('button[type=submit]').attr('disabled', 'disabled');
   });
-
-    $("body").on("click",".add_new_frm_field_btn", function (){
-      console.log("clicked");
-      var index = $(".form_field_outer").find(".form_field_outer_row").length + 1;
-      $(".form_field_outer").append(`
-          <div class="row form_field_outer_row">
-              <div class="form-group col-md-6">
-                <input type="text" class="form-control w_90" name="mobileb_no[]" id="mobileb_no_${index}" placeholder="Enter mobiel no." />
-              </div>
-              <div class="form-group col-md-4">
-                <select name="no_type[]" id="no_type_${index}" class="form-control" >
-                  <option>--Select type--</option>
-                  <option>Personal No.</option>
-                  <option>Company No.</option>
-                  <option>Parents No.</option>
-                </select>
-              </div>
-              <div class="form-group col-md-2 add_del_btn_outer">
-                <div class="btn_round add_node_btn_frm_field" title="Copy or clone this row">
-                  <i class="fas fa-copy"></i>
-                </div>
-
-                <div class="btn_round remove_node_btn_frm_field" disabled>
-                  <i class="fas fa-trash-alt"></i>
-                </div>
-              </div>
-            </div>
-        `);
-
-      $(".form_field_outer").find(".remove_node_btn_frm_field:not(:first)").prop("disabled", false);
-      $(".form_field_outer").find(".remove_node_btn_frm_field").first().prop("disabled", true);
+  $("body").on("click", ".add_node_btn_frm_field", function (e) {
+    var index = $(e.target).closest(".form_field_outer").find(".form_field_outer_row").length + 1;
+    var cloned_el = $(e.target).closest(".form_field_outer_row").clone(false);
+    $(e.target).closest(".form_field_outer").last().append(cloned_el).find(".remove_node_btn_frm_field:not(:first)").prop("disabled", false);
+    $(e.target).closest(".form_field_outer").find(".remove_node_btn_frm_field").first().prop("disabled", true);
+    // change id
+    $(e.target).closest(".form_field_outer").find(".form_field_outer_row").last().find("input[type='hidden']").attr("value", index);
+    $(e.target).closest(".form_field_outer").find(".form_field_outer_row").last().find("input[type='file']").attr("id", "phile_" + index);
+    $(e.target).closest(".form_field_outer").find(".form_field_outer_row").last().find("select").attr("id", "jab_type_" + index);
+    $(e.target).closest(".form_field_outer").find(".form_field_outer_row").last().find("input[type='text']").attr("id", "jab_date_" + index);
+    // change name
+    $('#phile_' + index).attr('name', 'bid' + index + '-phile');
+    $('#jab_date_' + index).attr('name', 'bid' + index + '-jab_date');
+    $('#jab_type_' + index).attr('name', 'bid' + index + '-jab_type');
+    // datepicker for date fields
+    $('#jab_date_' + index).datepicker({
+      weekStart: 1,
+      autoclose: true,
+      todayHighlight: true,
     });
-
-
-    $("body").on("click", ".add_node_btn_frm_field", function (e) {
-      var index = $(e.target).closest(".form_field_outer").find(".form_field_outer_row").length + 1;
-      var cloned_el = $(e.target).closest(".form_field_outer_row").clone(true);
-
-      $(e.target).closest(".form_field_outer").last().append(cloned_el).find(".remove_node_btn_frm_field:not(:first)").prop("disabled", false);
-
-      $(e.target).closest(".form_field_outer").find(".remove_node_btn_frm_field").first().prop("disabled", true);
-
-
-      //change id
-      $(e.target).closest(".form_field_outer").find(".form_field_outer_row").last().find("input[type='text']").attr("id", "mobileb_no_"+index);
-
-      $(e.target).closest(".form_field_outer").find(".form_field_outer_row").last().find("select").attr("id", "no_type_"+index);
-
-      console.log(cloned_el);
-      //count++;
+    $('#jab_date_'+index).val("").datepicker("update");
+    /*
+    $('#jab_date_"+index').datepicker('destroy').datepicker({
+      changeFirstDay: false,
+      dateFormat: "yy-mm-dd",
+      showOn: "both",
+      buttonImage: "//www.carthage.edu/themes/shared/img/ico/calendar.gif",
+      buttonImageOnly: true
     });
-
-
-    //===== delete the form fieed row
-    $("body").on("click", ".remove_node_btn_frm_field", function () {
-      $(this).closest(".form_field_outer_row").remove();
-      console.log("success");
-    });
-
-
+    */
+  });
+  //===== delete the form field row
+  $("body").on("click", ".remove_node_btn_frm_field", function () {
+    $(this).closest(".form_field_outer_row").remove();
+  });
 });
 </script>
 {% endblock %}
 {% block extra_style %}
 {{block.super}}
-<link href="//www.carthage.edu/static/vendor/jquery/ui/datepicker/css/smoothness/jquery-ui-1.10.4.custom.min.css"
-  rel="stylesheet" type="text/css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
 <style>
 #philes {display:none;}
 </style>
@@ -271,32 +251,13 @@ $(function(){
         For each booster you have received, upload your COVID-19 vaccine card or
         the receipt from the vaccine provider. Provide the vaccine type and booster date as well.
       </small>
-      <div class="form_field_outer container">
-        <div class="row form_field_outer_row">
-          <div class="form-group col-4">
-            <input type="file" class="form-control" name="phile[]" placeholder="Vaccine Card">
-          </div>
-          <div class="form-group col-3">
-            <select name="jab_type[]">
-              <option value="">---vax type---</option>
-              <option value="Pfizer">Pfizer</option>
-              <option value="Moderna">Moderna</option>
-              <option value="Johnson &amp; Johnson">Johnson &amp; Johnson</option>
-            </select>
-          </div>
-          <div class="form-group col-3">
-            <input type="text" name="jab_date[]" class="datepicker" placeholder="Vax Date">
-          </div>
-          <div class="form-group col-2 add_del_btn_outer">
-            <div class="btn_round add_node_btn_frm_field" title="Copy or clone this row">
-              <i class="fas fa-copy"></i>
-            </div>
-            <div class="btn_round remove_node_btn_frm_field" disabled>
-              <i class="fas fa-trash-alt"></i>
-            </div>
-          </div>
-        </div>
-      </div>
+      {% if jabs %}
+        {% for jid, jab in jabs.items %}
+          {% include "vaccine.boosters.inc.html" %}
+        {% endfor %}
+      {% else %}
+        {% include "vaccine.boosters.inc.html" %}
+      {% endif %}
     </div>
     <!-- /#philes -->
     <button class="btn btn-primary btn-block" type="submit" value="Submit" id="submit-button">Submit</button>

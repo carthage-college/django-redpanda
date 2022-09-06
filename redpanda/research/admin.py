@@ -12,12 +12,9 @@ class ProfileAdmin(admin.ModelAdmin):
     """Registration user profile admin class."""
 
     list_display = ('profile_username', 'profile_vaccine', 'profile_firstname')
-    #list_editable = ('profile_vaccine',)
     list_per_page = 500
     raw_id_fields = ('user',)
-
     date_hierarchy = 'created_at'
-    readonly_fields = ('user',)
     search_fields = (
         'user__username',
         'user__last_name',
