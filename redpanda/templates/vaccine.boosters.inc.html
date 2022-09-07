@@ -3,27 +3,21 @@
     <div class="form-group col-4 mt-1">
       <input type="hidden" name="bids[]" value='{{jid|default:1}}'>
       <input type="file" style="display:none;" name="bid{{jid|default:1}}-phile" id="phile_{{jid|default:1}}">
-      <label for="phile_{{jid|default:1}}">Select file</label>
-      {% if jab.phile.value %}
-      <a href="{{media_url}}{{jab.phile.value}}"
-        style="margin-left:10px;margin-top:3px;"
-        target="_blank" title="current file">
-        <i class="fa fa-file"></i></a>
-      {% endif %}
+      <label for="phile_{{jid|default:1}}" class="btn btn-success">Select file</label>
     </div>
     <div class="form-group col-3">
       <select name="bid{{jid|default:1}}-jab_type" id="jab_type_{{jid|default:1}}">
         <option value="">---vax type---</option>
-        <option value="Pfizer">Pfizer</option>
-        <option value="Moderna">Moderna</option>
-        <option value="Johnson &amp; Johnson">Johnson &amp; Johnson</option>
+        {% for vax in vax_types %}
+        <option value="{{vax}}"{% if jab.jab_type.value == vax %} selected{% endif %}>{{vax}}</option>
+        {% endfor %}
       </select>
     </div>
     <div class="form-group col-3">
       <input type="text" name="bid{{jid|default:1}}-jab_date" id="jab_date_{{jid|default:1}}" value="{{jab.jab_date.value}}" class="datepicker" placeholder="Booster Date">
     </div>
     <div class="form-group col-2 add_del_btn_outer">
-      <div class="btn_round add_node_btn_frm_field" title="Add a booster">
+      <div class="btn_round add_node_btn_frm_field" data-toggle="tooltip" data-placement="top" title="Add a booster">
         <i class="fa fa-plus-circle"></i>
       </div>
       <div class="btn_round remove_node_btn_frm_field" disabled>

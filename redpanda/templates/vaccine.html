@@ -115,11 +115,7 @@ $(function(){
     });
     return false;
   });
-  // override the submit event to handle some things
-  $('form#health-check').submit(function(){
-    // disable submit button after users clicks it
-    $(this).children('button[type=submit]').attr('disabled', 'disabled');
-  });
+  $(".form_field_outer").find(".remove_node_btn_frm_field").first().prop("disabled", true);
   $("body").on("click", ".add_node_btn_frm_field", function (e) {
     var index = $(e.target).closest(".form_field_outer").find(".form_field_outer_row").length + 1;
     var cloned_el = $(e.target).closest(".form_field_outer_row").clone(false);
@@ -130,6 +126,11 @@ $(function(){
     $(e.target).closest(".form_field_outer").find(".form_field_outer_row").last().find("input[type='file']").attr("id", "phile_" + index);
     $(e.target).closest(".form_field_outer").find(".form_field_outer_row").last().find("select").attr("id", "jab_type_" + index);
     $(e.target).closest(".form_field_outer").find(".form_field_outer_row").last().find("input[type='text']").attr("id", "jab_date_" + index);
+    // reset some things
+    $('#jab_date_' + index).attr('value', '').end();
+    $('#jab_type_' + index).attr('value', '').end();
+    $('#jab_type_' + index).prop('selectedIndex', 0);
+    $(e.target).closest(".form_field_outer").find(".form_field_outer_row").last().find("a").remove();
     // change name
     $('#phile_' + index).attr('name', 'bid' + index + '-phile');
     $('#jab_date_' + index).attr('name', 'bid' + index + '-jab_date');
@@ -140,20 +141,16 @@ $(function(){
       autoclose: true,
       todayHighlight: true,
     });
-    $('#jab_date_'+index).val("").datepicker("update");
-    /*
-    $('#jab_date_"+index').datepicker('destroy').datepicker({
-      changeFirstDay: false,
-      dateFormat: "yy-mm-dd",
-      showOn: "both",
-      buttonImage: "//www.carthage.edu/themes/shared/img/ico/calendar.gif",
-      buttonImageOnly: true
-    });
-    */
+    $('#jab_date_' + index).val("").datepicker("update");
   });
   //===== delete the form field row
   $("body").on("click", ".remove_node_btn_frm_field", function () {
     $(this).closest(".form_field_outer_row").remove();
+  });
+  // override the submit event to handle some things
+  $('form#vaccine-verify').submit(function(){
+    // disable submit button after users clicks it
+    $(this).children('button[type=submit]').attr('disabled', 'disabled');
   });
 });
 </script>
@@ -251,6 +248,33 @@ $(function(){
         For each booster you have received, upload your COVID-19 vaccine card or
         the receipt from the vaccine provider. Provide the vaccine type and booster date as well.
       </small>
+      {% if user.profile.get_boosters %}
+      <div class="container">
+        <strong>Current Booster Shots</strong>
+        <div class="row">
+        {% for booster in user.profile.get_boosters %}
+          <div class="form-group col-4 mt-1">
+            <a href="{{media_url}}{{booster.phile}}"
+              style="margin-left:10px;margin-top:3px;"
+              target="_blank" data-toggle="tooltip" data-placement="top" title="Booster File">
+              <i class="fa fa-file"></i></a>
+          </div>
+          <div class="col-3">
+            {{booster.jab_type}}
+          </div>
+          <div class="form-group col-3">
+            {{booster.jab_date}}
+          </div>
+          <div class="form-group col-2">
+            <div style="width: 35px; height: 35px; display: inline-block; border-radius: 50%; line-height: 35px; margin-left: 10px;">&nbsp;</div>
+            <div class="btn_round">
+              <i class="fas fa-trash-alt"></i>
+            </div>
+          </div>
+        {% endfor %}
+        </div>
+      </div>
+      {% endif %}
       {% if jabs %}
         {% for jid, jab in jabs.items %}
           {% include "vaccine.boosters.inc.html" %}

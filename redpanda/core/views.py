@@ -33,13 +33,8 @@ def vaccine(request):
     """Vaccine verification."""
     user = request.user
     vaxdoc = user.profile.get_vax()
-    errors = True
-    boosters = user.profile.get_boosters()
+    booster_error = True
     jabs = {}
-    if boosters:
-        for boo in boosters:
-            prefix = 'bid{0}'.format(boo.id)
-            jabs[boo.id] = DocumentForm(instance=boo, prefix=prefix, use_required_attribute=REQ_ATTR)
     if request.method == 'POST':
         form = VaccineForm(
             request.POST,
@@ -57,7 +52,6 @@ def vaccine(request):
             vax = form.save(commit=False)
             if vax.vaccine == 'Yes':
                 if form_vaxdoc.is_valid():
-                    errors = False
                     vax.save()
                     doc = form_vaxdoc.save(commit=False)
                     doc.registration = user.profile
@@ -79,14 +73,13 @@ def vaccine(request):
                             prefix=prefix,
                         )
                         if form_boo.is_valid():
-                            logger.debug(form_boo.as_table())
                             booster = form_boo.save(commit=False)
                             booster.registration = user.profile
                             booster.save()
                             booster.tags.add('Booster')
                         else:
                             booster_error = True
-                        jabs[bid] = form_boo
+                            jabs[bid] = form_boo
                     if booster_error:
                         messages.add_message(
                             request,
@@ -105,10 +98,9 @@ def vaccine(request):
                     extra_tags='alert-warning',
                 )
             else:
-                errors = False
                 vax.save()
 
-        if not errors:
+        if not booster_error:
             messages.add_message(
                 request,
                 messages.SUCCESS,
@@ -138,6 +130,7 @@ def vaccine(request):
             'form_vaxdoc': form_vaxdoc,
             'jabs': jabs,
             'facstaff': facstaff,
+            'vax_types':  ['Pfizer', 'Moderna', 'Johnson & Johnson'],
         },
     )
 
