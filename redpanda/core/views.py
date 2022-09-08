@@ -32,8 +32,12 @@ logger = logging.getLogger('debug_logfile')
 def vaccine(request):
     """Vaccine verification."""
     user = request.user
-    vaxdoc = user.profile.get_vax()
-    booster_error = True
+    try:
+        vaxdoc = user.profile.get_vax()
+    except Exception:
+        Registration.objects.create(user=user)
+        vaxdoc = None
+    booster_error = False
     jabs = {}
     if request.method == 'POST':
         form = VaccineForm(
@@ -52,12 +56,17 @@ def vaccine(request):
             vax = form.save(commit=False)
             if vax.vaccine == 'Yes':
                 if form_vaxdoc.is_valid():
-                    vax.save()
+                    vax = form.save()
+                    messages.add_message(
+                        request,
+                        messages.SUCCESS,
+                        'Thank you for submitting your vaccine status.',
+                        extra_tags='alert-success',
+                    )
                     doc = form_vaxdoc.save(commit=False)
                     doc.registration = user.profile
                     doc.save()
                     doc.tags.add('Vaccine')
-                    booster_error = False
                     for bid in request.POST.getlist('bids[]'):
                         prefix = 'bid{0}'.format(bid)
                         boo = None
@@ -81,33 +90,29 @@ def vaccine(request):
                             booster_error = True
                             jabs[bid] = form_boo
                     if booster_error:
+                        # this first message will only display for first time users.
+                        if vax.booster_due()['due']:
+                            message = """
+                                There was a problem with one of your booster uploads.
+                                Please submit your booster again.
+                            """
+                        else:
+                            message = 'Your booster information is due after {0}.'.format(
+                                vax.booster_due()['date'],
+                            )
                         messages.add_message(
                             request,
                             messages.WARNING,
-                            """
-                            There was a problem with one of your booster uploads.
-                            Please submit your booster again.
-                            """,
+                            message,
                             extra_tags='alert-warning',
                         )
                 else:
                     messages.add_message(
-                    request,
-                    messages.WARNING,
-                    "Please upload a photo of your vaccine card.",
-                    extra_tags='alert-warning',
-                )
-            else:
-                vax.save()
-
-        if not booster_error:
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Thank you for submitting your vaccine status.",
-                extra_tags='alert-success',
-            )
-            return HttpResponseRedirect(reverse_lazy('home'))
+                        request,
+                        messages.WARNING,
+                        'Please upload a photo of your vaccine card.',
+                        extra_tags='alert-warning',
+                    )
     else:
         form = VaccineForm(
             instance=user.profile,

@@ -9,7 +9,7 @@ function boosterDateCalc(vaxDate, vaxType) {
   var today = new Date();
   var booster = 150;
   var status = '';
-
+  console.log('boo');
   if (vaxType == 'Johnson & Johnson') {
     booster = 60;
   }
@@ -25,62 +25,32 @@ function boosterDateCalc(vaxDate, vaxType) {
 }
 
 $(function(){
-  var $vaxDate = $("#id_vaccine_date").val();
-  var $vaxType = $("#id_vaccine_type").val();
-  var $boosterDate = $("#id_booster_date").val();
-  if ($vaxType && $vaxDate && !$boosterDate) {
-    boosterDateCalc($vaxDate, $vaxType);
-    $('#booster_date_container').slideDown('200');
-    $('#booster_proof_container').slideDown('200');
-  }
-  /*
-  $("#jab_date_1").datepicker({
-    changeFirstDay:false,
-    dateFormat: "yy-mm-dd",
-    showOn: "both",
-    buttonImage: "//www.carthage.edu/themes/shared/img/ico/calendar.gif",
-    buttonImageOnly: true
-  });
-  */
-  $("input[id^='jab_date_']").datepicker({
+  $("input[id*='jab_date']").datepicker({
       weekStart: 1,
       daysOfWeekHighlighted: "6,0",
       autoclose: true,
       todayHighlight: true,
   });
-  $("#id_vaccine_type").on("change", function(){
+  $("#id_vax-jab_type").on("change", function(){
     $dis = $(this);
-    $vaxDate = $("#id_vaccine_date").val();
+    $vaxDate = $("#id_vax-jab_date").val();
     if ($vaxDate) {
       $vaxDate = boosterDateCalc($vaxDate, $dis.val());
       if ($vaxDate) {
-        $('#booster_date_container').slideDown('200');
-        $('#booster_proof_container').slideDown('200');
+        $('#boosters').slideDown('200');
       }
     }
   });
-  $("#id_vaccine_date").on("change", function(){
+  $("#id_vax-jab_date").on("change", function(){
     $dis = $(this);
-    $vaxType = $("#id_vaccine_type").val();
-    if ( $("#id_vaccine_type").val() ) {
+    $vaxType = $("#id_vax-jab_type").val();
+    if ( $("#id_vax-jab_type").val() ) {
       $vaxDate = boosterDateCalc($dis.val(), $vaxType);
-      $('#booster_date_container').slideDown('200');
-      $('#booster_proof_container').slideDown('200');
+      if ($vaxDate) {
+        $('#boosters').slideDown('200');
+      }
     }
   });
-  {% if user.profile.vaccine == 'Yes' %}
-  $('#philes').slideDown('200');
-  $('#id_vax_rationale').parent().slideUp('200');
-  {% else %}{% if user.profile.vaccine == 'No' %}
-  $('#id_vax_rationale').parent().slideDown('200');
-  $('#philes').slideUp('200');
-  {% else %}
-  $('#philes').slideUp('200');
-  $('#id_vax_rationale').parent().slideUp('200');
-  {% endif %}{% endif %}
-  {% if form.vaccine.errors %}
-  $('.invalid-feedback').css('display', 'inherit');
-  {% endif %}
   $("[name=vaccine]").click(function(){
     var $dis = $(this).val();
     if ($dis == 'Yes') {
@@ -92,6 +62,22 @@ $(function(){
       $('#id_vax_rationale').parent().slideDown('200');
     }
   });
+  {% if user.profile.vaccine == 'Yes' %}
+  $('#philes').slideDown('200');
+  $('#id_vax_rationale').parent().slideUp('200');
+    {% if user.profile.get_boosters or user.profile.booster_due.due %}
+      $('#boosters').slideDown('200');
+    {% endif %}
+  {% else %}{% if user.profile.vaccine == 'No' %}
+  $('#id_vax_rationale').parent().slideDown('200');
+  $('#philes').slideUp('200');
+  {% else %}
+  $('#philes').slideUp('200');
+  $('#id_vax_rationale').parent().slideUp('200');
+  {% endif %}{% endif %}
+  {% if form.vaccine.errors %}
+  $('.invalid-feedback').css('display', 'inherit');
+  {% endif %}
   /* clear django cache object by cache key and refresh content */
   $('.clear-cache').on('click', function(e){
     e.preventDefault();
@@ -159,7 +145,7 @@ $(function(){
 {{block.super}}
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
 <style>
-#philes {display:none;}
+#philes, #boosters {display:none;}
 </style>
 {% endblock %}
 {% block navbar-header %}
@@ -225,7 +211,7 @@ $(function(){
     <p>
     <a href="https://www.carthage.edu/livewhale/?blurbs_edit&tid=285&id=3095"
       target="_blank">
-      <i class="fa fa-pencil green" aria-hidden="true"
+      <i class="fas fa-pencil green" aria-hidden="true"
       title="Manage the content above in LiveWhale"></i></a>
     <a href="#" data-cid="3095" data-target="lw_success_3095" class="clear-cache">
       <i class="fa fa-refresh green" aria-hidden="true"
@@ -243,6 +229,10 @@ $(function(){
     <!-- #philes -->
     <div id="philes" class="mt-2 mb-2">
       {% bootstrap_form form_vaxdoc %}
+    </div>
+    <!-- /#philes -->
+    <!-- #boosters -->
+    <div id="boosters" class="mt-2 mb-2">
       <h3><label>Proof of Booster Shots</label></h3>
       <small class="form-text text-muted mb-1">
         For each booster you have received, upload your COVID-19 vaccine card or
@@ -250,7 +240,6 @@ $(function(){
       </small>
       {% if user.profile.get_boosters %}
       <div class="container">
-        <strong>Current Booster Shots</strong>
         <div class="row">
         {% for booster in user.profile.get_boosters %}
           <div class="form-group col-4 mt-1">
@@ -259,18 +248,8 @@ $(function(){
               target="_blank" data-toggle="tooltip" data-placement="top" title="Booster File">
               <i class="fa fa-file"></i></a>
           </div>
-          <div class="col-3">
-            {{booster.jab_type}}
-          </div>
-          <div class="form-group col-3">
-            {{booster.jab_date}}
-          </div>
-          <div class="form-group col-2">
-            <div style="width: 35px; height: 35px; display: inline-block; border-radius: 50%; line-height: 35px; margin-left: 10px;">&nbsp;</div>
-            <div class="btn_round">
-              <i class="fas fa-trash-alt"></i>
-            </div>
-          </div>
+          <div class="col-3">{{booster.jab_type}}</div>
+          <div class="form-group col-5">{{booster.jab_date}}</div>
         {% endfor %}
         </div>
       </div>
@@ -283,7 +262,7 @@ $(function(){
         {% include "vaccine.boosters.inc.html" %}
       {% endif %}
     </div>
-    <!-- /#philes -->
+    <!-- /#boosters -->
     <button class="btn btn-primary btn-block" type="submit" value="Submit" id="submit-button">Submit</button>
   </form>
   <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4 ml-2">

@@ -1,22 +1,22 @@
 <div class="form_field_outer container">
   <div class="row form_field_outer_row">
-    <div class="form-group col-4 mt-1">
+    <div class="form-group col-3 col-sm-3 col-md-2 col-lg-2 col-xl-2 mt-1">
       <input type="hidden" name="bids[]" value='{{jid|default:1}}'>
       <input type="file" style="display:none;" name="bid{{jid|default:1}}-phile" id="phile_{{jid|default:1}}">
       <label for="phile_{{jid|default:1}}" class="btn btn-success">Select file</label>
     </div>
-    <div class="form-group col-3">
+    <div class="form-group col-3 col-sm-3 col-md-4 col-lg-4 col-xl-4 no-gutters">
       <select name="bid{{jid|default:1}}-jab_type" id="jab_type_{{jid|default:1}}">
-        <option value="">---vax type---</option>
+        <option value="">--type--</option>
         {% for vax in vax_types %}
         <option value="{{vax}}"{% if jab.jab_type.value == vax %} selected{% endif %}>{{vax}}</option>
         {% endfor %}
       </select>
     </div>
-    <div class="form-group col-3">
-      <input type="text" name="bid{{jid|default:1}}-jab_date" id="jab_date_{{jid|default:1}}" value="{{jab.jab_date.value}}" class="datepicker" placeholder="Booster Date">
+    <div class="form-group col-3 col-sm-3 col-md-4 col-lg-4 col-xl-4 no-gutters">
+      <input type="text" name="bid{{jid|default:1}}-jab_date" id="jab_date_{{jid|default:1}}" value="{{jab.jab_date.value}}" class="datepicker" placeholder="Date">
     </div>
-    <div class="form-group col-2 add_del_btn_outer">
+    <div class="form-group col-3 col-sm-3 col-md-2 col-lg-2 col-xl-2 no-gutters add_del_btn_outer">
       <div class="btn_round add_node_btn_frm_field" data-toggle="tooltip" data-placement="top" title="Add a booster">
         <i class="fa fa-plus-circle"></i>
       </div>

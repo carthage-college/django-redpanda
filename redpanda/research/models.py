@@ -2,6 +2,8 @@
 
 """Data models."""
 
+import datetime
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.cache import cache
@@ -195,7 +197,24 @@ class Registration(models.Model):
 
     def get_boosters(self):
         """Return booster docs."""
-        return self.docs.filter(tags__name__in=['Booster'])
+        return self.docs.filter(tags__name__in=['Booster']).order_by('-jab_date')
+
+    def booster_due(self):
+        """Return booster due date."""
+        today = datetime.date.today()
+        due = False
+        vax = self.get_vax()
+        boo = self.get_boosters().first()
+        if boo:
+            vax = boo
+        days = 150
+        if vax.jab_type ==  'Johnson & Johnson':
+            days = 60
+        date = vax.jab_date + datetime.timedelta(days=days)
+
+        if today > date:
+            due = True
+        return {'date': date, 'due': due}
 
 
 class Document(models.Model):
