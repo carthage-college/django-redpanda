@@ -10,6 +10,7 @@
         <th>Vax Type</th>
         <th>Vax Card</th>
         <th>Boosters</th>
+        <th>Next Booster</th>
         <th>Updated At</th>
       </tr>
     </thead>
@@ -57,6 +58,9 @@
           {% endif %}
         </td>
         <td nowrap style="font-family: monospace;font-size:1.1em;">
+          {{profile.booster_due.date|date:'Y-m-d'}}
+        </td>
+        <td nowrap style="font-family: monospace;font-size:1.1em;">
           {{profile.updated_at|date:'Y-m-d H:i:s'}}
         </td>
       </tr>
@@ -71,6 +75,7 @@
         <th>Vax Type</th>
         <th>Vax Card</th>
         <th>Boosters</th>
+        <th>Next Booster</th>
         <th>Updated At</th>
       </tr>
     </tfoot>
