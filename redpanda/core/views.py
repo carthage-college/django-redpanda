@@ -91,7 +91,7 @@ def vaccine(request):
                             jabs[bid] = form_boo
                     if booster_error:
                         # this first message will only display for first time users.
-                        if vax.booster_due()['due']:
+                        if vax.booster_due()['due'] or user.profile.get_boosters():
                             message = """
                                 There was a problem with one of your booster uploads.
                                 Please submit your booster again.

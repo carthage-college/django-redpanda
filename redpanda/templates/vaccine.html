@@ -4,10 +4,10 @@
 {{block.super}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" language="javascript">
+var booster = 150;
 function boosterDateCalc(vaxDate, vaxType) {
   var vaxDate = new Date(vaxDate);
   var today = new Date();
-  var booster = 150;
   var status = '';
   if (vaxType == 'Johnson & Johnson') {
     booster = 60;
@@ -24,6 +24,9 @@ function boosterDateCalc(vaxDate, vaxType) {
 }
 
 $(function(){
+  {% if user.profile.get_boosters %}
+  boosterDateCalc("{{user.profile.get_boosters.0.jab_date}}", "{{user.profile.get_boosters.0.jab_type}}");
+  {% endif %}
   $("input[id*='jab_date']").datepicker({
       weekStart: 1,
       daysOfWeekHighlighted: "6,0",
@@ -238,14 +241,15 @@ $(function(){
         <div class="form-group col-5">{{user.profile.get_vax.jab_date}}</div>
       </div>
     </div>
-    {% else %}
-      {% bootstrap_form form %}
-      <!-- #philes -->
-      <div id="philes" class="mt-2 mb-2">
-        {% bootstrap_form form_vaxdoc %}
-      </div>
-      <!-- /#philes -->
+    <div style="display:none;">
     {% endif %}
+    {% bootstrap_form form %}
+    <!-- #philes -->
+    <div id="philes" class="mt-2 mb-2">
+      {% bootstrap_form form_vaxdoc %}
+    </div>
+    <!-- /#philes -->
+    {% if user.profile.get_vax %}</div>{% endif %}
     <!-- #boosters -->
     <div id="boosters" class="mt-2 mb-2">
       <h3><label>Proof of Booster Shots</label></h3>
