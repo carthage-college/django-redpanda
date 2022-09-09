@@ -9,7 +9,6 @@ function boosterDateCalc(vaxDate, vaxType) {
   var today = new Date();
   var booster = 150;
   var status = '';
-  console.log('boo');
   if (vaxType == 'Johnson & Johnson') {
     booster = 60;
   }
@@ -225,12 +224,28 @@ $(function(){
     {% if form.errors %}
       <div class="alert alert-danger mt-4">Please correct the errors below.</div>
     {% endif %}
-    {% bootstrap_form form %}
-    <!-- #philes -->
-    <div id="philes" class="mt-2 mb-2">
-      {% bootstrap_form form_vaxdoc %}
+    {% if user.profile.get_vax %}
+    <h3><label>First Vaccine Shot(s)</label></h3>
+    <div class="container">
+      <div class="row">
+        <div class="form-group col-4 mt-1">
+        <a href="{{media_url}}{{user.profile.get_vax.phile}}"
+          style="margin-left:10px;margin-top:3px;"
+          target="_blank" data-toggle="tooltip" data-placement="top" title="Vaccine Card">
+          <i class="fa fa-file"></i></a>
+        </div>
+        <div class="col-3">{{user.profile.get_vax.jab_type}}</div>
+        <div class="form-group col-5">{{user.profile.get_vax.jab_date}}</div>
+      </div>
     </div>
-    <!-- /#philes -->
+    {% else %}
+      {% bootstrap_form form %}
+      <!-- #philes -->
+      <div id="philes" class="mt-2 mb-2">
+        {% bootstrap_form form_vaxdoc %}
+      </div>
+      <!-- /#philes -->
+    {% endif %}
     <!-- #boosters -->
     <div id="boosters" class="mt-2 mb-2">
       <h3><label>Proof of Booster Shots</label></h3>
