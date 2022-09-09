@@ -203,17 +203,19 @@ class Registration(models.Model):
         """Return booster due date."""
         today = datetime.date.today()
         due = False
+        date = None
         vax = self.get_vax()
         boo = self.get_boosters().first()
         if boo:
             vax = boo
         days = 150
-        if vax.jab_type ==  'Johnson & Johnson':
-            days = 60
-        date = vax.jab_date + datetime.timedelta(days=days)
+        if vax and vax.jab_type:
+            if vax.jab_type ==  'Johnson & Johnson':
+                days = 60
+            date = vax.jab_date + datetime.timedelta(days=days)
 
-        if today > date:
-            due = True
+            if today > date:
+                due = True
         return {'date': date, 'due': due}
 
 
