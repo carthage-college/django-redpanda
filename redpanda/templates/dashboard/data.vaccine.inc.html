@@ -32,7 +32,7 @@
           {{profile.get_group}}
         </td>
         {% endcache %}
-        {% cache 31536000 user_group profile.user.id %}
+        {% cache 31536000 vax_response profile.user.id %}
         <td nowrap style="text-align: center;">
           {% if profile.vaccine == 'Yes' %}
           <i class="fa fa-check green" title="Vaccine"><span style="display:none;">✓</span> </i>
@@ -43,10 +43,10 @@
           {% endif %}{% endif %}
         </td>
         {% endcache %}
-        {% cache 31536000 user_group profile.user.id %}
+        {% cache 31536000 jab_type profile.user.id %}
         <td>{{profile.get_vax.jab_type|default:'&nbsp;'}}</td>
         {% endcache %}
-        {% cache 31536000 user_group profile.user.id %}
+        {% cache 31536000 vax_phile profile.user.id %}
         <td nowrap>
         {% if profile.vaccine == 'Yes' %}
         <a href="{{media_url}}{{profile.get_vax.phile}}" target="_blank" data-toggle="tooltip" data-placement="top" title="{{profile.get_vax.jab_date|date:'Y-m-d'}}">
@@ -55,6 +55,7 @@
         {% endif %}
         </td>
         {% endcache %}
+        {% cache 31536000 vax_boosters profile.user.id %}
         <td nowrap style="font-family: monospace;font-size:1.1em;">
           {% if profile.vaccine == 'Yes' %}
           {% for doc in profile.get_boosters %}
@@ -63,12 +64,13 @@
           {% endfor %}
           {% endif %}
         </td>
-        {% cache 31536000 user_cid profile.user.id %}
+        {% endcache %}
+        {% cache 31536000 booster_due profile.user.id %}
         <td nowrap style="font-family: monospace;font-size:1.1em;">
           {{profile.booster_due.date|date:'Y-m-d'}}
         </td>
         {% endcache %}
-        {% cache 31536000 user_cid profile.user.id %}
+        {% cache 31536000 profile_updated profile.user.id %}
         <td nowrap style="font-family: monospace;font-size:1.1em;">
           {{profile.updated_at|date:'Y-m-d H:i:s'}}
         </td>

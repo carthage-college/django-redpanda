@@ -19,6 +19,7 @@ from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from djauth.decorators import portal_auth_required
 from djimix.core.database import get_connection
@@ -292,7 +293,7 @@ def research(request):
         response = HttpResponseRedirect(reverse_lazy('home'))
     return response
 
-
+@cache_page(60*60*24)
 @portal_auth_required(
     session_var='REDPANDA_AUTH',
     redirect_url=reverse_lazy('access_denied'),
@@ -305,11 +306,18 @@ def vaccine(request):
     student_vax = perms.get(settings.STUDENT_VAX_DATA)
     if admins or student_vax:
         group = request.POST.get('group')
-        profiles = Registration.objects.filter(
-            vaccine__in=['Yes', 'No'],
-        ).order_by('user__last_name')
+        profiles = cache.get('profiles_all')
+        if not profiles:
+            profiles = Registration.objects.filter(
+                vaccine__in=['Yes', 'No'],
+            ).order_by('user__last_name')
+        cache.set('profiles_all', profiles)
         if student_vax:
-            profiles = profiles.filter(user__groups__name__in=[settings.STUDENT_GROUP])
+            student_profiles = cache.get('profiles_students')
+            if not student_profiles:
+                student_profiles = profiles.filter(user__groups__name__in=[settings.STUDENT_GROUP])
+            cache.set('profiles_students', student_profiles)
+            profiles = student_profiles
         response = render(
             request,
             'dashboard/vaccine.html',

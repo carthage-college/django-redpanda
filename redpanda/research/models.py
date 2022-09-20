@@ -143,13 +143,11 @@ class Registration(models.Model):
         GenericChoice,
         related_name='race',
         help_text='Check all that apply',
-        null=True,
-        blank=True,
     )
     allergy_symptoms = models.CharField(max_length=4, null=True, blank=True)
     smoking_status = models.CharField(max_length=16, null=True, blank=True)
     medications = models.TextField(null=True, blank=True)
-    incorrect_items = models.ManyToManyField(GenericChoice, null=True, blank=True)
+    incorrect_items = models.ManyToManyField(GenericChoice)
 
     class Meta:
         """Information about the data class model."""

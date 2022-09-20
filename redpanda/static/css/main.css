@@ -24,6 +24,11 @@
     margin-bottom: .25em;
     border: 2px solid #ddd;
 }
+.info {
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    color: #31708f;
+}
 body.sidenav-toggled .content-wrapper {margin-left: 0px;}
 .content-wrapper {margin-left: 0;}
 body.sidenav-toggled footer.sticky-footer {width: 100%;}
