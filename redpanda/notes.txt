@@ -1,0 +1,47 @@
+deploy:
+
+1) backup:
+   production only:
+    django_redpanda database
+    django-redpanda project
+   testing only:
+    recreate django_redpanda_staging database from production
+    cd /data2/python_venv/3.10/redpanda/lib/
+    mv django-redpanda django-redpanda_DATE
+    sudo tar zxvpf django-redpanda.tar.gz
+
+2) copy files (rm one, just in case):
+
+   testing only:
+   cp ../../django-redpanda_new/redpanda/settings/staging.py settings/
+   cp ../../django-redpanda_new/redpanda/settings/shell.py settings/
+   cp ../../django-redpanda_test1/uwsgi.staging.ini ../
+   cp ../../django-redpanda_new/redpanda/wsgi.py .
+   cp ../../django-redpanda_new/redpanda/settings/local.py settings/
+   rm settings/production.py
+   production and testing:
+   cp ../../django-redpanda_new/redpanda/bin/jabs_docs.py bin/jabs_docs.py
+
+3) manual edits to Document model:
+
+    phile = models.FileField(
+        "Vaccine Card",
+        upload_to=upload_to_path,
+        validators=settings.FILE_VALIDATORS,
+        max_length=767,
+    )
+    jab_type = models.CharField(
+        "Vaccine Type",
+        max_length=64,
+        choices=VACCINE_TYPES,
+    )
+    jab_date = models.DateField("Vaccine Date")
+
+4) execute the migration script for moving docs to document model.
+5) git stash; git pull
+6) execute django migrations:
+    python manage.py makemigrations research
+    python manage.py migrate
+7) clear cache:
+    python manage.py clearcache
+8) touch wsgi.py
